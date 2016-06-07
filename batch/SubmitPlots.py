@@ -15,22 +15,16 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-#indir    = 'HistSystem'
-#outdir   = 'PlotsSystem'
+indir    = 'HistMonVRTwoMu'
+outdir   = 'PlotsMonVRTwoMu'
 
-#indir    = 'HistVR'
-#outdir   = 'PlotsVR'
-
-#indir    = 'HistNewFF'
-#outdir   = 'PlotsNewFF'
-
-indir    = 'HistFinFF'
-outdir   = 'PlotsFinFF'
-
-inpath = os.path.join("/data/fscutti",ana)
+#indir    = 'HistVROneMu'
+#outdir   = 'PlotsVROneMu'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
+
+inpath = os.path.join("/imports/rcs5_data",USER,ana)
 INDIR   = os.path.join(inpath,indir)  
 OUTDIR  = os.path.join(inpath,outdir)
 
@@ -43,13 +37,13 @@ if not os.path.isdir(OUTDIR+"/"+"log"): os.makedirs(OUTDIR+"/"+"log")
 AUTOBUILD = True
 QUEUE     = 'short'
 BEXEC     = 'Plots.sh'
-JOBDIR    = "/data/fscutti/jobdir" 
+JOBDIR    = "/imports/rcs5_data/%s/jobdir" % USER
 
 #---------------------
 # Batch jobs variables
 #---------------------
 INTARBALL = os.path.join(JOBDIR,'plotstarball_%s.tar.gz' % (time.strftime("d%d_m%m_y%Y_H%H_M%M_S%S")) )
-SCRIPT    = os.path.join("./",ana,"scripts",'batch_merge.py')
+SCRIPT    = os.path.join("./",ana,"scripts",'merge.py')
 
 job_vars={}
 job_vars['INTARBALL'] = INTARBALL
@@ -57,57 +51,35 @@ job_vars['OUTDIR']    = OUTDIR
 job_vars['INDIR']     = INDIR
 job_vars['SCRIPT']    = SCRIPT
 
-regions = []
-#regions.append("NN_NOM")
-#regions.append("ND_NOM")
-#regions.append("DN_NOM")
-#regions.append("DD_NOM")
-#regions.append("NN_FAKES")
-#regions.append("ND_FAKES")
-#regions.append("DN_FAKES")
-#regions.append("DD_FAKES")
-#regions.append("ZCR")
+regions = {}
+# use it as such:
+#regions["FOLDERNAME"]     = [icut, "plot label"]
 
-#regions.append("FAKESVR_MERGED")
+#regions["FAKESVR1_NUM"]   = [5,  "numerator"]
+#regions["FAKESVR1_LTDEN"] = [5,"loose+tight"]
+#regions["FAKESVR1_TLDEN"] = [5,"tight+loose"]
+#regions["FAKESVR1_LLDEN"] = [5,"loose+loose"]
 
-#regions.append("SIG_NUM")
-#regions.append("SIG_DEN_TL")
-#regions.append("SIG_DEN_LT")
-#regions.append("SIG_DEN_LL")
+#regions["FAKESVR2_NUM"]   = [6,  "numerator"]
+#regions["FAKESVR2_LTDEN"] = [6,"loose+tight"]
+#regions["FAKESVR2_TLDEN"] = [6,"tight+loose"]
+#regions["FAKESVR2_LLDEN"] = [6,"loose+loose"]
 
-regions.append("FAKESFR1_NUM")
-regions.append("FAKESFR1_DEN")
-regions.append("FAKESFR2_NUM")
-regions.append("FAKESFR2_DEN")
-regions.append("FAKESFR3_NUM")
-regions.append("FAKESFR3_DEN")
-regions.append("FAKESFR4_NUM")
-regions.append("FAKESFR4_DEN")
-regions.append("FAKESFR5_NUM")
-regions.append("FAKESFR5_DEN")
-regions.append("FAKESFR6_NUM")
-regions.append("FAKESFR6_DEN")
-regions.append("FAKESFR7_NUM")
-regions.append("FAKESFR7_DEN")
-regions.append("FAKESFR8_NUM")
-regions.append("FAKESFR8_DEN")
-#regions.append("FAKESFR9_NUM")
-#regions.append("FAKESFR9_DEN")
-#regions.append("FAKESFR10_NUM")
-#regions.append("FAKESFR10_DEN")
-#regions.append("FAKESFR11_NUM")
-#regions.append("FAKESFR11_DEN")
-#regions.append("FAKESFR12_NUM")
-#regions.append("FAKESFR12_DEN")
-#regions.append("FAKESFR13_NUM")
-#regions.append("FAKESFR13_DEN")
-#regions.append("FAKESFR14_NUM")
-#regions.append("FAKESFR14_DEN")
-#regions.append("FAKESFR15_NUM")
-#regions.append("FAKESFR15_DEN")
+#regions["FAKESVR3_NUM"]   = [6,  "numerator"]
+#regions["FAKESVR3_LTDEN"] = [6,"loose+tight"]
+#regions["FAKESVR3_TLDEN"] = [6,"tight+loose"]
+#regions["FAKESVR3_LLDEN"] = [6,"loose+loose"]
 
-#regions.append("FAKESVR1_NUM")
-#regions.append("FAKESVR1_DEN")
+regions["FAKESVR4_NUM"]   = [6,  "numerator"]
+regions["FAKESVR4_LTDEN"] = [6,"loose+tight"]
+regions["FAKESVR4_TLDEN"] = [6,"tight+loose"]
+regions["FAKESVR4_LLDEN"] = [6,"loose+loose"]
+
+#regions["FAKESVR5_NUM"]   = [6,  "numerator"]
+#regions["FAKESVR5_LTDEN"] = [6,"loose+tight"]
+#regions["FAKESVR5_TLDEN"] = [6,"tight+loose"]
+#regions["FAKESVR5_LLDEN"] = [6,"loose+loose"]
+
 
 #---------------------
 # Make input tarball
@@ -124,14 +96,17 @@ m = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
 m.communicate()[0]
 
 
-for REG in regions:
+for REG,OPT in regions.iteritems():
   vars_list = plots.vars_mumu.vars_list
   #vars_list = plots.vars_fakes.vars_list
 
   for var in vars_list:
 
-    job_vars['VAR'] = var.name
-    job_vars['REG'] = REG
+    job_vars['VAR']      = var.name
+    job_vars['REG']      = REG
+    job_vars['ICUT']     = OPT[0]
+    job_vars['LAB']      = OPT[1]
+    job_vars['MAKEPLOT'] = True
     
     VARS = []
     
