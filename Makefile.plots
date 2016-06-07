@@ -7,6 +7,7 @@ DFILES='*.d'
 SOFILES='*.so'
 PYCFILES='*.pyc'
 PCMFILES='*.pcm'
+ROOTFILES='*.root'
 
 TARBALL = plotstarball.tar.gz #default value (typically 
 #overridden on command line)
@@ -29,7 +30,7 @@ TARINPUTS = ssdilep \
 all: $(TARBALL)
 
 $(TARBALL): $(PYTHON)
-	tar cvzf  $(TARBALL) --exclude=$(DFILES) --exclude=$(SOFILES) --exclude=$(PYCFILES) --exclude=$(PCMFILES) $(TARINPUTS)
+	tar cvzf  $(TARBALL) --exclude=$(DFILES) --exclude=$(SOFILES) --exclude=$(PYCFILES) --exclude=$(ROOTFILES) --exclude=$(PCMFILES) $(TARINPUTS)
 
 
 
