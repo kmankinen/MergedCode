@@ -21,7 +21,7 @@ NTUP='/imports/rcs5_data/fscutti/ssdilep/menu_singlemu/merged' # input NTUP path
 #NTUP='/imports/rcs5_data/fscutti/ssdilep/menu_lowptasym/merged' # input NTUP path
 #NTUP='/imports/rcs5_data/fscutti/ssdilep/presc/merged' # input NTUP path
 
-JOBDIR = "/imports/rcs5_data/fscutti/jobdir" # Alright this is twisted...
+JOBDIR = "/imports/rcs5_data/%s/jobdir" % USER # Alright this is twisted...
 INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%m_y%Y_H%H_M%M_S%S")) )
 
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
@@ -42,18 +42,19 @@ AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 #RUN = "HistFinFF"
 #RUN = "HistNewVR"
 
-RUN = "HistTEST"
+#RUN = "Hist4TEST"
+RUN = "HistMonVRTwoMu"
 
-OUTPATH="/imports/rcs5_data/fscutti/ssdilep/%s"%(RUN) # 
+OUTPATH="/imports/rcs5_data/%s/ssdilep/%s"%(USER,RUN) # 
 OUTFILE="ntuple.root"         # file output by pyframe job 
 
 # running
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
-SCRIPT="./ssdilep/run/j.plotter_VR.py"  # pyframe job script
+SCRIPT="./ssdilep/run/j.plotter_VR_TwoMu.py"  # pyframe job script
 BEXEC="Hist.sh"                      # exec script (probably dont change) 
 DO_NOM = True                        # submit the nominal job
 DO_NTUP_SYS = False                  # submit the NTUP systematics jobs
-DO_PLOT_SYS = False                 # submit the plot systematics jobs
+DO_PLOT_SYS = True                 # submit the plot systematics jobs
 TESTMODE = False                    # submit only 1 sub-job (for testing)
 
 
