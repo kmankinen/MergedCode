@@ -34,6 +34,9 @@ echo
 
 echo " VAR:       $VAR"
 echo " REG:       $REG"
+echo " LAB:       $LAB"
+echo " ICUT:      $ICUT"
+echo " MAKEPLOT:  $MAKEPLOT"
 echo " INDIR:     $INDIR"
 echo " OUTDIR:    $OUTDIR"
 echo " SCRIPT:    $SCRIPT"
@@ -90,8 +93,8 @@ source setup.sh
 
 echo ""
 echo "executing job..."
-echo "python ${SCRIPT} --var=${VAR} --reg=${REG} --input=${INDIR} --output=${OUTDIR}"
-python ${SCRIPT} --var=${VAR} --reg=${REG} --input=${INDIR} --output=${OUTDIR}
+echo "python ${SCRIPT} --var=${VAR} --reg=${REG} --lab=${LAB} --icut=${ICUT} --makeplot=${MAKEPLOT} --input=${INDIR} --output=${OUTDIR}"
+python ${SCRIPT} --var=${VAR} --reg=${REG} --lab=${LAB} --icut=${ICUT}  --makeplot=${MAKEPLOT} --input=${INDIR} --output=${OUTDIR}
 echo "finished execution"
 
 echo "copying output"
