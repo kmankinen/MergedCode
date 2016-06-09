@@ -475,7 +475,6 @@ def write_hist(
         histname    = None,
         rebin       = None,
         sys_dict    = None,
-        do_sys_conv = False,
         outname     = None,
         ):
     """
@@ -510,9 +509,6 @@ def write_hist(
                 
                 s_name = sys.name
 
-                #if do_sys_conv and s_name in sys_conv.cdict:
-                #  s_name = sys_conv.cdict[s_name]
-                
                 hname_sys_up = hname.replace('nominal','%s_%s' % (s_name,'UP'))
                 hname_sys_dn = hname.replace('nominal','%s_%s' % (s_name,'DN'))
 
