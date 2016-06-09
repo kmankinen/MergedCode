@@ -1,6 +1,6 @@
 #------------------- Makefile.tarball -----------------
 # Builds the input tarball for batch jobs. The makefile 
-# is called from the batch_merge.py script. 
+# is called from the Submit.py script. 
 #=-----------------------------------------------------
 
 DFILES='*.d'
