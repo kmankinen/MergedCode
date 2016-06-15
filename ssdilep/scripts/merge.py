@@ -41,10 +41,13 @@ parser.add_option('-o', '--output', dest='outdir',
 lumi =  3158.13
 
 # Control regions
+plotsfile = []
+if options.makeplot == "False":
+  plotsfile.append("hists")
+plotsfile.append(options.vname)
+plotsfile.append(options.region)
 
-plotsfile = [options.vname,options.region]
 plotsfile = "_".join(plotsfile)+".root"
-
 plotsfile = os.path.join(options.outdir,plotsfile)
 
 ROOT.gROOT.SetBatch(True)
@@ -102,7 +105,7 @@ else:
      background_samples=mc_backgrounds,
      )
 
- #-----------------
+#-----------------
 # Systematics       
 #-----------------
 # just an example ...
@@ -168,7 +171,7 @@ else:
          histname    = os.path.join(mumu_vdict[options.vname]['path'],mumu_vdict[options.vname]['hname']),
          rebin       = mumu_vdict[options.vname]['rebin'],
          sys_dict    = None,
-         outname     = "plain_hists.root"
+         outname     = plotsfile
          )
  ## EOF
 
