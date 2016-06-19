@@ -1,0 +1,37 @@
+#!bin/bash
+
+
+#python ./SubmitGet.py --samp="Zmumu_Pt2000_E_CMS_CVetoBVeto"
+
+#python ./SubmitGet.py --samp="DCH1000"
+#python ./SubmitGet.py --samp="DCH1100"
+#python ./SubmitGet.py --samp="DCH900"
+#python ./SubmitGet.py --samp="lllvjj_EW6"
+#python ./SubmitGet.py --samp="lllvSFMinus"
+#python ./SubmitGet.py --samp="00278727"
+#python ./SubmitGet.py --samp="00281075"
+python ./SubmitGet.py --samp="00281317"
+#python ./SubmitGet.py --samp="00284006"
+#python ./SubmitGet.py --samp="SingleTopSchan_noAllHad_top"
+#python ./SubmitGet.py --samp="ttmumu_Np0"
+#python ./SubmitGet.py --samp="ttW_Np0"
+#python ./SubmitGet.py --samp="Wenu_Pt1000_2000_BFilter"
+#python ./SubmitGet.py --samp="Wenu_Pt700_1000_CVetoBVeto"
+#python ./SubmitGet.py --samp="Wmunu_Pt2000_E_CMS_BFilter"
+#python ./SubmitGet.py --samp="Wmunu_Pt700_1000_BFilter"
+#python ./SubmitGet.py --samp="Wtaunu_Pt1000_2000_BFilter"
+#python ./SubmitGet.py --samp="WZqqvv"
+#python ./SubmitGet.py --samp="Zee_Pt0_70_CVetoBVeto"
+#python ./SubmitGet.py --samp="Zee_Pt700_1000_CVetoBVeto"
+#python ./SubmitGet.py --samp="Zee_Pt70_140_CVetoBVeto"
+#python ./SubmitGet.py --samp="Zmumu_Pt1000_2000_CVetoBVeto"
+#python ./SubmitGet.py --samp="Zmumu_Pt140_280_BFilter"
+#python ./SubmitGet.py --samp="Zmumu_Pt140_280_CVetoBVet"
+#python ./SubmitGet.py --samp="Zmumu_Pt2000_E_CMS_CVetoBVeto"
+#python ./SubmitGet.py --samp="Zmumu_Pt280_500_CFilterBVeto"
+#python ./SubmitGet.py --samp="Zmumu_Pt500_700_CVetoBVeto"
+#python ./SubmitGet.py --samp="Zmumu_Pt700_1000_CVetoBVeto"
+#python ./SubmitGet.py --samp="Ztautau_Pt1000_2000_BFilter"
+#python ./SubmitGet.py --samp="Ztautau_Pt500_700_BFilter"
+
+
