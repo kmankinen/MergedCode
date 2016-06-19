@@ -332,6 +332,57 @@ class CutAlg(pyframe.core.Algorithm):
           if j.tlv.DeltaR(p.lead.tlv)<0.4 or j.tlv.DeltaR(p.sublead.tlv)<0.4:
             p.StoreCut(cname,False)
       return True
+    
+    
+    #__________________________________________________________________________
+    def cut_MuPairsTT(self):
+      cname = "MuPairsTT"
+      pairs = self.store['mu_pairs']
+      for p in pairs:
+        lead_is_tight = bool(p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<3.)
+        sublead_is_tight = bool(p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<3.)
+        p.StoreCut(cname,lead_is_tight and sublead_is_tight)
+      return True 
+    #__________________________________________________________________________
+    def cut_MuPairsTL(self):
+      cname = "MuPairsTL"
+      pairs = self.store['mu_pairs']
+      for p in pairs:
+        lead_is_tight = bool(p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<3.)
+        sublead_is_loose = bool(not p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<10.)
+        p.StoreCut(cname,lead_is_tight and sublead_is_loose)
+      return True 
+    #__________________________________________________________________________
+    def cut_MuPairsLT(self):
+      cname = "MuPairsLT"
+      pairs = self.store['mu_pairs']
+      for p in pairs:
+        lead_is_loose = bool(not p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<10.)
+        sublead_is_tight = bool(p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<3.)
+        p.StoreCut(cname,lead_is_loose and sublead_is_tight)
+      return True 
+    #__________________________________________________________________________
+    def cut_MuPairsLL(self):
+      cname = "MuPairsLL"
+      pairs = self.store['mu_pairs']
+      for p in pairs:
+        lead_is_loose = bool(not p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<10.)
+        sublead_is_loose = bool(not p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<10.)
+        p.StoreCut(cname,lead_is_loose and sublead_is_loose)
+      return True 
+    
+    #__________________________________________________________________________
+    def cut_MuPairsMatchSingleMuIsoChain(self):
+      cname = "MuPairsMatchSingleMuIsoChain"
+      pairs = self.store['mu_pairs']
+      #trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":1, "HLT_mu50":2} # for the "ntuples" file
+      trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":0, "HLT_mu50":1}
+      
+      for p in pairs:
+        p.StoreCut(cname,False)
+        if p.lead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.lead.isTrigMatchedToChain.at(trig["HLT_mu50"]) : p.StoreCut(cname,True)
+        if p.sublead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.sublead.isTrigMatchedToChain.at(trig["HLT_mu50"]) : p.StoreCut(cname,True)
+      return True
 
     #__________________________________________________________________________
     def cut_MatchSingleMuIsoChain(self):
@@ -375,57 +426,78 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_LeadMuTruthFilter(self):
       muons = self.store['muons'] 
       if self.sampletype == "mc":
-        return muons[0].isTrueIsoMuon
+        return muons[0].isTrueIsoMuon()
       return True
     
     #__________________________________________________________________________
     def cut_SubLeadMuTruthFilter(self):
       muons = self.store['muons'] 
       if self.sampletype == "mc":
-        return muons[1].isTrueIsoMuon
+        return muons[1].isTrueIsoMuon()
       return True
     
-   #__________________________________________________________________________
+    #__________________________________________________________________________
     def cut_MuTruthFilter(self):
       muons = self.store['muons'] 
       if self.sampletype == "mc":
         for m in muons:
-          if not m.isTrueIsoMuon: return False
+          if not m.isTrueIsoMuon(): return False
       return True 
     
     #__________________________________________________________________________
     def cut_MuPairsTruthFilter(self):
       cname = "MuPairsTruthFilter"
       pairs = self.store['mu_pairs']
-      
       for p in pairs:
         p.StoreCut(cname,True)
-        if not p.isTrueIsoPair():
-          p.StoreCut(cname,False)
+        if self.sampletype == "mc":
+          if not (p.lead.isTrueIsoMuon() and p.sublead.isTrueIsoMuon()):
+            p.StoreCut(cname,False)
       return True
    
+   
     #__________________________________________________________________________
-    def cut_MuPairsLeadTruthFilter(self):
-      cname = "MuPairsLeadTruthFilter"
+    def cut_MuPairsFilterTT(self):
+      cname = "MuPairsFilterTT"
       pairs = self.store['mu_pairs']
-      
       for p in pairs:
         p.StoreCut(cname,True)
-        if not p.lead.isTrueIsoMuon():
-          p.StoreCut(cname,False)
+        if self.sampletype == "mc":
+          if not (p.lead.isTrueIsoMuon() and p.sublead.isTrueIsoMuon()):
+            p.StoreCut(cname,False)
       return True
-    
     #__________________________________________________________________________
-    def cut_MuPairsSubLeadTruthFilter(self):
-      cname = "MuPairsSubLeadTruthFilter"
+    def cut_MuPairsFilterLT(self):
+      cname = "MuPairsFilterLT"
       pairs = self.store['mu_pairs']
-      
       for p in pairs:
         p.StoreCut(cname,True)
-        if not p.sublead.isTrueIsoMuon():
-          p.StoreCut(cname,False)
+        if self.sampletype == "mc":
+          if not (p.lead.isTrueNonIsoMuon() and p.sublead.isTrueIsoMuon()):
+            p.StoreCut(cname,False)
       return True
-
+    #__________________________________________________________________________
+    def cut_MuPairsFilterTL(self):
+      cname = "MuPairsFilterTL"
+      pairs = self.store['mu_pairs']
+      for p in pairs:
+        p.StoreCut(cname,True)
+        if self.sampletype == "mc":
+          if not (p.lead.isTrueIsoMuon() and p.sublead.isTrueNonIsoMuon()):
+            p.StoreCut(cname,False)
+      return True
+    #__________________________________________________________________________
+    def cut_MuPairsFilterLL(self):
+      cname = "MuPairsFilterLL"
+      pairs = self.store['mu_pairs']
+      for p in pairs:
+        p.StoreCut(cname,True)
+        if self.sampletype == "mc":
+          if not (p.lead.isTrueNonIsoMuon() and p.sublead.isTrueNonIsoMuon()):
+            p.StoreCut(cname,False)
+      return True
+   
+   
     #__________________________________________________________________________
     def cut_LeadMuD0Sig2(self):
       muons = self.store['muons']
@@ -858,7 +930,6 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         self.h_musublead_ptcone30 = self.hist('h_musublead_ptcone30', "ROOT.TH1F('$', ';ptcone30/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
         self.h_musublead_ptcone40 = self.hist('h_musublead_ptcone40', "ROOT.TH1F('$', ';ptcone40/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
         
-        
         ## met plots
         self.h_met_clus_et = self.hist('h_met_clus_et', "ROOT.TH1F('$', ';E^{miss}_{T}(clus) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET)
         self.h_met_clus_phi = self.hist('h_met_clus_phi', "ROOT.TH1F('$', ';#phi(E^{miss}_{T}(clus));Events / (0.1)', 64, -3.2, 3.2)", dir=MET)
@@ -877,7 +948,6 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         self.h_mumu_musublead_eta = self.hist('h_mumu_musublead_eta', "ROOT.TH1F('$', ';#eta(#mu#mu_{sublead});Events / (0.1)', 50, -2.5, 2.5)", dir=PAIRS)
         self.h_mumu_mulead_phi = self.hist('h_mumu_mulead_phi', "ROOT.TH1F('$', ';#phi(#mu#mu_{lead});Events / (0.1)', 64, -3.2, 3.2)", dir=PAIRS)
         self.h_mumu_musublead_phi = self.hist('h_mumu_musublead_phi', "ROOT.TH1F('$', ';#phi(#mu#mu_{sublead});Events / (0.1)', 64, -3.2, 3.2)", dir=PAIRS)
-        
         
         # ---------------
         # Fill histograms
@@ -931,7 +1001,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
           self.h_mulead_ptcone40.Fill(mu_lead.ptcone40/mu_lead.tlv.Pt(), weight)
          
          
-          # leading
+          # subleading
           self.h_musublead_pt.Fill(mu_sublead.tlv.Pt()/GeV, weight)
           self.h_musublead_eta.Fill(mu_sublead.tlv.Eta(), weight)
           self.h_musublead_phi.Fill(mu_sublead.tlv.Phi(), weight)
@@ -950,7 +1020,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
           self.h_musublead_ptcone20.Fill(mu_sublead.ptcone20/mu_sublead.tlv.Pt(), weight)
           self.h_musublead_ptcone30.Fill(mu_sublead.ptcone30/mu_sublead.tlv.Pt(), weight)
           self.h_musublead_ptcone40.Fill(mu_sublead.ptcone40/mu_sublead.tlv.Pt(), weight)
-          
+
           ## met plots
           self.h_met_clus_et.Fill(met_clus.tlv.Pt()/GeV, weight)
           self.h_met_clus_phi.Fill(met_clus.tlv.Phi(), weight)
@@ -959,7 +1029,6 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
           self.h_met_clus_sumet.Fill(met_clus.sumet/GeV, weight)
           self.h_met_trk_sumet.Fill(met_trk.sumet/GeV, weight)
          
-        
           ## muon pairs plots
           for mp in mupairs:
            
@@ -984,7 +1053,6 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
              self.h_mumu_musublead_eta.Fill(mp.sublead.tlv.Eta(), pweight * weight)
              self.h_mumu_mulead_phi.Fill(mp.lead.tlv.Phi(), pweight * weight)
              self.h_mumu_musublead_phi.Fill(mp.sublead.tlv.Phi(), pweight * weight)
-    
     
     #__________________________________________________________________________
     def check_region(self,cutnames):
