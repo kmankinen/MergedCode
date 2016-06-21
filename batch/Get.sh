@@ -10,12 +10,11 @@
 # Request 1 processors on 1 node 
 # ------------------------------ 
 #PBS -l nodes=1:ppn=1
-#PBS -m n
 
 # --------  
 # Walltime
 # --------
-#PBS -l walltime=6:00:00
+#PBS -l walltime=24:00:00
 
 # ----------------------------------------
 # Request 1 gigabyte of memory per process
@@ -148,8 +147,8 @@ ls ${TMPDIR}/${MYDIR} -la
 # -------------------------------
 # download and merge cutflow file
 # -------------------------------
-echo "-----> rucio download --dir=${TMPDIR}/${MYDIR} ${CUTFLOWFILE}"
-rucio download --dir=${TMPDIR}/${MYDIR} ${CUTFLOWFILE}
+echo "-----> rucio -v get --dir=${TMPDIR}/${MYDIR} ${CUTFLOWFILE}"
+rucio -v get --dir=${TMPDIR}/${MYDIR} ${CUTFLOWFILE}
 
 echo "-----> ls ${TMPDIR}/${MYDIR}/${CUTFLOWFILE} -la"
 ls ${TMPDIR}/${MYDIR}/${CUTFLOWFILE} -la

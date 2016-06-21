@@ -16,41 +16,25 @@ USER   = os.getenv('USER')
 
 ## global config
 # inputs
-NTUP='/imports/rcs5_data/fscutti/ssdilep/menu_singlemu/merged' # input NTUP path
-#NTUP='/imports/rcs5_data/fscutti/ssdilep/menu_HLT_2mu10/merged' # input NTUP path
-#NTUP='/imports/rcs5_data/fscutti/ssdilep/menu_lowptasym/merged' # input NTUP path
-#NTUP='/imports/rcs5_data/fscutti/ssdilep/presc/merged' # input NTUP path
+NTUP='/coepp/cephfs/mel/fscutti/ssdilep/presc/merged' # input NTUP path
+#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/menu_singlemu/merged' # input NTUP path
 
-JOBDIR = "/imports/rcs5_data/%s/jobdir" % USER # Alright this is twisted...
+JOBDIR = "/coepp/cephfs/mel/%s/jobdir" % USER # Alright this is twisted...
 INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%m_y%Y_H%H_M%M_S%S")) )
 
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-#RUN = "HistFF"
-#RUN = "HistVR"
+RUN = "HistNewMatchFF"
 
-#RUN = "HistEleVetoFF"
-#RUN = "HistEleVetoVR"
-
-#RUN = "HistDphi27FF"
-#RUN = "HistDphi27VR"
-
-#RUN = "HistNewFF"
-#RUN = "HistNewVR"
-
-#RUN = "HistFinFF"
-#RUN = "HistNewVR"
-
-#RUN = "Hist4TEST"
-RUN = "HistMonVRTwoMu"
-
-OUTPATH="/imports/rcs5_data/%s/ssdilep/%s"%(USER,RUN) # 
+OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 OUTFILE="ntuple.root"         # file output by pyframe job 
 
 # running
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
-SCRIPT="./ssdilep/run/j.plotter_VR_TwoMu.py"  # pyframe job script
+SCRIPT="./ssdilep/run/j.plotter_FF.py"  # pyframe job script
+#SCRIPT="./ssdilep/run/j.plotter_VR_TwoMu.py"  # pyframe job script
+#SCRIPT="./ssdilep/run/j.plotter_VR_MuPairs.py"  # pyframe job script
 BEXEC="Hist.sh"                      # exec script (probably dont change) 
 DO_NOM = True                        # submit the nominal job
 DO_NTUP_SYS = False                  # submit the NTUP systematics jobs

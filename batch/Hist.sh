@@ -6,8 +6,7 @@
 #PBS -l nodes=1:ppn=1
 
 
-#PBS -l walltime=6:00:00
-#PBS -m n
+#PBS -l walltime=10:00:00
 #
 #   Request 4 gigabyte of memory per process
 #

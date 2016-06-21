@@ -7,14 +7,20 @@ from pyutils.utils import recreplace, mcstrings
 ## list jobs output
 ## it wildcards around jtag!
 
+from optparse import OptionParser
+
+parser = OptionParser()
+parser.add_option('-s', '--samp', dest='sample',
+                  help='sample name',metavar='SAMP',default="")
+(options, args) = parser.parse_args()
+
+
+
 # --------------
 user  = "fscutti"
-samp  = ""
+samp  = options.sample
 
-#jtag  = "menu_HLT_2mu10_V2."
-#jtag  = "menu_singlemu_V2."
-#jtag  = "menu_nonisosingle_V2."
-jtag  = "presc.*%s*" % samp
+jtag  = "ntuples.*%s*" % samp
 jtype = "SSDiLep"
 sys   = None
 if not sys: sys = "nominal"
@@ -23,11 +29,7 @@ if not sys: sys = "nominal"
 
 # --------------
 SCRIPT     = "Get.sh"
-#OUTDIR     = "/data/fscutti/ssdilep/menu_HLT_2mu10_V2"
-#OUTDIR     = "/data/fscutti/ssdilep/menu_singlemu_V2"
-#OUTDIR     = "/data/fscutti/ssdilep/menu_nonisosingle_V2"
-#OUTDIR     = "/data/fscutti/ssdilep/menu_lowptasym"
-OUTDIR     = "/data/fscutti/ssdilep/presc"
+OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/ntuples"
 
 OUTMERGED  = os.path.join(OUTDIR,"merged",sys)
 OUTTREE    = os.path.join(OUTDIR,"tree",sys)
@@ -38,7 +40,7 @@ JOB_TAG    = jtag
 QUEUE      = "long"
 # --------------
 
-JOBDIR    = "/data/fscutti/jobdir" 
+JOBDIR    = "/coepp/cephfs/mel/fscutti/jobdir" 
 
 dir_list = []
 dir_list.append(os.path.join(OUTDIR,"tree"))

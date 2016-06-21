@@ -15,16 +15,13 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-indir    = 'HistMonVRTwoMu'
-outdir   = 'PlotsMonVRTwoMu'
-
-#indir    = 'HistVROneMu'
-#outdir   = 'PlotsVROneMu'
+indir    = 'HistNewMatchFF'
+outdir   = 'PlotsNewMatchFF'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
 
-inpath = os.path.join("/imports/rcs5_data",USER,ana)
+inpath  = os.path.join("/coepp/cephfs/mel",USER,ana)
 INDIR   = os.path.join(inpath,indir)  
 OUTDIR  = os.path.join(inpath,outdir)
 
@@ -37,7 +34,7 @@ if not os.path.isdir(OUTDIR+"/"+"log"): os.makedirs(OUTDIR+"/"+"log")
 AUTOBUILD = True
 QUEUE     = 'short'
 BEXEC     = 'Plots.sh'
-JOBDIR    = "/imports/rcs5_data/%s/jobdir" % USER
+JOBDIR    = "/coepp/cephfs/mel/%s/jobdir" % USER
 
 #---------------------
 # Batch jobs variables
@@ -54,31 +51,68 @@ job_vars['SCRIPT']    = SCRIPT
 regions = {}
 # use it as such:
 #regions["FOLDERNAME"]     = [icut, "plot label"]
+"""
+regions["FAKESVR1_NUM"]   = [5,  "VR1 numerator"]
+regions["FAKESVR1_LTDEN"] = [5,"VR1 loose+tight"]
+regions["FAKESVR1_TLDEN"] = [5,"VR1 tight+loose"]
+regions["FAKESVR1_LLDEN"] = [5,"VR1 loose+loose"]
 
-#regions["FAKESVR1_NUM"]   = [5,  "numerator"]
-#regions["FAKESVR1_LTDEN"] = [5,"loose+tight"]
-#regions["FAKESVR1_TLDEN"] = [5,"tight+loose"]
-#regions["FAKESVR1_LLDEN"] = [5,"loose+loose"]
+regions["FAKESVR2_NUM"]   = [5,  "VR2 numerator"]
+regions["FAKESVR2_LTDEN"] = [5,"VR2 loose+tight"]
+regions["FAKESVR2_TLDEN"] = [5,"VR2 tight+loose"]
+regions["FAKESVR2_LLDEN"] = [5,"VR2 loose+loose"]
 
-#regions["FAKESVR2_NUM"]   = [6,  "numerator"]
-#regions["FAKESVR2_LTDEN"] = [6,"loose+tight"]
-#regions["FAKESVR2_TLDEN"] = [6,"tight+loose"]
-#regions["FAKESVR2_LLDEN"] = [6,"loose+loose"]
+regions["FAKESVR3_NUM"]   = [4,  "VR3 numerator"]
+regions["FAKESVR3_LTDEN"] = [4,"VR3 loose+tight"]
+regions["FAKESVR3_TLDEN"] = [4,"VR3 tight+loose"]
+regions["FAKESVR3_LLDEN"] = [4,"VR3 loose+loose"]
 
-#regions["FAKESVR3_NUM"]   = [6,  "numerator"]
-#regions["FAKESVR3_LTDEN"] = [6,"loose+tight"]
-#regions["FAKESVR3_TLDEN"] = [6,"tight+loose"]
-#regions["FAKESVR3_LLDEN"] = [6,"loose+loose"]
+regions["FAKESVR4_NUM"]   = [5,  "VR4 numerator"]
+regions["FAKESVR4_LTDEN"] = [5,"VR4 loose+tight"]
+regions["FAKESVR4_TLDEN"] = [5,"VR4 tight+loose"]
+regions["FAKESVR4_LLDEN"] = [5,"VR4 loose+loose"]
 
-regions["FAKESVR4_NUM"]   = [6,  "numerator"]
-regions["FAKESVR4_LTDEN"] = [6,"loose+tight"]
-regions["FAKESVR4_TLDEN"] = [6,"tight+loose"]
-regions["FAKESVR4_LLDEN"] = [6,"loose+loose"]
+regions["FAKESVR5_NUM"]   = [6,  "VR5 numerator"]
+regions["FAKESVR5_LTDEN"] = [6,"VR5 loose+tight"]
+regions["FAKESVR5_TLDEN"] = [6,"VR5 tight+loose"]
+regions["FAKESVR5_LLDEN"] = [6,"VR5 loose+loose"]
 
-#regions["FAKESVR5_NUM"]   = [6,  "numerator"]
-#regions["FAKESVR5_LTDEN"] = [6,"loose+tight"]
-#regions["FAKESVR5_TLDEN"] = [6,"tight+loose"]
-#regions["FAKESVR5_LLDEN"] = [6,"loose+loose"]
+regions["FAKESVR6_NUM"]   = [7,  "VR6 numerator"]
+regions["FAKESVR6_LTDEN"] = [7,"VR6 loose+tight"]
+regions["FAKESVR6_TLDEN"] = [7,"VR6 tight+loose"]
+regions["FAKESVR6_LLDEN"] = [7,"VR6 loose+loose"]
+
+regions["FAKESVR7_NUM"]   = [6,  "VR7 numerator"]
+regions["FAKESVR7_LTDEN"] = [6,"VR7 loose+tight"]
+regions["FAKESVR7_TLDEN"] = [6,"VR7 tight+loose"]
+regions["FAKESVR7_LLDEN"] = [6,"VR7 loose+loose"]
+"""
+
+
+regions["FAKESFR1_NUM"]   = [9,  "di-jet numerator"]
+regions["FAKESFR1_DEN"]   = [9,  "di-jet denominator"]
+
+regions["FAKESFR2_NUM"]   = [9,  "di-jet numerator"]
+regions["FAKESFR2_DEN"]   = [9,  "di-jet denominator"]
+
+
+regions["FAKESFR3_NUM"]   = [9,  "di-jet numerator"]
+regions["FAKESFR3_DEN"]   = [9,  "di-jet denominator"]
+
+regions["FAKESFR4_NUM"]   = [9,  "di-jet numerator"]
+regions["FAKESFR4_DEN"]   = [9,  "di-jet denominator"]
+
+regions["FAKESFR5_NUM"]   = [9,  "di-jet numerator"]
+regions["FAKESFR5_DEN"]   = [9,  "di-jet denominator"]
+
+regions["FAKESFR6_NUM"]   = [9,  "di-jet numerator"]
+regions["FAKESFR6_DEN"]   = [9,  "di-jet denominator"]
+
+regions["FAKESFR7_NUM"]   = [9,  "di-jet numerator"]
+regions["FAKESFR7_DEN"]   = [9,  "di-jet denominator"]
+
+regions["FAKESFR8_NUM"]   = [9,  "di-jet numerator"]
+regions["FAKESFR8_DEN"]   = [9,  "di-jet denominator"]
 
 
 #---------------------
