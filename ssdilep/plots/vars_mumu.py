@@ -450,6 +450,7 @@ mumu_angle = Var(name = 'mumu_angle',
 
 
 vars_list = []
+"""
 vars_list.append(averageIntPerXing)
 vars_list.append(actualIntPerXing)
 vars_list.append(NPV)
@@ -501,7 +502,6 @@ vars_list.append(met_clus_sumet)
 vars_list.append(met_trk_et)
 vars_list.append(met_trk_phi)
 vars_list.append(met_trk_sumet)
-
 """
 vars_list.append(mumu_mulead_pt)
 vars_list.append(mumu_musublead_pt)
@@ -513,7 +513,6 @@ vars_list.append(mumu_mVis)
 vars_list.append(mumu_mTtot)
 vars_list.append(mumu_sumcosdphi)
 vars_list.append(mumu_angle)
-"""
 
 
 vars_dict = {}
