@@ -64,6 +64,11 @@ class PairVars(object):
       # Angle between two particles
       # ---------------------
       self.angle = self.lead.tlv.Angle(self.sublead.tlv.Vect())
+      
+      # Angle between two particles
+      # ---------------------
+      self.deltapt = abs(self.lead.tlv.Pt() - self.sublead.tlv.Pt())
+      self.reldeltapt = abs(self.lead.tlv.Pt() - self.sublead.tlv.Pt()) / self.lead.tlv.Pt()
 
       # weights and cuts
       # ---------------------
