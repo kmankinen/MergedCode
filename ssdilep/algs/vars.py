@@ -61,6 +61,8 @@ class PairVars(object):
       scdphi += ROOT.TMath.Cos(self.met.tlv.Phi() - self.sublead.tlv.Phi())
       self.SumCosDphi = scdphi
 
+      # Angle between two particles
+      # ---------------------
       self.angle = self.lead.tlv.Angle(self.sublead.tlv.Vect())
 
       # weights and cuts
