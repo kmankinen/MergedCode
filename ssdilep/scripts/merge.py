@@ -31,6 +31,8 @@ parser.add_option('-i', '--input', dest='indir',
                   help='input directory',metavar='INDIR',default=None)
 parser.add_option('-o', '--output', dest='outdir',
                   help='output directory',metavar='OUTDIR',default=None)
+parser.add_option('-f', '--fakest', dest='fakest',
+                  help='choose fake estimate',metavar='FAKEST',default=None)
 
 
 (options, args) = parser.parse_args()
@@ -79,8 +81,8 @@ fakes_mumu = samples.fakes.copy()
 
 ## signals
 mumu_signals = []
-#mumu_signals.append(samples.all_DCH)
-mumu_signals.append(samples.DCH800)
+mumu_signals.append(samples.all_DCH)
+#mumu_signals.append(samples.DCH800)
 
 
 
@@ -90,15 +92,14 @@ mumu_signals.append(samples.DCH800)
 for s in mc_backgrounds + mumu_signals + [data]: 
     histmgr.load_base_estimator(hm,s)
 
-
-if options.makeplot == "True":
+if options.fakest == "FakeFactor":
   fakes_mumu.estimator = histmgr.FakeEstimator(
       hm=hm, 
       sample=fakes_mumu,
       data_sample = data,
       mc_samples = mc_backgrounds )
-else:
- fakes_mumu.estimator = histmgr.DataBkgSubEstimator(
+elif options.fakest == "Subtraction":
+  fakes_mumu.estimator = histmgr.DataBkgSubEstimator(
      hm=hm,
      sample=fakes_mumu,
      data_sample=data,
@@ -147,7 +148,7 @@ if options.makeplot == "True":
  funcs.plot_hist(
     backgrounds   = mumu_backgrounds,
     signal        = mumu_signals, 
-    data          = data,
+    #data          = data,
     region        = options.region,
     label         = options.label,
     histname      = os.path.join(mumu_vdict[options.vname]['path'],mumu_vdict[options.vname]['hname']),
@@ -169,7 +170,8 @@ else:
          region      = options.region,
          icut        = int(options.icut),
          histname    = os.path.join(mumu_vdict[options.vname]['path'],mumu_vdict[options.vname]['hname']),
-         rebin       = mumu_vdict[options.vname]['rebin'],
+         #rebin       = mumu_vdict[options.vname]['rebin'],
+         rebin       = 1,
          sys_dict    = None,
          outname     = plotsfile
          )
