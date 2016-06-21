@@ -380,8 +380,14 @@ class CutAlg(pyframe.core.Algorithm):
       
       for p in pairs:
         p.StoreCut(cname,False)
-        if p.lead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.lead.isTrigMatchedToChain.at(trig["HLT_mu50"]) : p.StoreCut(cname,True)
-        if p.sublead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.sublead.isTrigMatchedToChain.at(trig["HLT_mu50"]) : p.StoreCut(cname,True)
+        
+        if p.lead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.lead.isTrigMatchedToChain.at(trig["HLT_mu50"]):
+          if p.sublead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.sublead.isTrigMatchedToChain.at(trig["HLT_mu50"]): 
+            p.StoreCut(cname,True)
+        
+        #if p.lead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.lead.isTrigMatchedToChain.at(trig["HLT_mu50"]) : p.StoreCut(cname,True)
+        #if p.sublead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.sublead.isTrigMatchedToChain.at(trig["HLT_mu50"]) : p.StoreCut(cname,True)
+      
       return True
 
     #__________________________________________________________________________
@@ -396,7 +402,7 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_MatchSingleMuPrescChain(self):
       muons = self.store['muons']
-      trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":1, "HLT_mu50":2}
+      trig = {"HLT_mu20_L1MU15":0}
       for m in muons:
         if m.isTrigMatchedToChain.at(trig["HLT_mu20_L1MU15"]): return True
       return False
@@ -455,6 +461,23 @@ class CutAlg(pyframe.core.Algorithm):
             p.StoreCut(cname,False)
       return True
    
+    #__________________________________________________________________________
+    def cut_MuPairsAngleHi10Low25(self):
+      cname = "MuPairsAngleHi10Low25"
+      pairs = self.store['mu_pairs']
+      for p in pairs:
+        p.StoreCut(cname,abs(p.angle)>1.0 and abs(p.angle)<2.5)
+      return True
+   
+    #__________________________________________________________________________
+    def cut_MuPairsZ0SinThetaNot002(self):
+      cname = "MuPairsZ0SinThetaNot002"
+      pairs = self.store['mu_pairs']
+      for p in pairs:
+        p.StoreCut(cname,True)
+        if not (abs(p.lead.trkz0sintheta)>0.02 and abs(p.sublead.trkz0sintheta)>0.02):
+          p.StoreCut(cname,False)
+      return True
    
     #__________________________________________________________________________
     def cut_MuPairsFilterTT(self):
@@ -847,7 +870,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         ## get event candidate
         muons      = self.store['muons'] 
         mu_lead    = muons[0]
-        mu_sublead = muons[1]
+        #mu_sublead = muons[1]
         jets       = self.store['jets']
         #jet_lead   = jets[0]
         
@@ -865,7 +888,6 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         # -----------------
         # Create histograms
         # -----------------
-
         ## event plots
         self.h_averageIntPerXing = self.hist('h_averageIntPerXing', "ROOT.TH1F('$', ';averageInteractionsPerCrossing;Events', 50, -0.5, 49.5)", dir=EVT)
         self.h_actualIntPerXing = self.hist('h_actualIntPerXing', "ROOT.TH1F('$', ';actualInteractionsPerCrossing;Events', 50, -0.5, 49.5)", dir=EVT)
@@ -911,6 +933,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         
         
         # subleading
+        """
         self.h_musublead_pt = self.hist('h_musublead_pt', "ROOT.TH1F('$', ';p_{T}(#mu_{sublead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MUONS)
         self.h_musublead_eta = self.hist('h_musublead_eta', "ROOT.TH1F('$', ';#eta(#mu_{sublead});Events / (0.1)', 50, -2.5, 2.5)", dir=MUONS)
         self.h_musublead_phi = self.hist('h_musublead_phi', "ROOT.TH1F('$', ';#phi(#mu_{sublead});Events / (0.1)', 64, -3.2, 3.2)", dir=MUONS)
@@ -929,7 +952,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         self.h_musublead_ptcone20 = self.hist('h_musublead_ptcone20', "ROOT.TH1F('$', ';ptcone20/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
         self.h_musublead_ptcone30 = self.hist('h_musublead_ptcone30', "ROOT.TH1F('$', ';ptcone30/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
         self.h_musublead_ptcone40 = self.hist('h_musublead_ptcone40', "ROOT.TH1F('$', ';ptcone40/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        
+        """ 
         ## met plots
         self.h_met_clus_et = self.hist('h_met_clus_et', "ROOT.TH1F('$', ';E^{miss}_{T}(clus) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET)
         self.h_met_clus_phi = self.hist('h_met_clus_phi', "ROOT.TH1F('$', ';#phi(E^{miss}_{T}(clus));Events / (0.1)', 64, -3.2, 3.2)", dir=MET)
@@ -937,10 +960,11 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         self.h_met_trk_phi = self.hist('h_met_trk_phi', "ROOT.TH1F('$', ';#phi(E^{miss}_{T}(trk));Events / (0.1)', 64, -3.2, 3.2)", dir=MET)
         self.h_met_clus_sumet = self.hist('h_met_clus_sumet', "ROOT.TH1F('$', ';#Sigma E_{T}(clus) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET)
         self.h_met_trk_sumet = self.hist('h_met_trk_sumet', "ROOT.TH1F('$', ';#Sigma E_{T}(trk) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET)
-        
+        """
         ## muons pairs
         self.h_mumu_mVis = self.hist('h_mumu_mVis', "ROOT.TH1F('$', ';m_{vis}(#mu#mu) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=PAIRS)
         self.h_mumu_mTtot = self.hist('h_mumu_mTtot', "ROOT.TH1F('$', ';m^{tot}_{T}(#mu#mu) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=PAIRS)
+        self.h_mumu_angle = self.hist('h_mumu_angle', "ROOT.TH1F('$', ';#omega(#mu#mu);Events', 320, 0.0, 3.2)", dir=PAIRS)
         self.h_mumu_sumcosdphi = self.hist('h_mumu_sumcosdphi', "ROOT.TH1F('$', ';#Sigmacos#Delta#phi(#mu_{lead/sublead},E^{miss}_{T});Events / 0.1', 40, -2, 2)", dir=PAIRS)
         self.h_mumu_mulead_pt = self.hist('h_mumu_mulead_pt', "ROOT.TH1F('$', ';p_{T}(#mu#mu_{lead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=PAIRS)
         self.h_mumu_musublead_pt = self.hist('h_mumu_musublead_pt', "ROOT.TH1F('$', ';p_{T}(#mu#mu_{sublead}) [GeV];Events / (1 GeV)',2000,0.0,2000.0)",dir=PAIRS)
@@ -948,12 +972,11 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         self.h_mumu_musublead_eta = self.hist('h_mumu_musublead_eta', "ROOT.TH1F('$', ';#eta(#mu#mu_{sublead});Events / (0.1)', 50, -2.5, 2.5)", dir=PAIRS)
         self.h_mumu_mulead_phi = self.hist('h_mumu_mulead_phi', "ROOT.TH1F('$', ';#phi(#mu#mu_{lead});Events / (0.1)', 64, -3.2, 3.2)", dir=PAIRS)
         self.h_mumu_musublead_phi = self.hist('h_mumu_musublead_phi', "ROOT.TH1F('$', ';#phi(#mu#mu_{sublead});Events / (0.1)', 64, -3.2, 3.2)", dir=PAIRS)
-        
+        """
         # ---------------
         # Fill histograms
         # ---------------
         if passed:
-
           ## event plots
           self.h_averageIntPerXing.Fill(self.chain.averageInteractionsPerCrossing, weight)
           self.h_actualIntPerXing.Fill(self.chain.actualInteractionsPerCrossing, weight)
@@ -1002,6 +1025,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
          
          
           # subleading
+          """
           self.h_musublead_pt.Fill(mu_sublead.tlv.Pt()/GeV, weight)
           self.h_musublead_eta.Fill(mu_sublead.tlv.Eta(), weight)
           self.h_musublead_phi.Fill(mu_sublead.tlv.Phi(), weight)
@@ -1020,7 +1044,8 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
           self.h_musublead_ptcone20.Fill(mu_sublead.ptcone20/mu_sublead.tlv.Pt(), weight)
           self.h_musublead_ptcone30.Fill(mu_sublead.ptcone30/mu_sublead.tlv.Pt(), weight)
           self.h_musublead_ptcone40.Fill(mu_sublead.ptcone40/mu_sublead.tlv.Pt(), weight)
-
+          """
+          
           ## met plots
           self.h_met_clus_et.Fill(met_clus.tlv.Pt()/GeV, weight)
           self.h_met_clus_phi.Fill(met_clus.tlv.Phi(), weight)
@@ -1028,7 +1053,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
           self.h_met_trk_phi.Fill(met_trk.tlv.Phi(), weight)
           self.h_met_clus_sumet.Fill(met_clus.sumet/GeV, weight)
           self.h_met_trk_sumet.Fill(met_trk.sumet/GeV, weight)
-         
+          """       
           ## muon pairs plots
           for mp in mupairs:
            
@@ -1044,6 +1069,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
                pweight *= mp.GetWeight(w)
             
             if pcut:           
+             self.h_mumu_angle.Fill(mp.angle, pweight * weight)
              self.h_mumu_mVis.Fill(mp.m_vis/GeV, pweight * weight)
              self.h_mumu_mTtot.Fill(mp.mt_tot/GeV, pweight * weight)
              self.h_mumu_sumcosdphi.Fill(mp.SumCosDphi, pweight * weight)
@@ -1053,7 +1079,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
              self.h_mumu_musublead_eta.Fill(mp.sublead.tlv.Eta(), pweight * weight)
              self.h_mumu_mulead_phi.Fill(mp.lead.tlv.Phi(), pweight * weight)
              self.h_mumu_musublead_phi.Fill(mp.sublead.tlv.Phi(), pweight * weight)
-    
+          """
     #__________________________________________________________________________
     def check_region(self,cutnames):
         cut_passed = True
