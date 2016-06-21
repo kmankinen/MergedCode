@@ -98,6 +98,7 @@ if options.fakest == "FakeFactor":
       sample=fakes_mumu,
       data_sample = data,
       mc_samples = mc_backgrounds )
+
 elif options.fakest == "Subtraction":
   fakes_mumu.estimator = histmgr.DataBkgSubEstimator(
      hm=hm,
@@ -105,6 +106,10 @@ elif options.fakest == "Subtraction":
      data_sample=data,
      background_samples=mc_backgrounds,
      )
+
+else:
+  print "WARNING: no estimator for fake bkg!!!"
+
 
 #-----------------
 # Systematics       
