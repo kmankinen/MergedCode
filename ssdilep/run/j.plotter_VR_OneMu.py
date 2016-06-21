@@ -141,54 +141,6 @@ def analyze(config):
             )
     """ 
     
-    ## pairs
-    ## +++++++++++++++++++++++++++++++++++++++
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="Tight",
-            sublead_mu_level="Tight",
-            key='MuPairsAllTightSF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="Tight",
-            sublead_mu_level="NotTight",
-            key='MuPairsLeadTightSubLeadNotTightAllSF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="NotTight",
-            sublead_mu_level="Tight",
-            key='MuPairsLeadNotTightSubLeadTightAllSF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="NotTight",
-            sublead_mu_level="NotTight",
-            key='MuPairsLeadNotTightSubLeadNotTightAllSF',
-            scale=None,
-            )
-    
-    ## fake-factors
-    """
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/hist_ff.root'),
-            mu_index=0,
-            key='MuPairsLeadFF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/hist_ff.root'),
-            mu_index=1,
-            key='MuPairsSubLeadFF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/hist_ff.root'),
-            mu_index=2,
-            key='MuPairsLeadSubLeadFF',
-            scale=None,
-            )
-    """ 
     ## objects
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.ObjWeights.MuAllSF(
@@ -206,14 +158,14 @@ def analyze(config):
             )
     """
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_FinFF_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_DebugFF_ff.root'),
             mu_index=0,
             key='MuLeadFF',
             scale=sys_ff,
             )
     """
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_FinFF_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_DebugFF_ff.root'),
             mu_index=1,
             key='MuSubLeadFF',
             scale=sys_ff,

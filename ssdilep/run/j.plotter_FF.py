@@ -109,14 +109,8 @@ def analyze(config):
    
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastOneMuon') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TwoMuons') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneMuon') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt20') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt22') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt20') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt12') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
 
     
@@ -125,6 +119,7 @@ def analyze(config):
     ## event
     ## +++++++++++++++++++++++++++++++++++++++
     """
+    No trigger scale factors!!!
     loop += ssdilep.algs.EvWeights.MuTrigSF(
             is_single_mu = True,
             mu_trig_level="Loose_Loose",
@@ -133,64 +128,7 @@ def analyze(config):
             scale=None,
             )
     """ 
-    """
-    loop += ssdilep.algs.EvWeights.MuTrigSF(
-            is_di_mu = True,
-            mu_trig_level="Loose_Loose",
-            mu_trig_chain="HLT_2mu10",
-            key='DiMuonTrigSF',
-            scale=None,
-            )
-    """ 
     
-    ## pairs
-    ## +++++++++++++++++++++++++++++++++++++++
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="Tight",
-            sublead_mu_level="Tight",
-            key='MuPairsAllTightSF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="Tight",
-            sublead_mu_level="NotTight",
-            key='MuPairsLeadTightSubLeadNotTightAllSF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="NotTight",
-            sublead_mu_level="Tight",
-            key='MuPairsLeadNotTightSubLeadTightAllSF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="NotTight",
-            sublead_mu_level="NotTight",
-            key='MuPairsLeadNotTightSubLeadNotTightAllSF',
-            scale=None,
-            )
-    
-    ## fake-factors
-    """
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/hist_ff.root'),
-            mu_index=0,
-            key='MuPairsLeadFF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/hist_ff.root'),
-            mu_index=1,
-            key='MuPairsSubLeadFF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/hist_ff.root'),
-            mu_index=2,
-            key='MuPairsLeadSubLeadFF',
-            scale=None,
-            )
-    """ 
     ## objects
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.ObjWeights.MuAllSF(
@@ -199,50 +137,21 @@ def analyze(config):
             key='MuLeadAllSF',
             scale=None,
             )
-    """
-    loop += ssdilep.algs.ObjWeights.MuAllSF(
-            #mu_level="NotTight",
-            mu_index=1,
-            key='MuSubLeadAllSF',
-            scale=None,
-            )
-    """
-    """
-    loop += ssdilep.algs.ObjWeights.MuFakeFactor(
-            #config_file=os.path.join(main_path,'ssdilep/data/hist_ff.root'),
-            #config_file=os.path.join(main_path,'ssdilep/data/hist_ff_merged_TueZ0.root'),
-            #config_file=os.path.join(main_path,'ssdilep/data/hist_ff_merged_Tue2Mu10.root'),
-            #config_file=os.path.join(main_path,'ssdilep/data/hist_ff_merged_Flip.root'),
-            config_file=os.path.join(main_path,'ssdilep/data/hist_ff_merged_Try13.root'),
-            mu_index=0,
-            key='MuLeadFF',
-            scale=None,
-            )
-    loop += ssdilep.algs.ObjWeights.MuFakeFactor(
-            #config_file=os.path.join(main_path,'ssdilep/data/hist_ff.root'),
-            #config_file=os.path.join(main_path,'ssdilep/data/hist_ff_merged_TueZ0.root'),
-            #config_file=os.path.join(main_path,'ssdilep/data/hist_ff_merged_Tue2Mu10.root'),
-            #config_file=os.path.join(main_path,'ssdilep/data/hist_ff_merged_Flip.root'),
-            config_file=os.path.join(main_path,'ssdilep/data/hist_ff_merged_Try13.root'),
-            mu_index=1,
-            key='MuSubLeadFF',
-            scale=None,
-            )
-    """
+    
     ##-------------------------------------------------------------------------
     ## make plots
     ##-------------------------------------------------------------------------
     
-    ## di-jet control region fakes numerator
+    ## FR1
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR1_NUM',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -251,16 +160,14 @@ def analyze(config):
               ['METlow40',None],
               ],
             )
-    ## di-jet control region fakes denominator
-    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR1_DEN',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -271,16 +178,16 @@ def analyze(config):
             )
 
 
-    ## di-jet control region fakes numerator
+    ## FR2
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR2_NUM',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -289,16 +196,14 @@ def analyze(config):
               ['METlow30',None],
               ],
             )
-    ## di-jet control region fakes denominator
-    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR2_DEN',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -309,16 +214,16 @@ def analyze(config):
             )
 
 
-    ## di-jet control region fakes numerator
+    ## FR3
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR3_NUM',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -327,16 +232,14 @@ def analyze(config):
               ['METlow50',None],
               ],
             )
-    ## di-jet control region fakes denominator
-    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR3_DEN',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -349,16 +252,16 @@ def analyze(config):
 
 
 
-    ## di-jet control region fakes numerator
+    ## FR4
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR4_NUM',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt40',None],
@@ -367,16 +270,14 @@ def analyze(config):
               ['METlow40',None],
               ],
             )
-    ## di-jet control region fakes denominator
-    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR4_DEN',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt40',None],
@@ -387,16 +288,16 @@ def analyze(config):
             )
 
 
-    ## di-jet control region fakes numerator
+    ## FR5
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR5_NUM',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -405,16 +306,14 @@ def analyze(config):
               ['METlow40',None],
               ],
             )
-    ## di-jet control region fakes denominator
-    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR5_DEN',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -426,16 +325,16 @@ def analyze(config):
 
 
 
-    ## di-jet control region fakes numerator
+    ## FR6
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR6_NUM',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -444,16 +343,14 @@ def analyze(config):
               ['METlow40',None],
               ],
             )
-    ## di-jet control region fakes denominator
-    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR6_DEN',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -464,19 +361,16 @@ def analyze(config):
             )
 
 
-
-
-
-    ## di-jet control region fakes numerator
+    ## FR7
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR7_NUM',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoTight',['MuLeadAllSF']],
               ['MuJetDphi28',None],
               ['AllJetPt35',None],
@@ -485,16 +379,14 @@ def analyze(config):
               ['METlow40',None],
               ],
             )
-    ## di-jet control region fakes denominator
-    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR7_DEN',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotTight',['MuLeadAllSF']],
               ['MuJetDphi28',None],
               ['AllJetPt35',None],
@@ -505,20 +397,16 @@ def analyze(config):
             )
 
 
-
-
-
-
-    ## di-jet control region fakes numerator
+    ## FR8
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR8_NUM',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoTight',['MuLeadAllSF']],
               ['MuJetDphi26',None],
               ['AllJetPt35',None],
@@ -527,16 +415,14 @@ def analyze(config):
               ['METlow40',None],
               ],
             )
-    ## di-jet control region fakes denominator
-    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESFR8_DEN',
             plot_all  = False,
             cut_flow  = [
               ['OneJet',None],
-              ['MuTrigMatch',None],
-              ['MuTruthFilter',None],
-              ['SingleMuTrigPass',None],
+              ['MatchSingleMuPrescChain',None],
+              ['PassSingleMuPrescChain',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotTight',['MuLeadAllSF']],
               ['MuJetDphi26',None],
               ['AllJetPt35',None],

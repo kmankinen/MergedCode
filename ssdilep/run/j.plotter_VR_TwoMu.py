@@ -109,14 +109,8 @@ def analyze(config):
    
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastOneMuon') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TwoMuons') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TwoSSMuons') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneMuon') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt20') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt22') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt20') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt12') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
 
     
@@ -131,86 +125,27 @@ def analyze(config):
             key='SingleMuonTrigSF',
             scale=None,
             )
-    """
-    loop += ssdilep.algs.EvWeights.MuTrigSF(
-            is_di_mu = True,
-            mu_trig_level="Loose_Loose",
-            mu_trig_chain="HLT_2mu10",
-            key='DiMuonTrigSF',
-            scale=None,
-            )
-    """ 
     
-    ## pairs
-    ## +++++++++++++++++++++++++++++++++++++++
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="Tight",
-            sublead_mu_level="Tight",
-            key='MuPairsAllTightSF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="Tight",
-            sublead_mu_level="NotTight",
-            key='MuPairsLeadTightSubLeadNotTightAllSF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="NotTight",
-            sublead_mu_level="Tight",
-            key='MuPairsLeadNotTightSubLeadTightAllSF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            lead_mu_level="NotTight",
-            sublead_mu_level="NotTight",
-            key='MuPairsLeadNotTightSubLeadNotTightAllSF',
-            scale=None,
-            )
-    
-    ## fake-factors
-    """
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/hist_ff.root'),
-            mu_index=0,
-            key='MuPairsLeadFF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/hist_ff.root'),
-            mu_index=1,
-            key='MuPairsSubLeadFF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/hist_ff.root'),
-            mu_index=2,
-            key='MuPairsLeadSubLeadFF',
-            scale=None,
-            )
-    """ 
     ## objects
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.ObjWeights.MuAllSF(
-            #mu_level="Tight",
             mu_index=0,
             key='MuLeadAllSF',
             scale=None,
             )
     loop += ssdilep.algs.ObjWeights.MuAllSF(
-            #mu_level="NotTight",
             mu_index=1,
             key='MuSubLeadAllSF',
             scale=None,
             )
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_FinFF_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_DebugFF_ff.root'),
             mu_index=0,
             key='MuLeadFF',
             scale=sys_ff,
             )
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_FinFF_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_DebugFF_ff.root'),
             mu_index=1,
             key='MuSubLeadFF',
             scale=sys_ff,

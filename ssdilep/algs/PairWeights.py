@@ -38,20 +38,22 @@ class MuPairsAllSF(pyframe.core.Algorithm):
     """
     #__________________________________________________________________________
     def __init__(self, name="MuPairsAllSF",
-            lead_mu_level    = None,
-            sublead_mu_level = None,
+            #lead_mu_level    = None,
+            #sublead_mu_level = None,
             key              = None,
             scale            = None,
             ):
         pyframe.core.Algorithm.__init__(self, name=name)
-        self.lead_mu_level    = lead_mu_level
-        self.sublead_mu_level = sublead_mu_level
+        #self.lead_mu_level    = lead_mu_level
+        #self.sublead_mu_level = sublead_mu_level
         self.key              = key
         self.scale            = scale
 
         assert key, "Must provide key for storing mu pairs reco sf"
     #_________________________________________________________________________
     def initialize(self):
+      pass
+      """
       self.reco_levels = {"Loose":"Loose", "Medium":"Loose",         "Tight":"Loose"}
       self.iso_levels  = {"Loose":"Loose", "Medium":"FixedCutLoose", "Tight":"FixedCutTightTrackOnly"}
       self.ttva_levels = {"Loose": None,   "Medium": None,           "Tight": None}
@@ -69,7 +71,7 @@ class MuPairsAllSF(pyframe.core.Algorithm):
       else:
         assert self.sublead_mu_level in self.sublead_mu_levels, "ERROR: sublead_mu_level %s not recognised!!!" % self.sublead_mu_level
         self.sublead_mu_levels = [self.sublead_mu_level]
-
+      """
 
     #_________________________________________________________________________
     def execute(self, weight):
@@ -84,16 +86,26 @@ class MuPairsAllSF(pyframe.core.Algorithm):
              if mp.lead.isTruthMatchedToMuon:
                sf_lead *= getattr(mp.lead,"_".join(["RecoEff","SF","Loose"])).at(0)
                sf_lead *= getattr(mp.lead,"_".join(["TTVAEff","SF"])).at(0)
-               for l in self.lead_mu_levels:
-                 if getattr(mp.lead,"isIsolated_"+self.iso_levels[l]):
-                   sf_lead *= getattr(mp.lead,"_".join(["IsoEff","SF",self.iso_levels[l]])).at(0)
+            
+               if getattr(mp.lead,"isIsolated_FixedCutTightTrackOnly"):
+                 sf_lead *= getattr(mp.lead,"_".join(["IsoEff","SF","FixedCutTightTrackOnly"])).at(0)
+               elif getattr(mp.lead,"isIsolated_FixedCutLoose"):
+                 sf_lead *= getattr(mp.lead,"_".join(["IsoEff","SF","FixedCutLoose"])).at(0)
+               elif getattr(mp.lead,"isIsolated_Loose"):
+                 sf_lead *= getattr(mp.lead,"_".join(["IsoEff","SF","Loose"])).at(0)
+               else: pass
              
              if mp.sublead.isTruthMatchedToMuon:
                sf_sublead *= getattr(mp.sublead,"_".join(["RecoEff","SF","Loose"])).at(0)
                sf_sublead *= getattr(mp.sublead,"_".join(["TTVAEff","SF"])).at(0)
-               for l in self.sublead_mu_levels:
-                 if getattr(mp.sublead,"isIsolated_"+self.iso_levels[l]):
-                   sf_sublead *= getattr(mp.sublead,"_".join(["IsoEff","SF",self.iso_levels[l]])).at(0)
+            
+               if getattr(mp.sublead,"isIsolated_FixedCutTightTrackOnly"):
+                 sf_sublead *= getattr(mp.sublead,"_".join(["IsoEff","SF","FixedCutTightTrackOnly"])).at(0)
+               elif getattr(mp.sublead,"isIsolated_FixedCutLoose"):
+                 sf_sublead *= getattr(mp.sublead,"_".join(["IsoEff","SF","FixedCutLoose"])).at(0)
+               elif getattr(mp.sublead,"isIsolated_Loose"):
+                 sf_sublead *= getattr(mp.sublead,"_".join(["IsoEff","SF","Loose"])).at(0)
+               else: pass
              
              mp.StoreWeight(self.key, sf_lead * sf_sublead)
                
@@ -114,9 +126,9 @@ class MuPairsFakeFactor(pyframe.core.Algorithm):
     def __init__(self, name="MuPairsFakeFactor",config_file=None,mu_index=None,key=None,scale=None):
         pyframe.core.Algorithm.__init__(self,name=name)
         self.config_file = config_file
-        self.mu_index = mu_index
-        self.key = key
-        self.scale = scale
+        self.mu_index    = mu_index
+        self.key         = key
+        self.scale       = scale
         
         assert mu_index in [0,1,2], "ERROR: mu_index must be in [0,1,2]"
         assert config_file, "Must provide config file!"
@@ -126,11 +138,10 @@ class MuPairsFakeFactor(pyframe.core.Algorithm):
         f = ROOT.TFile.Open(self.config_file)
         assert f, "Failed to open fake-factor config file: %s"%(self.config_file)
 
-        h_ff = f.Get("h_ff")
-        assert h_ff, "Failed to get 'h_ff' from %s"%(self.config_file)
+        g_ff = f.Get("g_ff_stat_sys")
+        assert g_ff, "Failed to get 'g_ff' from %s"%(self.config_file)
 
-        self.h_ff = h_ff.Clone()
-        self.h_ff.SetDirectory(0)
+        self.g_ff = g_ff.Clone()
         f.Close()
     #_________________________________________________________________________
     def execute(self, weight):
@@ -139,43 +150,49 @@ class MuPairsFakeFactor(pyframe.core.Algorithm):
           #if not self.sampletype == "datadriven": continue
           #if self.sampletype == "mc": continue
           mp.StoreWeight(self.key,1.0)
-          pt_lead = mp.lead.tlv.Pt()/GeV  
-          pt_sublead = mp.sublead.tlv.Pt()/GeV  
+          pt_mulead = mp.lead.tlv.Pt()/GeV  
+          pt_musublead = mp.sublead.tlv.Pt()/GeV  
           
-          ibin_lead = None
-          ibin_sublead = None
+          for ibin_mulead in xrange(1,self.g_ff.GetN()):
+           edlow = self.g_ff.GetX()[ibin_mulead] - self.g_ff.GetEXlow()[ibin_mulead]
+           edhi  = self.g_ff.GetX()[ibin_mulead] + self.g_ff.GetEXhigh()[ibin_mulead]
+           if pt_mulead>=edlow and pt_mulead<edhi: break
+ 
+          for ibin_musublead in xrange(1,self.g_ff.GetN()):
+           edlow = self.g_ff.GetX()[ibin_musublead] - self.g_ff.GetEXlow()[ibin_musublead]
+           edhi  = self.g_ff.GetX()[ibin_musublead] + self.g_ff.GetEXhigh()[ibin_musublead]
+           if pt_musublead>=edlow and pt_musublead<edhi: break
+ 
+          ff_mulead = 1.0 
+          ff_musublead = 1.0 
 
-          ff_lead = 1.0
-          eff_lead = 0.0
-           
-          ff_sublead = 1.0
-          eff_sublead = 0.0
-          
-          ibin_lead = self.h_ff.GetXaxis().FindBin(pt_lead) 
-          ibin_sublead = self.h_ff.GetXaxis().FindBin(pt_sublead) 
+          eff_up_mulead = 0.0 
+          eff_up_musublead = 0.0 
 
-          assert ibin_lead, "ERROR: pt bin for lead mu not found!!!"
-          assert ibin_sublead, "ERROR: pt bin for sublead mu not found!!!"
-          
-          # error bars are symmetric
+          eff_dn_mulead = 0.0 
+          eff_dn_musublead = 0.0 
+
+          # error bars are asymmetric
           if self.mu_index == 0 or self.mu_index == 2:
-            ff_lead = self.h_ff.GetBinContent(ibin_lead)
-            eff_lead = self.h_ff.GetBinError(ibin_lead)
+            ff_mulead = self.g_ff.GetY()[ibin_mulead]
+            eff_up_mulead = self.g_ff.GetEYhigh()[ibin_mulead]
+            eff_dn_mulead = self.g_ff.GetEYlow()[ibin_mulead]
           if self.mu_index == 1 or self.mu_index == 2:
-            ff_sublead = self.h_ff.GetBinContent(ibin_sublead)
-            eff_sublead = self.h_ff.GetBinError(ibin_sublead)
-          
+            ff_musublead = self.g_ff.GetY()[ibin_musublead]
+            eff_up_musublead = self.g_ff.GetEYhigh()[ibin_musublead]
+            eff_dn_musublead = self.g_ff.GetEYlow()[ibin_musublead]
+ 
           if self.scale == 'up': 
-            ff_lead +=eff_lead
-            ff_sublead += eff_sublead
+           ff_mulead +=eff_up_mulead
+           ff_musublead +=eff_up_musublead
           if self.scale == 'dn': 
-            ff_lead -=eff_lead
-            ff_sublead -= eff_sublead
-
-          mp.StoreWeight(self.key, ff_lead * ff_sublead)
-        
-        if self.key: 
-          self.store[self.key] = 1.0
+           ff_mulead +=eff_dn_mulead
+           ff_musublead +=eff_dn_musublead
+ 
+          mp.StoreWeight(self.key, ff_mulead * ff_musublead)
+ 
+        if self.key:
+           self.store[self.key] = 1.0
 
         return True
 
