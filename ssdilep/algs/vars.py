@@ -116,13 +116,13 @@ class PairVars(object):
     #https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
     #__________________________________________________________________________
     def isTrueNonIsoPair(self):
-      matchtype_lead = self.lead.truthType in [7,8]
-      matchtype_sublead = self.sublead.truthType in [7,8]
+      matchtype_lead = self.lead.truthType in [5,7,8]
+      matchtype_sublead = self.sublead.truthType in [5,7,8]
       return self.lead.isTruthMatchedToMuon and self.sublead.isTruthMatchedToMuon and matchtype_lead and matchtype_sublead
     #__________________________________________________________________________
     def isTrueIsoPair(self):
-      matchtype_lead = self.lead.truthType in [5,6]
-      matchtype_sublead = self.sublead.truthType in [5,6]
+      matchtype_lead = self.lead.truthType in [6]
+      matchtype_sublead = self.sublead.truthType in [6]
       return self.lead.isTruthMatchedToMuon and self.sublead.isTruthMatchedToMuon and matchtype_lead and matchtype_sublead
 
 
@@ -216,11 +216,11 @@ class Particle(pyframe.core.ParticleProxy):
     #https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
     #__________________________________________________________________________
     def isTrueNonIsoMuon(self):
-      matchtype = self.truthType in [7,8]
+      matchtype = self.truthType in [5,7,8]
       return self.isTruthMatchedToMuon and matchtype
     #__________________________________________________________________________
     def isTrueIsoMuon(self):
-      matchtype = self.truthType in [5,6]
+      matchtype = self.truthType in [6]
       return self.isTruthMatchedToMuon and matchtype
 
 
