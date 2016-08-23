@@ -15,8 +15,8 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-indir    = 'HistNewMatchFF'
-outdir   = 'PlotsNewMatchFF'
+indir    = 'Hist18AugNoWeight'
+outdir   = 'Plots18AugNoWeight'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -48,8 +48,8 @@ job_vars['OUTDIR']    = OUTDIR
 job_vars['INDIR']     = INDIR
 job_vars['SCRIPT']    = SCRIPT
 
-fake_estimate = "FakeFactor"
-#fake_estimate = "Subtraction"
+#fake_estimate = "FakeFactor"
+fake_estimate = "Subtraction"
 
 regions = {}
 # use it as such:
@@ -89,7 +89,7 @@ regions["FAKESVR7_NUM"]   = [6,  "VR7 numerator"]
 regions["FAKESVR7_LTDEN"] = [6,"VR7 loose+tight"]
 regions["FAKESVR7_TLDEN"] = [6,"VR7 tight+loose"]
 regions["FAKESVR7_LLDEN"] = [6,"VR7 loose+loose"]
-"""
+
 
 
 regions["FAKESFR1_NUM"]   = [9,  "di-jet numerator"]
@@ -116,7 +116,12 @@ regions["FAKESFR7_DEN"]   = [9,  "di-jet denominator"]
 
 regions["FAKESFR8_NUM"]   = [9,  "di-jet numerator"]
 regions["FAKESFR8_DEN"]   = [9,  "di-jet denominator"]
+"""
 
+regions["PROBE_TIGHT"]   = [4,  "probe tight"]
+regions["PROBE_TIGHT_TRIGMATCHED"]   = [4,  "probe tight and trigger matched"]
+regions["PROBE_LOOSE"]   = [4,  "probe loose"]
+regions["PROBE_LOOSE_TRIGMATCHED"]   = [4,  "probe loose and trigger matched"]
 
 #---------------------
 # Make input tarball
