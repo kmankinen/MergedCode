@@ -14,10 +14,10 @@ echo "++++++++++++++++++++++++++++"
 echo "copying grid proxy to jobdir"
 echo "++++++++++++++++++++++++++++"
 echo ""
-echo "cp /tmp/x509up_u1132 /imports/rcs5_data/${USER}/jobdir"
+echo "cp /tmp/x509up_u1132 /coepp/cephfs/mel/${USER}/jobdir"
 
 # name of certificate needs to be changed
-cp /tmp/x509up_u1132 /imports/rcs5_data/${USER}/jobdir
+cp /tmp/x509up_u1132 /coepp/cephfs/mel/${USER}/Analysis 
 
 
 

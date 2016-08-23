@@ -6,7 +6,7 @@ ROOT.gROOT.SetBatch(True)
 
 hdict = {}
 
-infile = ROOT.TFile.Open("histsys_ff_FinFF.root","READ")
+infile = ROOT.TFile.Open("histsys_ff_DebugFF.root","READ")
 
 #hdict["NOM"] = infile.Get("h_ff_FR1").Clone()
 hdict["NOM"] = infile.Get("h_ff_FR1").Clone()
@@ -144,7 +144,7 @@ hdict["NOM"].Draw("SAME,PE1")
 
 l2.Draw()
 
-outfile = ROOT.TFile.Open("g_FinFF_ff.root","RECREATE")
+outfile = ROOT.TFile.Open("g_DebugFF_ff.root","RECREATE")
 
 outfile.WriteTObject(g_sys_ff)
 outfile.WriteTObject(g_nom_ff)

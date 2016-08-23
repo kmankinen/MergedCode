@@ -48,8 +48,8 @@ job_vars['OUTDIR']    = OUTDIR
 job_vars['INDIR']     = INDIR
 job_vars['SCRIPT']    = SCRIPT
 
-#fake_estimate = "FakeFactor"
-fake_estimate = "Subtraction"
+fake_estimate = "FakeFactor"
+#fake_estimate = "Subtraction"
 
 regions = {}
 # use it as such:
@@ -144,7 +144,7 @@ for REG,OPT in regions.iteritems():
     job_vars['ICUT']     = OPT[0]
     job_vars['LAB']      = OPT[1]
     job_vars['MAKEPLOT'] = True
-    job_vars['FAKEST']   = True
+    job_vars['FAKEST']   = fake_estimate
     
     VARS = []
     

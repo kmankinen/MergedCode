@@ -21,6 +21,7 @@ log = logging.getLogger(__name__)
 
 ## python
 from itertools import combinations
+from copy import copy
 
 ## pyframe
 import pyframe
@@ -466,9 +467,15 @@ class CutAlg(pyframe.core.Algorithm):
       cname = "MuPairsAngleHi10Low25"
       pairs = self.store['mu_pairs']
       for p in pairs:
-        p.StoreCut(cname,abs(p.angle)>1.0 and abs(p.angle)<2.5)
+        p.StoreCut(cname,True)
+        if p.angle < 1.0 or p.angle > 2.5:
+          p.StoreCut(cname,False)
+      
+      for p in pairs:
+        if (p.angle < 1.0 or p.angle > 2.5):
+         print p, p.cdict, len(pairs), p.angle
       return True
-   
+    
     #__________________________________________________________________________
     def cut_MuPairsZ0SinThetaNot002(self):
       cname = "MuPairsZ0SinThetaNot002"
@@ -1057,15 +1064,17 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
             pcut = True 
             for c in list_cuts:
              if c.startswith("MuPairs"):
+              #print c, mp.angle, mp.HasPassedCut(c)
               pcut = pcut and mp.HasPassedCut(c)
-               
+             
             pweight = 1.0
             if list_weights:
              for w in list_weights: 
               if w.startswith("MuPairs"):
                pweight *= mp.GetWeight(w)
             
-            if pcut:           
+            if pcut: 
+             #if mp.angle < 1.0 or mp.angle > 2.5: print "What the fuck"
              self.h_mumu_angle.Fill(mp.angle, pweight * weight)
              self.h_mumu_mVis.Fill(mp.m_vis/GeV, pweight * weight)
              self.h_mumu_mTtot.Fill(mp.mt_tot/GeV, pweight * weight)
@@ -1171,6 +1180,29 @@ class VarsAlg(pyframe.core.Algorithm):
           self.store['mTtot']          = (muon1T + muon2T + met.tlv).M()  
           self.store['muons_dphi']     = muon2.tlv.DeltaPhi(muon1.tlv)
           self.store['muons_deta']     = muon2.tlv.Eta()-muon1.tlv.Eta()
+          
+          # definition of tag and probe 
+          """
+          lead_mu_is_tight = bool(muon1.isIsolated_FixedCutTightTrackOnly and muon1.trkd0sig<3.)
+          lead_mu_is_loose = bool(not muon1.isIsolated_FixedCutTightTrackOnly and muon1.trkd0sig<10.)
+
+          sublead_mu_is_tight = bool(muon2.isIsolated_FixedCutTightTrackOnly and muon2.trkd0sig<3.)
+          sublead_mu_is_loose = bool(not muon2.isIsolated_FixedCutTightTrackOnly and muon2.trkd0sig<10.)
+          
+          if lead_mu_is_tight and sublead_mu_is_tight:
+            if muon1.trkcharge > 0.0:
+              self.store['tag'] = copy(muon1)
+              self.store['probe'] = copy(muon2) 
+            else:
+              self.store['tag'] = copy(muon2)
+              self.store['probe'] = copy(muon1) 
+          elif lead_mu_is_loose or sublead_mu_is_tight:
+            self.store['tag'] = copy(muon2)
+            self.store['probe'] = copy(muon1) 
+          elif sublead_mu_is_loose or lead_mu_is_tight:
+            self.store['tag'] = copy(muon1)
+            self.store['probe'] = copy(muon2) 
+        """ 
         
         if bool(len(jets)) and bool(len(muons)):
           self.store['mujet_dphi'] = muons[0].tlv.DeltaPhi(jets[0].tlv)

@@ -36,12 +36,12 @@ c_all.SetTicky()
 
 
 for i in xrange(1,9):
-  num_file = ROOT.TFile.Open("histsys_mutight_FinFF%s.root"%i,"READ")
-  den_file = ROOT.TFile.Open("histsys_muloose_FinFF%s.root"%i,"READ")
+  num_file = ROOT.TFile.Open("hists_mulead_pt_FAKESFR%s_NUM.root"%i,"READ")
+  den_file = ROOT.TFile.Open("hists_mulead_pt_FAKESFR%s_DEN.root"%i,"READ")
 
-  h_nom = num_file.Get("h_FAKESFR%s_NUM_nominal_fakes_cr"%i).Clone()
+  h_nom = num_file.Get("h_FAKESFR%s_NUM_nominal_fakes"%i).Clone()
   h_nom.SetNameTitle("h_nom","h_nom")
-  h_den = den_file.Get("h_FAKESFR%s_DEN_nominal_fakes_cr"%i).Clone()
+  h_den = den_file.Get("h_FAKESFR%s_DEN_nominal_fakes"%i).Clone()
   h_den.SetNameTitle("h_den","h_den")
 
   #new_bins = array('d', [22.,23.,24.,26.,28.,30.,34.,38.,45.,80.])
@@ -81,7 +81,7 @@ for i in xrange(1,9):
   
   h_ff.Draw("E1")
   
-  ff_file = ROOT.TFile.Open("histsys_ff_FinFF%s.root"%i,"RECREATE")
+  ff_file = ROOT.TFile.Open("histsys_ff_DebugFF%s.root"%i,"RECREATE")
   
   ff_file.WriteTObject(h_ff)
   ff_file.WriteTObject(c)
