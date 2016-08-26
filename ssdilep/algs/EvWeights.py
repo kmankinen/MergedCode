@@ -213,7 +213,7 @@ class MuTrigMatchSF(pyframe.core.Algorithm):
           elif self.mu_type == "sublead":
             muon = self.store['muons'][1]
           else:
-            muon = self.store[mu_type]
+            muon = self.store[self.mu_type]
           
           for k,v in self.mu_trig_chain_dict.iteritems():
             if muon.isTrigMatchedToChain.at(v):
