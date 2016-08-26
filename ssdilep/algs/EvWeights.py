@@ -171,4 +171,57 @@ class MuTrigSF(pyframe.core.Algorithm):
           self.store[self.key] = trig_sf
         return True
 
+
+#------------------------------------------------------------------------------
+class MuTrigMatchSF(pyframe.core.Algorithm):
+    """
+    Muon trigger scale factor applied to matched muons
+    """
+    #__________________________________________________________________________
+    def __init__(self, name="MuTrigMatchSF",
+            mu_trig_level      = None,
+            mu_trig_chain_dict = None, # {"TRIG1":0,"TRIG2":1,...}
+            mu_type            = None, # one of ["probe","tag","lead","sublead"]
+            key                = None,
+            scale              = None,
+            ):
+        pyframe.core.Algorithm.__init__(self, name=name)
+        self.mu_trig_level      = mu_trig_level
+        self.mu_trig_chain_dict = mu_trig_chain_dict
+        self.mu_type            = mu_type
+        self.key                = key
+        self.scale              = scale
+
+        assert key, "Must provide key for storing mu reco sf"
+    
+    #_________________________________________________________________________
+    def initialize(self):
+      allowed_levels = [
+          "Loose_Loose",
+          "Loose_FixedCutTightTrackOnly",
+          ]
+      assert self.mu_trig_level in allowed_levels, "ERROR: mu trig iso level %s is invalid. Check configuration!!!" % self.mu_trig_level
+      assert self.mu_type in ["probe","tag","lead","sublead"], "ERROR: muon type not compatible. Should be in [probe, tag, lead, sublead]!!!"
+    
+    #_________________________________________________________________________
+    def execute(self, weight):
+        trig_sf=1.0
+        if "mc" in self.sampletype: 
+          muon = None
+          if self.mu_type == "lead":
+            muon = self.store['muons'][0]
+          elif self.mu_type == "sublead":
+            muon = self.store['muons'][1]
+          else:
+            muon = self.store[mu_type]
+          
+          for k,v in self.mu_trig_chain_dict.iteritems():
+            if muon.isTrigMatchedToChain.at(v):
+              trig_sf = getattr(muon,"_".join(["TrigEff","SF",str(self.mu_trig_level)])).at(0)
+          
+          #if self.scale: pass
+       
+        if self.key: 
+          self.store[self.key] = trig_sf
+        return True
 # EOF
