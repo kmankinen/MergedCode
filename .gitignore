@@ -43,6 +43,7 @@ Thumbs.db
 
 # Other files #
 ###############
+*.txt
 *.swp
 *.root
 *.eps
