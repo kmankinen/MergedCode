@@ -17,7 +17,7 @@ echo ""
 echo "cp /tmp/x509up_u1132 /coepp/cephfs/mel/${USER}/jobdir"
 
 # name of certificate needs to be changed
-cp /tmp/x509up_u1132 /coepp/cephfs/mel/${USER}/Analysis 
+cp /tmp/x509up_u1132 /coepp/cephfs/mel/${USER}/jobdir
 
 
 
