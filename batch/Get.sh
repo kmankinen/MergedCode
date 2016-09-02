@@ -61,7 +61,7 @@ MYDIR=Get_${RANDOM}${RANDOM}
 # This is the job!
 # ----------------
 
-export X509_USER_PROXY=/data/fscutti/jobdir/x509up_u1132
+export X509_USER_PROXY=/coepp/cephfs/mel/fscutti/jobdir/x509up_u1132
 setupATLAS
 lsetup rucio
 lsetup root
