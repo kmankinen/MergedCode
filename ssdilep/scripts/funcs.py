@@ -205,6 +205,7 @@ def plot_hist(
     rebin         = None,
     sys_dict      = None,
     do_ratio_plot = False,
+    save_eps      = False,
     plotsfile     = None,
     sig_rescale   = None,
     ):
@@ -217,7 +218,7 @@ def plot_hist(
     '''
     print 'making plot: ', histname, ' in region', region
     
-    assert signal, "ERROR: no signal provided for plot_hist"
+    #assert signal, "ERROR: no signal provided for plot_hist"
     assert backgrounds, "ERROR: no background provided for plot_hist"
     
     samples = backgrounds + signal
@@ -298,11 +299,12 @@ def plot_hist(
     leg.SetFillColor(0)
     leg.SetFillStyle(0)
     if data: leg.AddEntry(h_data,data.tlatex,'PL')
-    for s in signal:
-      sig_tag = s.tlatex
-      if sig_rescale: sig_tag = "%d #times "%int(sig_rescale) + sig_tag
-      if not s in hists.keys(): continue
-      leg.AddEntry(hists[s],sig_tag,'F')
+    if signal:
+     for s in signal:
+       sig_tag = s.tlatex
+       if sig_rescale: sig_tag = "%d #times "%int(sig_rescale) + sig_tag
+       if not s in hists.keys(): continue
+       leg.AddEntry(hists[s],sig_tag,'F')
     for b in backgrounds: 
       if not b in hists.keys(): continue
       leg.AddEntry(hists[b],b.tlatex,'F')
@@ -319,9 +321,9 @@ def plot_hist(
     if xmax==None: xmax = h_total.GetBinLowEdge(h_total.GetNbinsX()+1)
     ymin = 1.e-3
     ymax = h_total.GetMaximum()
-    for s in signal:
-      if not s in hists.keys(): continue
-      ymax = max([ymax,hists[s].GetMaximum()])
+    for b in backgrounds:
+      if not b in hists.keys(): continue
+      ymax = max([ymax,hists[b].GetMaximum()])
     if data: ymax = max([ymax,h_data.GetMaximum()])
     if log: ymax *= 100000.
     else:   ymax *= 1.8
@@ -381,11 +383,12 @@ def plot_hist(
     yaxis1.SetNdivisions(510)
 
     h_stack.Draw("SAME,HIST")
-
-    for s in reversed(signal):
-      if not s in hists.keys(): continue
-      if sig_rescale: hists[s].Scale(sig_rescale)
-      hists[s].Draw("SAME,HIST")
+    
+    if signal:
+     for s in reversed(signal):
+       if not s in hists.keys(): continue
+       if sig_rescale: hists[s].Scale(sig_rescale)
+       hists[s].Draw("SAME,HIST")
 
     if data: h_data.Draw("SAME")
     pad1.SetLogy(log)
@@ -459,8 +462,11 @@ def plot_hist(
       pad2.RedrawAxis()
 
     print 'saving plot...'
-    if not log: c.SaveAs("%s.eps"%c.GetName())
-    else:   c.SaveAs("%s_LOG.eps"%c.GetName())
+    if save_eps:
+     eps_file = plotsfile.replace(".root",".eps")
+     if not log: c.SaveAs(eps_file)
+     else: c.SaveAs(eps_file.replace(".eps","_LOG.eps"))
+
     fout = ROOT.TFile.Open(plotsfile,'UPDATE')
     fout.WriteTObject(c)
     fout.Close()
