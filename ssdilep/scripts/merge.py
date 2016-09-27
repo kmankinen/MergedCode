@@ -7,7 +7,7 @@ import os
 
 from ssdilep.samples import samples
 from ssdilep.plots   import vars_mumu
-from ssdilep.plots   import vars_fakes
+#from ssdilep.plots   import vars_fakes
 from systematics     import *
 
 from optparse import OptionParser
@@ -33,6 +33,8 @@ parser.add_option('-o', '--output', dest='outdir',
                   help='output directory',metavar='OUTDIR',default=None)
 parser.add_option('-f', '--fakest', dest='fakest',
                   help='choose fake estimate',metavar='FAKEST',default=None)
+parser.add_option('-t', '--tag', dest='tag',
+                  help='outfile tag',metavar='TAG',default=None)
 
 
 (options, args) = parser.parse_args()
@@ -40,7 +42,9 @@ parser.add_option('-f', '--fakest', dest='fakest',
 #-----------------
 # Configuration
 #-----------------
-lumi =  3158.13
+#lumi =  3158.13
+#lumi =  3212.96
+lumi =  18232.8
 
 # Control regions
 plotsfile = []
@@ -48,6 +52,7 @@ if options.makeplot == "False":
   plotsfile.append("hists")
 plotsfile.append(options.vname)
 plotsfile.append(options.region)
+plotsfile.append(options.tag)
 
 plotsfile = "_".join(plotsfile)+".root"
 plotsfile = os.path.join(options.outdir,plotsfile)
@@ -61,10 +66,10 @@ hm = histmgr.HistMgr(basedir=options.indir,target_lumi=lumi)
 
 ## data
 data = samples.data
-
 ## backgrounds 
+
 mc_backgrounds = [
-    samples.diboson_sherpa,
+    ##samples.diboson_sherpa,
     ##samples.diboson_powheg,
     samples.Wenu,
     samples.Wmunu,
@@ -72,16 +77,33 @@ mc_backgrounds = [
     samples.Zee,
     samples.Zmumu,
     samples.Ztautau,
-    samples.ttX,
+    #samples.ttX,
     samples.singletop,
-    samples.ttbar,
+    ##samples.ttbar,
    ]
+
+"""
+mc_backgrounds = [
+    ##samples.diboson_sherpa,
+    ##samples.diboson_powheg,
+    samples.WenuPowheg,
+    samples.WmunuPowheg,
+    samples.WtaunuPowheg,
+    samples.ZeePowheg,
+    samples.ZmumuPowheg,
+    samples.ZtautauPowheg,
+    ##samples.ttX,
+    samples.singletop,
+    ##samples.ttbar,
+    #fakes_mumu,
+    ]
+"""
 
 fakes_mumu = samples.fakes.copy()
 
 ## signals
 mumu_signals = []
-mumu_signals.append(samples.all_DCH)
+#mumu_signals.append(samples.all_DCH)
 #mumu_signals.append(samples.DCH800)
 
 
@@ -124,10 +146,10 @@ mc_sys = [
 #for s in mc_backgrounds + mumu_signals:
 #    s.estimator.add_systematics(mc_sys)
 
-fakes_mumu.estimator.add_systematics(FF)
+#fakes_mumu.estimator.add_systematics(FF)
 
 mumu_vdict  = vars_mumu.vars_dict
-fakes_vdict = vars_fakes.vars_dict
+#fakes_vdict = vars_fakes.vars_dict
 
 #-----------------
 # Plotting 
@@ -135,7 +157,7 @@ fakes_vdict = vars_fakes.vars_dict
 
 ## order backgrounds for plots
 mumu_backgrounds = [
-    samples.diboson_sherpa,
+    ##samples.diboson_sherpa,
     ##samples.diboson_powheg,
     samples.Wenu,
     samples.Wmunu,
@@ -143,17 +165,34 @@ mumu_backgrounds = [
     samples.Zee,
     samples.Zmumu,
     samples.Ztautau,
-    samples.ttX,
+    ##samples.ttX,
     samples.singletop,
-    samples.ttbar,
-    fakes_mumu,
+    ##samples.ttbar,
+    #fakes_mumu,
     ]
+
+"""
+mumu_backgrounds = [
+    ##samples.diboson_sherpa,
+    ##samples.diboson_powheg,
+    samples.WenuPowheg,
+    samples.WmunuPowheg,
+    samples.WtaunuPowheg,
+    samples.ZeePowheg,
+    samples.ZmumuPowheg,
+    samples.ZtautauPowheg,
+    ##samples.ttX,
+    samples.singletop,
+    ##samples.ttbar,
+    #fakes_mumu,
+    ]
+"""
 
 if options.makeplot == "True":
  funcs.plot_hist(
     backgrounds   = mumu_backgrounds,
     signal        = mumu_signals, 
-    #data          = data,
+    data          = data,
     region        = options.region,
     label         = options.label,
     histname      = os.path.join(mumu_vdict[options.vname]['path'],mumu_vdict[options.vname]['hname']),
@@ -162,8 +201,10 @@ if options.makeplot == "True":
     rebin         = mumu_vdict[options.vname]['rebin'],
     log           = mumu_vdict[options.vname]['log'],
     icut          = int(options.icut),
-    sys_dict      = sys_dict,
-    do_ratio_plot = True,
+    #sys_dict      = sys_dict,
+    sys_dict      = None,
+    do_ratio_plot = False,
+    save_eps      = True,
     plotsfile     = plotsfile,
     )
 
