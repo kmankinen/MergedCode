@@ -402,14 +402,6 @@ class CutAlg(pyframe.core.Algorithm):
       
       return True
 
-    #__________________________________________________________________________
-    def cut_MatchSingleMuIsoChain(self):
-      muons = self.store['muons']
-      #trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":1, "HLT_mu50":2} # for the "ntuples" file
-      trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":0, "HLT_mu50":1}
-      for m in muons:
-        if m.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or m.isTrigMatchedToChain.at(trig["HLT_mu50"]) : return True
-      return False
     
     
     
@@ -547,27 +539,42 @@ class CutAlg(pyframe.core.Algorithm):
       else: return False
     
     
+    
+    
+    #__________________________________________________________________________
+    def cut_MatchSingleMuIsoChain(self):
+      muons = self.store['muons']
+      trig = {"HLT_mu26_imedium":2, "HLT_mu50":3}
+      for m in muons:
+        if m.isTrigMatchedToChain.at(trig["HLT_mu26_imedium"]) or m.isTrigMatchedToChain.at(trig["HLT_mu50"]) : return True
+      return False
+    
     #__________________________________________________________________________
     def cut_MatchSingleMuPrescChain(self):
       muons = self.store['muons']
-      trig = {"HLT_mu20_L1MU15":0}
+      trig = {"HLT_mu20_L1MU15":0, "HLT_mu24":1, "HLT_mu50":3}
       for m in muons:
-        if m.isTrigMatchedToChain.at(trig["HLT_mu20_L1MU15"]): return True
+        if m.isTrigMatchedToChain.at(trig["HLT_mu20_L1MU15"]) or m.isTrigMatchedToChain.at(trig["HLT_mu24"]) or m.isTrigMatchedToChain.at(trig["HLT_mu50"]): return True
       return False
 
     #__________________________________________________________________________
     def cut_PassSingleMuIsoChain(self):
-      chain = ["HLT_mu20_iloose_L1MU15","HLT_mu50"]
+      chain = ["HLT_mu26_imedium","HLT_mu50"]
       for i in xrange(self.chain.passedTriggers.size()):
         if self.chain.passedTriggers.at(i) in chain: return True
       return False
     
     #__________________________________________________________________________
     def cut_PassSingleMuPrescChain(self):
-      chain = ["HLT_mu20_L1MU15"]
+      chain = ["HLT_mu20_L1MU15","HLT_mu24","HLT_mu50"]
       for i in xrange(self.chain.passedTriggers.size()):
         if self.chain.passedTriggers.at(i) in chain: return True
       return False
+    
+    
+    
+    
+    
     
     #__________________________________________________________________________
     def cut_PassDiMuChain(self):
