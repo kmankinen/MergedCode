@@ -250,8 +250,8 @@ class Estimator(BaseEstimator):
             kfactor = self.sample.kfactor
             Ntotal  = self.hm.get_nevents(self.sample.name,sys,mode)
             # there seems to be no need for feff and kfactor
-            #self.mc_lumi_frac[sys] = (xsec * feff * kfactor) / Ntotal if Ntotal else 0.0
-            self.mc_lumi_frac[sys] = xsec / Ntotal if Ntotal else 0.0
+            self.mc_lumi_frac[sys] = (xsec * feff * kfactor) / Ntotal if Ntotal else 0.0
+            #self.mc_lumi_frac[sys] = xsec / Ntotal if Ntotal else 0.0
         return self.mc_lumi_frac[sys]
 
 
