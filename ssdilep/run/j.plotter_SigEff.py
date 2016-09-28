@@ -119,11 +119,27 @@ def analyze(config):
     ## ---------------------------------------
     ## event
     ## +++++++++++++++++++++++++++++++++++++++
+    """
     loop += ssdilep.algs.EvWeights.MuTrigSF(
             is_single_mu = True,
             mu_trig_level="Loose_Loose",
             mu_trig_chain="HLT_mu20_iloose_L1MU15_OR_HLT_mu50",
             key='SingleMuonTrigSF',
+            scale=None,
+            )
+    """
+    loop += ssdilep.algs.EvWeights.MuTrigMatchSF(
+            mu_trig_level="Loose_Loose",
+            mu_trig_chain_dict ={"HLT_mu20_iloose_L1MU15":0,"HLT_mu50":1},
+            mu_type="tag",
+            key='TagTrigMatchSF',
+            scale=None,
+            )
+    loop += ssdilep.algs.EvWeights.MuTrigMatchSF(
+            mu_trig_level="Loose_Loose",
+            mu_trig_chain_dict ={"HLT_mu20_iloose_L1MU15":0,"HLT_mu50":1},
+            mu_type="probe",
+            key='ProbeTrigMatchSF',
             scale=None,
             )
     
@@ -181,11 +197,13 @@ def analyze(config):
             plot_all  = False,
             obj_keys  = ["mu_pairs"],
             cut_flow  = [
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
+              ['PassSingleMuIsoChain',None],
               ['M15',None],
               ['MZwindow',None],
-              ['MuTruthFilter',None], 
-              ['ProbeIsTightSigTag',None],
+              #['MuTruthFilter',None], 
+              ['ProbeIsTightSigTag',['TagTrigMatchSF']],
+              #['ProbeIsTightSigTag',None],
+              #['ProbeIsTightFFTag',None],
               ],
             )
 
@@ -195,11 +213,13 @@ def analyze(config):
             plot_all  = False,
             obj_keys  = ["mu_pairs"],
             cut_flow  = [
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
+              ['PassSingleMuIsoChain',None],
               ['M15',None],
               ['MZwindow',None],
-              ['MuTruthFilter',None], 
-              ['ProbeIsTightSigTrigMatched',None],
+              #['MuTruthFilter',None], 
+              ['ProbeIsTightSigTrigMatched',['TagTrigMatchSF','ProbeTrigMatchSF']],
+              #['ProbeIsTightSigTrigMatched',None],
+              #['ProbeIsTightFFTrigMatched',None],
               ],
             )
 
@@ -208,11 +228,13 @@ def analyze(config):
             plot_all  = False,
             obj_keys  = ["mu_pairs"],
             cut_flow  = [
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
+              ['PassSingleMuIsoChain',None],
               ['M15',None],
               ['MZwindow',None],
-              ['MuTruthFilter',None], 
-              ['ProbeIsLooseSigTag',None],
+              #['MuTruthFilter',None], 
+              ['ProbeIsLooseSigTag',['TagTrigMatchSF']],
+              #['ProbeIsLooseSigTag',None],
+              #['ProbeIsLooseFFTag',None],
               ],
             )
     
@@ -221,11 +243,13 @@ def analyze(config):
             plot_all  = False,
             obj_keys  = ["mu_pairs"],
             cut_flow  = [
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
+              ['PassSingleMuIsoChain',None],
               ['M15',None],
               ['MZwindow',None],
-              ['MuTruthFilter',None], 
-              ['ProbeIsLooseSigTrigMatched',None],
+              #['MuTruthFilter',None], 
+              ['ProbeIsLooseSigTrigMatched',['TagTrigMatchSF','ProbeTrigMatchSF']],
+              #['ProbeIsLooseSigTrigMatched',None],
+              #['ProbeIsLooseFFTrigMatched',None],
               ],
             )
     

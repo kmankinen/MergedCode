@@ -10,86 +10,86 @@ from ROOT import *
 
 #--------- one and three prong ------------#
 
-f = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_pt_PROBE_TIGHT.root')
+f = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_pt_PROBE_TIGHT.root')
 hist_Zmumu_pt_tight = f.Get('h_PROBE_TIGHT_nominal_data')
 
-g = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_pt_PROBE_TIGHT_TRIGMATCHED.root')
+g = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_pt_PROBE_TIGHT_TRIGMATCHED.root')
 hist_Zmumu_pt_tight_trigmatched = g.Get('h_PROBE_TIGHT_TRIGMATCHED_nominal_data')
 
-h = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_eta_PROBE_TIGHT.root')
+h = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_eta_PROBE_TIGHT.root')
 hist_Zmumu_eta_tight = h.Get('h_PROBE_TIGHT_nominal_data')
 
-i = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_eta_PROBE_TIGHT_TRIGMATCHED.root')
+i = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_eta_PROBE_TIGHT_TRIGMATCHED.root')
 hist_Zmumu_eta_tight_trigmatched = i.Get('h_PROBE_TIGHT_TRIGMATCHED_nominal_data')
 
-j = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_phi_PROBE_TIGHT.root')
+j = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_phi_PROBE_TIGHT.root')
 hist_Zmumu_phi_tight = j.Get('h_PROBE_TIGHT_nominal_data')
 
-k = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_phi_PROBE_TIGHT_TRIGMATCHED.root')
+k = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_phi_PROBE_TIGHT_TRIGMATCHED.root')
 hist_Zmumu_phi_tight_trigmatched = k.Get('h_PROBE_TIGHT_TRIGMATCHED_nominal_data')
 
-l = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_pt_PROBE_LOOSE.root')
+l = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_pt_PROBE_LOOSE.root')
 hist_Zmumu_pt_loose = l.Get('h_PROBE_LOOSE_nominal_data')
 
-m = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_pt_PROBE_LOOSE_TRIGMATCHED.root')
+m = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_pt_PROBE_LOOSE_TRIGMATCHED.root')
 hist_Zmumu_pt_loose_trigmatched = m.Get('h_PROBE_LOOSE_TRIGMATCHED_nominal_data')
 
-n = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_eta_PROBE_LOOSE.root')
+n = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_eta_PROBE_LOOSE.root')
 hist_Zmumu_eta_loose = n.Get('h_PROBE_LOOSE_nominal_data')
 
-o = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_eta_PROBE_LOOSE_TRIGMATCHED.root')
+o = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_eta_PROBE_LOOSE_TRIGMATCHED.root')
 hist_Zmumu_eta_loose_trigmatched = o.Get('h_PROBE_LOOSE_TRIGMATCHED_nominal_data')
 
-p = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_phi_PROBE_LOOSE.root')
+p = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_phi_PROBE_LOOSE.root')
 hist_Zmumu_phi_loose = p.Get('h_PROBE_LOOSE_nominal_data')
 
-q = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/hists_probe_phi_PROBE_LOOSE_TRIGMATCHED.root')
+q = ROOT.TFile('/coepp/cephfs/mel/skeyte/SSDiLep/test/26AugSigTrigCut/hists_probe_phi_PROBE_LOOSE_TRIGMATCHED.root')
 hist_Zmumu_phi_loose_trigmatched = q.Get('h_PROBE_LOOSE_TRIGMATCHED_nominal_data')
 
 
 print hist_Zmumu_pt_tight, hist_Zmumu_pt_tight_trigmatched, hist_Zmumu_eta_tight, hist_Zmumu_eta_tight_trigmatched, hist_Zmumu_phi_tight, hist_Zmumu_phi_tight_trigmatched, hist_Zmumu_pt_loose, hist_Zmumu_pt_loose_trigmatched, hist_Zmumu_eta_loose, hist_Zmumu_eta_loose_trigmatched, hist_Zmumu_phi_loose, hist_Zmumu_phi_loose_trigmatched, 
 
-hist_Zmumu_pt_tight.SetXTitle('')
+hist_Zmumu_pt_tight.SetXTitle('pT')
 hist_Zmumu_pt_tight.SetYTitle('Efficiency')
-hist_Zmumu_pt_tight.SetTitle('')
-hist_Zmumu_pt_tight_trigmatched.SetXTitle('')
+hist_Zmumu_pt_tight.SetTitle('Probe Tight Efficiency vs pT')
+hist_Zmumu_pt_tight_trigmatched.SetXTitle('pT')
 hist_Zmumu_pt_tight_trigmatched.SetYTitle('Efficiency')
-hist_Zmumu_pt_tight_trigmatched.SetTitle('')
+hist_Zmumu_pt_tight_trigmatched.SetTitle('Probe Tight & Trig Matched Efficiency vs pT')
 
-hist_Zmumu_eta_tight.SetXTitle('')
+hist_Zmumu_eta_tight.SetXTitle('eta')
 hist_Zmumu_eta_tight.SetYTitle('Efficiency')
-hist_Zmumu_eta_tight.SetTitle('')
-hist_Zmumu_eta_tight_trigmatched.SetXTitle('')
+hist_Zmumu_eta_tight.SetTitle('Probe Tight Efficiency vs eta')
+hist_Zmumu_eta_tight_trigmatched.SetXTitle('eta')
 hist_Zmumu_eta_tight_trigmatched.SetYTitle('Efficiency')
-hist_Zmumu_eta_tight_trigmatched.SetTitle('')
+hist_Zmumu_eta_tight_trigmatched.SetTitle('Probe Tight & Trig Matched Efficiency vs eta')
 
-hist_Zmumu_phi_tight.SetXTitle('')
+hist_Zmumu_phi_tight.SetXTitle('phi')
 hist_Zmumu_phi_tight.SetYTitle('Efficiency')
-hist_Zmumu_phi_tight.SetTitle('')
-hist_Zmumu_phi_tight_trigmatched.SetXTitle('')
+hist_Zmumu_phi_tight.SetTitle('Probe Tight Efficiency vs phi')
+hist_Zmumu_phi_tight_trigmatched.SetXTitle('phi')
 hist_Zmumu_phi_tight_trigmatched.SetYTitle('Efficiency')
-hist_Zmumu_phi_tight_trigmatched.SetTitle('')
+hist_Zmumu_phi_tight_trigmatched.SetTitle('Probe Tight & Trig Matched Efficiency vs phi')
 
-hist_Zmumu_pt_loose.SetXTitle('')
+hist_Zmumu_pt_loose.SetXTitle('pT')
 hist_Zmumu_pt_loose.SetYTitle('Efficiency')
-hist_Zmumu_pt_loose.SetTitle('')
-hist_Zmumu_pt_loose_trigmatched.SetXTitle('')
+hist_Zmumu_pt_loose.SetTitle('Probe Loose Efficiency vs pT')
+hist_Zmumu_pt_loose_trigmatched.SetXTitle('pT')
 hist_Zmumu_pt_loose_trigmatched.SetYTitle('Efficiency')
-hist_Zmumu_pt_loose_trigmatched.SetTitle('')
+hist_Zmumu_pt_loose_trigmatched.SetTitle('Probe Loose & Trig Matched Efficiency vs pT')
 
-hist_Zmumu_eta_loose.SetXTitle('')
+hist_Zmumu_eta_loose.SetXTitle('eta')
 hist_Zmumu_eta_loose.SetYTitle('Efficiency')
-hist_Zmumu_eta_loose.SetTitle('')
-hist_Zmumu_eta_loose_trigmatched.SetXTitle('')
+hist_Zmumu_eta_loose.SetTitle('Probe Loose Efficiency vs eta')
+hist_Zmumu_eta_loose_trigmatched.SetXTitle('eta')
 hist_Zmumu_eta_loose_trigmatched.SetYTitle('Efficiency')
-hist_Zmumu_eta_loose_trigmatched.SetTitle('')
+hist_Zmumu_eta_loose_trigmatched.SetTitle('Probe Loose & Trig Matched Efficiency vs eta')
 
-hist_Zmumu_phi_loose.SetXTitle('')
+hist_Zmumu_phi_loose.SetXTitle('phi')
 hist_Zmumu_phi_loose.SetYTitle('Efficiency')
-hist_Zmumu_phi_loose.SetTitle('')
-hist_Zmumu_phi_loose_trigmatched.SetXTitle('')
+hist_Zmumu_phi_loose.SetTitle('Probe Loose Efficiency vs phi')
+hist_Zmumu_phi_loose_trigmatched.SetXTitle('phi')
 hist_Zmumu_phi_loose_trigmatched.SetYTitle('Efficiency')
-hist_Zmumu_phi_loose_trigmatched.SetTitle('')
+hist_Zmumu_phi_loose_trigmatched.SetTitle('Probe Loose & Trig Matched Efficiency vs phi')
 
 #pt efficiency plots
 
@@ -145,7 +145,7 @@ h_trigger_efficiency_Zmumu_eta_tight.Divide(hist_Zmumu_eta_tight_trigmatched, hi
 h_trigger_efficiency_Zmumu_eta_loose = hist_Zmumu_eta_loose_trigmatched.Clone()
 h_trigger_efficiency_Zmumu_eta_loose.Divide(hist_Zmumu_eta_loose_trigmatched, hist_Zmumu_eta_loose, 1.0, 1.0, "B")
 
-outfile = ROOT.TFile('Zmumu_trigger_efficiency.root','recreate')
+outfile = ROOT.TFile('Zmumu_Sig_trigger_efficiency.root','recreate')
 
 h_trigger_efficiency_Zmumu_pt_tight.Write()
 h_trigger_efficiency_Zmumu_pt_loose.Write()

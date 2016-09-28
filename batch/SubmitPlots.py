@@ -15,8 +15,8 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-indir    = 'Hist18AugNoWeight'
-outdir   = 'Plots18AugNoWeight'
+indir    = 'Hist27AugSigTrigMenu_singlemu'
+outdir   = 'Plots27AugSigTrigMenu_singlemu'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -118,10 +118,11 @@ regions["FAKESFR8_NUM"]   = [9,  "di-jet numerator"]
 regions["FAKESFR8_DEN"]   = [9,  "di-jet denominator"]
 """
 
-regions["PROBE_TIGHT"]   = [4,  "probe tight"]
-regions["PROBE_TIGHT_TRIGMATCHED"]   = [4,  "probe tight and trigger matched"]
-regions["PROBE_LOOSE"]   = [4,  "probe loose"]
-regions["PROBE_LOOSE_TRIGMATCHED"]   = [4,  "probe loose and trigger matched"]
+#tag and probe regions
+regions["PROBE_TIGHT"]   = [3,  "probe tight"]
+regions["PROBE_TIGHT_TRIGMATCHED"]   = [3,  "probe tight and trigger matched"]
+regions["PROBE_LOOSE"]   = [3,  "probe loose"]
+regions["PROBE_LOOSE_TRIGMATCHED"]   = [3,  "probe loose and trigger matched"]
 
 #---------------------
 # Make input tarball
