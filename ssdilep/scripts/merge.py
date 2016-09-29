@@ -34,7 +34,7 @@ parser.add_option('-o', '--output', dest='outdir',
 parser.add_option('-f', '--fakest', dest='fakest',
                   help='choose fake estimate',metavar='FAKEST',default=None)
 parser.add_option('-t', '--tag', dest='tag',
-                  help='outfile tag',metavar='TAG',default=None)
+                  help='outfile tag',metavar='TAG',default="")
 
 
 (options, args) = parser.parse_args()
