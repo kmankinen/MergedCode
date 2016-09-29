@@ -18,7 +18,7 @@ USER   = os.getenv('USER')
 # inputs
 #NTUP='/coepp/cephfs/mel/fscutti/ssdilep/presc/merged' # input NTUP path
 #NTUP='/coepp/cephfs/mel/fscutti/ssdilep/menu_singlemu/merged' # input NTUP path
-NTUP='/coepp/cephfs/mel/fscutti/ssdilep/menu_singlemu/merged' # input NTUP path
+NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v2_p2689/merged' # input NTUP path
 
 JOBDIR = "/coepp/cephfs/mel/%s/jobdir" % USER # Alright this is twisted...
 INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%m_y%Y_H%H_M%M_S%S")) )
@@ -26,7 +26,7 @@ INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-RUN = "Hist27AugSigTrigMenu_singlemu"
+RUN = "Hist28SepFFTrigHIGG3D3"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 OUTFILE="ntuple.root"         # file output by pyframe job 
@@ -35,7 +35,7 @@ OUTFILE="ntuple.root"         # file output by pyframe job
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
 #SCRIPT="./ssdilep/run/j.plotter_FF.py"  # pyframe job script
 #SCRIPT="./ssdilep/run/j.plotter_VR_TwoMu.py"  # pyframe job script
-SCRIPT="./ssdilep/run/j.plotter_SigEff.py"  # pyframe job script
+SCRIPT="./ssdilep/run/j.plotter_FFEff_Loose.py"  # pyframe job script
 BEXEC="Hist.sh"                      # exec script (probably dont change) 
 DO_NOM = True                        # submit the nominal job
 DO_NTUP_SYS = False                  # submit the NTUP systematics jobs
