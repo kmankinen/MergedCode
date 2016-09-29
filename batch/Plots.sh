@@ -35,6 +35,7 @@ echo
 echo " VAR:       $VAR"
 echo " REG:       $REG"
 echo " LAB:       $LAB"
+echo " TAG:       $TAG"
 echo " ICUT:      $ICUT"
 echo " MAKEPLOT:  $MAKEPLOT"
 echo " FAKEST:    $FAKEST"
@@ -94,14 +95,14 @@ source setup.sh
 
 echo ""
 echo "executing job..."
-echo "python ${SCRIPT} --var=${VAR} --reg=${REG} --lab=${LAB} --icut=${ICUT} --makeplot=${MAKEPLOT} --fakest=${FAKEST} --input=${INDIR} --output=${OUTDIR}"
-python ${SCRIPT} --var=${VAR} --reg=${REG} --lab=${LAB} --icut=${ICUT}  --makeplot=${MAKEPLOT} --fakest=${FAKEST} --input=${INDIR} --output=${OUTDIR}
+echo "python ${SCRIPT} --var=${VAR} --reg=${REG} --lab=${LAB} --tag=${TAG} --icut=${ICUT} --makeplot=${MAKEPLOT} --fakest=${FAKEST} --input=${INDIR} --output=${OUTDIR}"
+python ${SCRIPT} --var=${VAR} --reg=${REG} --lab=${LAB} --tag=${TAG} --icut=${ICUT}  --makeplot=${MAKEPLOT} --fakest=${FAKEST} --input=${INDIR} --output=${OUTDIR}
 echo "finished execution"
 
 echo "copying output"
 
-echo "cp ${MYDIR}/*.eps ${OUTDIR}"
-cp ${MYDIR}/*.eps ${OUTDIR}
+#echo "cp ${MYDIR}/*.eps ${OUTDIR}"
+#cp ${MYDIR}/*.eps ${OUTDIR}
 
 echo "cd ${TMPDIR}"
 cd ${TMPDIR}
