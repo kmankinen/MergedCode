@@ -119,10 +119,10 @@ regions["FAKESFR8_DEN"]   = [9,  "di-jet denominator"]
 """
 
 #tag and probe regions
-regions["PROBE_TIGHT"]   = [3,  "probe tight"]
-regions["PROBE_TIGHT_TRIGMATCHED"]   = [3,  "probe tight and trigger matched"]
-regions["PROBE_LOOSE"]   = [3,  "probe loose"]
-regions["PROBE_LOOSE_TRIGMATCHED"]   = [3,  "probe loose and trigger matched"]
+regions["PROBE_TIGHT"]   = [3,  "probe tight", ""]
+regions["PROBE_TIGHT_TRIGMATCHED"]   = [3,  "probe tight and trigger matched",""]
+regions["PROBE_LOOSE"]   = [3,  "probe loose", ""]
+regions["PROBE_LOOSE_TRIGMATCHED"]   = [3,  "probe loose and trigger matched", ""]
 
 #---------------------
 # Make input tarball
@@ -149,6 +149,7 @@ for REG,OPT in regions.iteritems():
     job_vars['REG']      = REG
     job_vars['ICUT']     = OPT[0]
     job_vars['LAB']      = OPT[1]
+    job_vars['TAG']      = OPT[2]
     job_vars['MAKEPLOT'] = True
     job_vars['FAKEST']   = fake_estimate
     
