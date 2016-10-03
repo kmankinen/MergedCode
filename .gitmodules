@@ -1,0 +1,6 @@
+[submodule "SSDiLepAnalysis"]
+	path = SSDiLepAnalysis
+	url = https://github.com/fscutti/SSDiLepAnalysis
+[submodule "SSDiMuAnalysis"]
+	path = SSDiMuAnalysis
+	url = https://github.com/fscutti/SSDiMuAnalysis.git
