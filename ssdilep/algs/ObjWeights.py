@@ -80,8 +80,8 @@ class MuAllSF(pyframe.core.Algorithm):
             
             if getattr(muon,"isIsolated_FixedCutTightTrackOnly"):
               sf *= getattr(muon,"_".join(["IsoEff","SF","FixedCutTightTrackOnly"])).at(0)
-            elif getattr(muon,"isIsolated_FixedCutLoose"):
-              sf *= getattr(muon,"_".join(["IsoEff","SF","FixedCutLoose"])).at(0)
+            #elif getattr(muon,"isIsolated_FixedCutLoose"):
+            #  sf *= getattr(muon,"_".join(["IsoEff","SF","FixedCutLoose"])).at(0)
             elif getattr(muon,"isIsolated_Loose"):
               sf *= getattr(muon,"_".join(["IsoEff","SF","Loose"])).at(0)
             else: pass
