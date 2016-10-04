@@ -21,7 +21,6 @@ log = logging.getLogger(__name__)
 
 ## python
 from itertools import combinations
-from copy import copy
 
 ## pyframe
 import pyframe
@@ -333,63 +332,6 @@ class CutAlg(pyframe.core.Algorithm):
           if j.tlv.DeltaR(p.lead.tlv)<0.4 or j.tlv.DeltaR(p.sublead.tlv)<0.4:
             p.StoreCut(cname,False)
       return True
-    
-    
-    #__________________________________________________________________________
-    def cut_MuPairsTT(self):
-      cname = "MuPairsTT"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        lead_is_tight = bool(p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<3.)
-        sublead_is_tight = bool(p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<3.)
-        p.StoreCut(cname,lead_is_tight and sublead_is_tight)
-      return True 
-    #__________________________________________________________________________
-    def cut_MuPairsTL(self):
-      cname = "MuPairsTL"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        lead_is_tight = bool(p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<3.)
-        sublead_is_loose = bool(not p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<10.)
-        p.StoreCut(cname,lead_is_tight and sublead_is_loose)
-      return True 
-    #__________________________________________________________________________
-    def cut_MuPairsLT(self):
-      cname = "MuPairsLT"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        lead_is_loose = bool(not p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<10.)
-        sublead_is_tight = bool(p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<3.)
-        p.StoreCut(cname,lead_is_loose and sublead_is_tight)
-      return True 
-    #__________________________________________________________________________
-    def cut_MuPairsLL(self):
-      cname = "MuPairsLL"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        lead_is_loose = bool(not p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<10.)
-        sublead_is_loose = bool(not p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<10.)
-        p.StoreCut(cname,lead_is_loose and sublead_is_loose)
-      return True 
-    
-    #__________________________________________________________________________
-    def cut_MuPairsMatchSingleMuIsoChain(self):
-      cname = "MuPairsMatchSingleMuIsoChain"
-      pairs = self.store['mu_pairs']
-      #trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":1, "HLT_mu50":2} # for the "ntuples" file
-      trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":0, "HLT_mu50":1}
-      
-      for p in pairs:
-        p.StoreCut(cname,False)
-        
-        if p.lead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.lead.isTrigMatchedToChain.at(trig["HLT_mu50"]):
-          if p.sublead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.sublead.isTrigMatchedToChain.at(trig["HLT_mu50"]): 
-            p.StoreCut(cname,True)
-        
-        #if p.lead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.lead.isTrigMatchedToChain.at(trig["HLT_mu50"]) : p.StoreCut(cname,True)
-        #if p.sublead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.sublead.isTrigMatchedToChain.at(trig["HLT_mu50"]) : p.StoreCut(cname,True)
-      
-      return True
 
     #__________________________________________________________________________
     def cut_MatchSingleMuIsoChain(self):
@@ -399,6 +341,15 @@ class CutAlg(pyframe.core.Algorithm):
       for m in muons:
         if m.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or m.isTrigMatchedToChain.at(trig["HLT_mu50"]) : return True
       return False
+    
+    #__________________________________________________________________________
+    def cut_MatchSingleMuPrescChain(self):
+      muons = self.store['muons']
+      trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":1, "HLT_mu50":2}
+      for m in muons:
+        if m.isTrigMatchedToChain.at(trig["HLT_mu20_L1MU15"]): return True
+      return False
+
     #__________________________________________________________________________
     def cut_PassSingleMuIsoChain(self):
       chain = ["HLT_mu20_iloose_L1MU15","HLT_mu50"]
@@ -406,39 +357,12 @@ class CutAlg(pyframe.core.Algorithm):
         if self.chain.passedTriggers.at(i) in chain: return True
       return False
     
-    
-    
     #__________________________________________________________________________
-    def cut_MatchSingleMuPrescChainLow(self):
-      muons = self.store['muons']
-      trig = {"HLT_mu20_L1MU15":0,"HLT_mu24":1}
-      for m in muons:
-        #if m.isTrigMatchedToChain.at(trig["HLT_mu20_L1MU15"]) or m.isTrigMatchedToChain.at(trig["HLT_mu24"]): return True
-        if m.isTrigMatchedToChain.at(trig["HLT_mu20_L1MU15"]): return True
-      return False
-    #__________________________________________________________________________
-    def cut_PassSingleMuPrescChainLow(self):
-      #chain = ["HLT_mu20_L1MU15","HLT_mu24"]
+    def cut_PassSingleMuPrescChain(self):
       chain = ["HLT_mu20_L1MU15"]
       for i in xrange(self.chain.passedTriggers.size()):
         if self.chain.passedTriggers.at(i) in chain: return True
       return False
-    
-    #__________________________________________________________________________
-    def cut_MatchSingleMuPrescChainAll(self):
-      muons = self.store['muons']
-      trig = {"HLT_mu20_L1MU15":0,"HLT_mu24":1}
-      for m in muons:
-        if m.isTrigMatchedToChain.at(trig["HLT_mu20_L1MU15"]) or m.isTrigMatchedToChain.at(trig["HLT_mu24"]): return True
-      return False
-    #__________________________________________________________________________
-    def cut_PassSingleMuPrescChainAll(self):
-      chain = ["HLT_mu20_L1MU15","HLT_mu24"]
-      for i in xrange(self.chain.passedTriggers.size()):
-        if self.chain.passedTriggers.at(i) in chain: return True
-      return False
-    
-    
     
     #__________________________________________________________________________
     def cut_PassDiMuChain(self):
@@ -448,104 +372,46 @@ class CutAlg(pyframe.core.Algorithm):
       return False
     
     #__________________________________________________________________________
-    def cut_LeadMuTruthFilter(self):
-      muons = self.store['muons'] 
-      if self.sampletype == "mc":
-        return muons[0].isTrueIsoMuon()
-      return True
-    
-    #__________________________________________________________________________
-    def cut_SubLeadMuTruthFilter(self):
-      muons = self.store['muons'] 
-      if self.sampletype == "mc":
-        return muons[1].isTrueIsoMuon()
-      return True
-    
-    #__________________________________________________________________________
     def cut_MuTruthFilter(self):
       muons = self.store['muons'] 
       if self.sampletype == "mc":
         for m in muons:
-          if not m.isTrueIsoMuon(): return False
-      return True 
+          if not m.isTrueIsoMuon: return False
+      return True
     
     #__________________________________________________________________________
     def cut_MuPairsTruthFilter(self):
       cname = "MuPairsTruthFilter"
       pairs = self.store['mu_pairs']
+      
       for p in pairs:
         p.StoreCut(cname,True)
-        if self.sampletype == "mc":
-          if not (p.lead.isTrueIsoMuon() and p.sublead.isTrueIsoMuon()):
-            p.StoreCut(cname,False)
+        if not p.isTrueIsoPair():
+          p.StoreCut(cname,False)
       return True
    
     #__________________________________________________________________________
-    def cut_MuPairsAngleHi10Low25(self):
-      cname = "MuPairsAngleHi10Low25"
+    def cut_MuPairsLeadTruthFilter(self):
+      cname = "MuPairsLeadTruthFilter"
       pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if p.angle < 1.0 or p.angle > 2.5:
-          p.StoreCut(cname,False)
       
       for p in pairs:
-        if (p.angle < 1.0 or p.angle > 2.5):
-         print p, p.cdict, len(pairs), p.angle
+        p.StoreCut(cname,True)
+        if not p.lead.isTrueIsoMuon():
+          p.StoreCut(cname,False)
       return True
     
     #__________________________________________________________________________
-    def cut_MuPairsZ0SinThetaNot002(self):
-      cname = "MuPairsZ0SinThetaNot002"
+    def cut_MuPairsSubLeadTruthFilter(self):
+      cname = "MuPairsSubLeadTruthFilter"
       pairs = self.store['mu_pairs']
+      
       for p in pairs:
         p.StoreCut(cname,True)
-        if not (abs(p.lead.trkz0sintheta)>0.02 and abs(p.sublead.trkz0sintheta)>0.02):
+        if not p.sublead.isTrueIsoMuon():
           p.StoreCut(cname,False)
       return True
-   
-    #__________________________________________________________________________
-    def cut_MuPairsFilterTT(self):
-      cname = "MuPairsFilterTT"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc":
-          if not (p.lead.isTrueIsoMuon() and p.sublead.isTrueIsoMuon()):
-            p.StoreCut(cname,False)
-      return True
-    #__________________________________________________________________________
-    def cut_MuPairsFilterLT(self):
-      cname = "MuPairsFilterLT"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc":
-          if not (p.lead.isTrueNonIsoMuon() and p.sublead.isTrueIsoMuon()):
-            p.StoreCut(cname,False)
-      return True
-    #__________________________________________________________________________
-    def cut_MuPairsFilterTL(self):
-      cname = "MuPairsFilterTL"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc":
-          if not (p.lead.isTrueIsoMuon() and p.sublead.isTrueNonIsoMuon()):
-            p.StoreCut(cname,False)
-      return True
-    #__________________________________________________________________________
-    def cut_MuPairsFilterLL(self):
-      cname = "MuPairsFilterLL"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc":
-          if not (p.lead.isTrueNonIsoMuon() and p.sublead.isTrueNonIsoMuon()):
-            p.StoreCut(cname,False)
-      return True
-   
-   
+
     #__________________________________________________________________________
     def cut_LeadMuD0Sig2(self):
       muons = self.store['muons']
@@ -620,11 +486,6 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_LeadMuZ0SinTheta02(self):
       muons = self.store['muons']
       return abs(muons[0].trkz0sintheta)<0.2
-    
-    #__________________________________________________________________________
-    def cut_LeadMuZ0SinTheta05(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)<0.5
     
     
     
@@ -710,11 +571,6 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_METhigher40(self):
       met = self.store["met_clus"]
       return met.tlv.Pt() > 40 * GeV
-    
-    #__________________________________________________________________________
-    def cut_METhigher50(self):
-      met = self.store["met_clus"]
-      return met.tlv.Pt() > 50 * GeV
    
     #__________________________________________________________________________
     def cut_SumCosDPhi02(self):
@@ -889,8 +745,8 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
                region_name = region_name.replace('!', 'N')
                region = os.path.join('/regions/', region_name)
                
-               #if passed:             
-               self.plot(region, passed, list_cuts, cut, list_weights=list_weights, weight=weight)
+               if passed:             
+                 self.plot(region, passed, list_cuts, cut, list_weights=list_weights, weight=weight)
 
         return True
 
@@ -905,224 +761,128 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         ## get event candidate
         muons      = self.store['muons'] 
         mu_lead    = muons[0]
-        #mu_sublead = muons[1]
+        mu_sublead = muons[1]
         jets       = self.store['jets']
-        jet_lead   = jets[0]
+        #jet_lead   = jets[0]
         
         met_trk    = self.store['met_trk']
         met_clus   = self.store['met_clus']
-        #mupairs    = self.store['mu_pairs']
+        mupairs    = self.store['mu_pairs']
         
         ## plot directories
         EVT    = os.path.join(region, 'event')
         MUONS  = os.path.join(region, 'muons')
         MET    = os.path.join(region, 'met')
         JETS   = os.path.join(region, 'jets')
-        #PAIRS  = os.path.join(region, 'pairs')
+        PAIRS  = os.path.join(region, 'pairs')
         
-        # -----------------
-        # Create histograms
-        # -----------------
+        # if the cut is not passed plot an empty hist
+        # but plot it anyway!!!
+        #if not passed: weight *= 0
+     
         ## event plots
-        self.h_averageIntPerXing = self.hist('h_averageIntPerXing', "ROOT.TH1F('$', ';averageInteractionsPerCrossing;Events', 50, -0.5, 49.5)", dir=EVT)
-        self.h_actualIntPerXing = self.hist('h_actualIntPerXing', "ROOT.TH1F('$', ';actualInteractionsPerCrossing;Events', 50, -0.5, 49.5)", dir=EVT)
-        self.h_NPV = self.hist('h_NPV', "ROOT.TH1F('$', ';NPV;Events', 35, 0., 35.0)", dir=EVT)
-        self.h_nmuons = self.hist('h_nmuons', "ROOT.TH1F('$', ';N_{#mu};Events', 8, 0, 8)", dir=EVT)
-        self.h_nelectrons = self.hist('h_nelectrons', "ROOT.TH1F('$', ';N_{e};Events', 8, 0, 8)", dir=EVT)
-        self.h_njets = self.hist('h_njets', "ROOT.TH1F('$', ';N_{jet};Events', 8, 0, 8)", dir=EVT)
-        #self.h_nmuonpairs = self.hist('h_nmuonpairs', "ROOT.TH1F('$', ';N_{#mu#mu};Events ', 8, 0, 8)", dir=EVT)
-             
-        #self.h_muons_chargeprod = self.hist('h_muons_chargeprod', "ROOT.TH1F('$', ';q(#mu_{lead}) #timesq (#mu_{sublead});Events ', 4, -2,2)", dir=EVT)
-        #self.h_muons_dphi = self.hist('h_muons_dphi', "ROOT.TH1F('$', ';#Delta#phi(#mu_{lead},#mu_{sublead});Events ', 64, -3.2, 3.2)", dir=EVT)
-        #self.h_muons_deta = self.hist('h_muons_deta', "ROOT.TH1F('$', ';#Delta#eta(#mu_{lead},#mu_{sublead});Events ', 50, -2.5, 2.5)", dir=EVT)
-        #self.h_muons_mVis = self.hist('h_muons_mVis', "ROOT.TH1F('$', ';m_{vis}(#mu_{lead},#mu_{sublead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.)", dir=EVT)
-        #self.h_muons_mTtot = self.hist('h_muons_mTtot', "ROOT.TH1F('$', ';m^{tot}_{T}(#mu_{lead},#mu_{sublead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.)", dir=EVT)
-             
-        self.h_mujet_dphi = self.hist('h_mujet_dphi', "ROOT.TH1F('$', ';#Delta#phi(#mu_{lead},jet_{lead});Events ', 64, -3.2, 3.2)", dir=EVT)
-        self.h_scdphi = self.hist('h_scdphi', "ROOT.TH1F('$', ';#Sigma cos#Delta#phi;Events ', 400, -2., 2.)", dir=EVT)
+        self.hist('h_averageIntPerXing', "ROOT.TH1F('$', ';averageInteractionsPerCrossing;Events', 50, -0.5, 49.5)", dir=EVT).Fill(self.chain.averageInteractionsPerCrossing, weight)
+        self.hist('h_actualIntPerXing', "ROOT.TH1F('$', ';actualInteractionsPerCrossing;Events', 50, -0.5, 49.5)", dir=EVT).Fill(self.chain.actualInteractionsPerCrossing, weight)
+        self.hist('h_NPV', "ROOT.TH1F('$', ';NPV;Events', 35, 0., 35.0)", dir=EVT).Fill(self.chain.NPV, weight)
+        self.hist('h_nmuons', "ROOT.TH1F('$', ';N_{#mu};Events', 8, 0, 8)", dir=EVT).Fill(self.chain.nmuon, weight)
+        self.hist('h_nelectrons', "ROOT.TH1F('$', ';N_{e};Events', 8, 0, 8)", dir=EVT).Fill(self.chain.nel, weight)
+        self.hist('h_njets', "ROOT.TH1F('$', ';N_{jet};Events', 8, 0, 8)", dir=EVT).Fill(self.chain.njets, weight)
+        self.hist('h_nmuonpairs', "ROOT.TH1F('$', ';N_{#mu#mu};Events ', 8, 0, 8)", dir=EVT).Fill(len(mupairs), weight)
+        
+        if bool(len(muons)==2):
+          self.hist('h_muons_chargeprod', "ROOT.TH1F('$', ';q(#mu_{lead}) #timesq (#mu_{sublead});Events ', 4, -2,2)", dir=EVT).Fill(self.store['charge_product'], weight)
+          self.hist('h_muons_dphi', "ROOT.TH1F('$', ';#Delta#phi(#mu_{lead},#mu_{sublead});Events ', 64, -3.2, 3.2)", dir=EVT).Fill(self.store['muons_dphi'], weight)
+          self.hist('h_muons_deta', "ROOT.TH1F('$', ';#Delta#eta(#mu_{lead},#mu_{sublead});Events ', 50, -2.5, 2.5)", dir=EVT).Fill(self.store['muons_deta'], weight)
+          self.hist('h_muons_mVis', "ROOT.TH1F('$', ';m_{vis}(#mu_{lead},#mu_{sublead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.)", dir=EVT).Fill(self.store['mVis']/GeV, weight)
+          self.hist('h_muons_mTtot', "ROOT.TH1F('$', ';m^{tot}_{T}(#mu_{lead},#mu_{sublead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.)", dir=EVT).Fill(self.store['mTtot']/GeV, weight)
+        
+        if bool(len(jets)) and bool(len(muons)):
+          self.hist('h_mujet_dphi', "ROOT.TH1F('$', ';#Delta#phi(#mu_{lead},jet_{lead});Events ', 64, -3.2, 3.2)", dir=EVT).Fill(self.store['mujet_dphi'], weight)
+          self.hist('h_scdphi', "ROOT.TH1F('$', ';#Sigma cos#Delta#phi;Events ', 400, -2., 2.)", dir=EVT).Fill(self.store['scdphi'], weight)
         
         ## jets plots
-        self.h_jetlead_pt = self.hist('h_jetlead_pt', "ROOT.TH1F('$', ';p_{T}(jet_{lead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=JETS)
+        #if bool(len(jets)):
+        #  self.hist('h_jetlead_pt', "ROOT.TH1F('$', ';p_{T}(jet_{lead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=JETS).Fill(jet_lead.tlv.Pt()/GeV, weight)
 
 
         ## muon plots
         # leading
-        self.h_mulead_pt = self.hist('h_mulead_pt', "ROOT.TH1F('$', ';p_{T}(#mu_{lead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MUONS)
-        self.h_mulead_eta = self.hist('h_mulead_eta', "ROOT.TH1F('$', ';#eta(#mu_{lead});Events / (0.1)', 50, -2.5, 2.5)", dir=MUONS)
-        self.h_mulead_phi = self.hist('h_mulead_phi', "ROOT.TH1F('$', ';#phi(#mu_{lead});Events / (0.1)', 64, -3.2, 3.2)", dir=MUONS)
-        self.h_mulead_trkd0 = self.hist('h_mulead_trkd0', "ROOT.TH1F('$', ';d^{trk}_{0}(#mu_{lead}) [mm];Events / (0.01)', 80, -0.4, 0.4)", dir=MUONS)
-        self.h_mulead_trkd0sig = self.hist('h_mulead_trkd0sig', "ROOT.TH1F('$', ';d^{trk sig}_{0}(#mu_{lead});Events / (0.1)', 100, 0., 10.)", dir=MUONS)
-        self.h_mulead_trkz0 = self.hist('h_mulead_trkz0', "ROOT.TH1F('$', ';z^{trk}_{0}(#mu_{lead}) [mm];Events / (0.1)', 40, -2, 2)", dir=MUONS)
-        self.h_mulead_trkz0sintheta = self.hist('h_mulead_trkz0sintheta', "ROOT.TH1F('$', ';z^{trk}_{0}sin#theta(#mu_{lead}) [mm];Events / (0.01)', 200, -1, 1)", dir=MUONS)
-              
-        self.h_mulead_topoetcone20 = self.hist('h_mulead_topoetcone20', "ROOT.TH1F('$', ';topoetcone20/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_mulead_topoetcone30 = self.hist('h_mulead_topoetcone30', "ROOT.TH1F('$', ';topoetcone30/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_mulead_topoetcone40 = self.hist('h_mulead_topoetcone40', "ROOT.TH1F('$', ';topoetcone40/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_mulead_ptvarcone20 = self.hist('h_mulead_ptvarcone20', "ROOT.TH1F('$', ';ptvarcone20/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_mulead_ptvarcone30 = self.hist('h_mulead_ptvarcone30', "ROOT.TH1F('$', ';ptvarcone30/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_mulead_ptvarcone40 = self.hist('h_mulead_ptvarcone40', "ROOT.TH1F('$', ';ptvarcone40/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-              
-        self.h_mulead_ptcone20 = self.hist('h_mulead_ptcone20', "ROOT.TH1F('$', ';ptcone20/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_mulead_ptcone30 = self.hist('h_mulead_ptcone30', "ROOT.TH1F('$', ';ptcone30/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_mulead_ptcone40 = self.hist('h_mulead_ptcone40', "ROOT.TH1F('$', ';ptcone40/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
+        self.hist('h_mulead_pt', "ROOT.TH1F('$', ';p_{T}(#mu_{lead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MUONS).Fill(mu_lead.tlv.Pt()/GeV, weight)
+        self.hist('h_mulead_eta', "ROOT.TH1F('$', ';#eta(#mu_{lead});Events / (0.1)', 50, -2.5, 2.5)", dir=MUONS).Fill(mu_lead.tlv.Eta(), weight)
+        self.hist('h_mulead_phi', "ROOT.TH1F('$', ';#phi(#mu_{lead});Events / (0.1)', 64, -3.2, 3.2)", dir=MUONS).Fill(mu_lead.tlv.Phi(), weight)
+        self.hist('h_mulead_trkd0', "ROOT.TH1F('$', ';d^{trk}_{0}(#mu_{lead}) [mm];Events / (0.01)', 80, -0.4, 0.4)", dir=MUONS).Fill(mu_lead.trkd0, weight)
+        self.hist('h_mulead_trkd0sig', "ROOT.TH1F('$', ';d^{trk sig}_{0}(#mu_{lead});Events / (0.1)', 100, 0., 10.)", dir=MUONS).Fill(mu_lead.trkd0sig, weight)
+        self.hist('h_mulead_trkz0', "ROOT.TH1F('$', ';z^{trk}_{0}(#mu_{lead}) [mm];Events / (0.1)', 40, -2, 2)", dir=MUONS).Fill(mu_lead.trkz0, weight)
+        self.hist('h_mulead_trkz0sintheta', "ROOT.TH1F('$', ';z^{trk}_{0}sin#theta(#mu_{lead}) [mm];Events / (0.01)', 200, -1, 1)", dir=MUONS).Fill(mu_lead.trkz0sintheta, weight)
+        
+        self.hist('h_mulead_topoetcone20', "ROOT.TH1F('$', ';topoetcone20/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.topoetcone20/mu_lead.tlv.Pt(), weight)
+        self.hist('h_mulead_topoetcone30', "ROOT.TH1F('$', ';topoetcone30/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.topoetcone30/mu_lead.tlv.Pt(), weight)
+        self.hist('h_mulead_topoetcone40', "ROOT.TH1F('$', ';topoetcone40/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.topoetcone40/mu_lead.tlv.Pt(), weight)
+        self.hist('h_mulead_ptvarcone20', "ROOT.TH1F('$', ';ptvarcone20/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.ptvarcone20/mu_lead.tlv.Pt(), weight)
+        self.hist('h_mulead_ptvarcone30', "ROOT.TH1F('$', ';ptvarcone30/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.ptvarcone30/mu_lead.tlv.Pt(), weight)
+        self.hist('h_mulead_ptvarcone40', "ROOT.TH1F('$', ';ptvarcone40/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.ptvarcone40/mu_lead.tlv.Pt(), weight)
+        
+        self.hist('h_mulead_ptcone20', "ROOT.TH1F('$', ';ptcone20/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.ptcone20/mu_lead.tlv.Pt(), weight)
+        self.hist('h_mulead_ptcone30', "ROOT.TH1F('$', ';ptcone30/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.ptcone30/mu_lead.tlv.Pt(), weight)
+        self.hist('h_mulead_ptcone40', "ROOT.TH1F('$', ';ptcone40/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.ptcone40/mu_lead.tlv.Pt(), weight)
         
         
         # subleading
-        """
-        self.h_musublead_pt = self.hist('h_musublead_pt', "ROOT.TH1F('$', ';p_{T}(#mu_{sublead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MUONS)
-        self.h_musublead_eta = self.hist('h_musublead_eta', "ROOT.TH1F('$', ';#eta(#mu_{sublead});Events / (0.1)', 50, -2.5, 2.5)", dir=MUONS)
-        self.h_musublead_phi = self.hist('h_musublead_phi', "ROOT.TH1F('$', ';#phi(#mu_{sublead});Events / (0.1)', 64, -3.2, 3.2)", dir=MUONS)
-        self.h_musublead_trkd0 = self.hist('h_musublead_trkd0', "ROOT.TH1F('$', ';d^{trk}_{0}(#mu_{sublead}) [mm];Events / (0.01)', 80, -0.4, 0.4)", dir=MUONS)
-        self.h_musublead_trkd0sig = self.hist('h_musublead_trkd0sig', "ROOT.TH1F('$', ';d^{trk sig}_{0}(#mu_{sublead});Events / (0.1)', 100, 0., 10.)", dir=MUONS)
-        self.h_musublead_trkz0 = self.hist('h_musublead_trkz0', "ROOT.TH1F('$', ';z^{trk}_{0}(#mu_{sublead}) [mm];Events / (0.1)', 40, -2, 2)", dir=MUONS)
-        self.h_musublead_trkz0sintheta = self.hist('h_musublead_trkz0sintheta', "ROOT.TH1F('$', ';z^{trk}_{0}sin#theta(#mu_{sublead}) [mm];Events / (0.01)', 200, -1, 1)", dir=MUONS)
-              
-        self.h_musublead_topoetcone20 = self.hist('h_musublead_topoetcone20', "ROOT.TH1F('$', ';topoetcone20/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_musublead_topoetcone30 = self.hist('h_musublead_topoetcone30', "ROOT.TH1F('$', ';topoetcone30/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_musublead_topoetcone40 = self.hist('h_musublead_topoetcone40', "ROOT.TH1F('$', ';topoetcone40/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_musublead_ptvarcone20 = self.hist('h_musublead_ptvarcone20', "ROOT.TH1F('$', ';ptvarcone20/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_musublead_ptvarcone30 = self.hist('h_musublead_ptvarcone30', "ROOT.TH1F('$', ';ptvarcone30/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_musublead_ptvarcone40 = self.hist('h_musublead_ptvarcone40', "ROOT.TH1F('$', ';ptvarcone40/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-              
-        self.h_musublead_ptcone20 = self.hist('h_musublead_ptcone20', "ROOT.TH1F('$', ';ptcone20/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_musublead_ptcone30 = self.hist('h_musublead_ptcone30', "ROOT.TH1F('$', ';ptcone30/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
-        self.h_musublead_ptcone40 = self.hist('h_musublead_ptcone40', "ROOT.TH1F('$', ';ptcone40/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS)
+        self.hist('h_musublead_pt', "ROOT.TH1F('$', ';p_{T}(#mu_{sublead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MUONS).Fill(mu_sublead.tlv.Pt()/GeV, weight)
+        self.hist('h_musublead_eta', "ROOT.TH1F('$', ';#eta(#mu_{sublead});Events / (0.1)', 50, -2.5, 2.5)", dir=MUONS).Fill(mu_sublead.tlv.Eta(), weight)
+        self.hist('h_musublead_phi', "ROOT.TH1F('$', ';#phi(#mu_{sublead});Events / (0.1)', 64, -3.2, 3.2)", dir=MUONS).Fill(mu_sublead.tlv.Phi(), weight)
+        self.hist('h_musublead_trkd0', "ROOT.TH1F('$', ';d^{trk}_{0}(#mu_{sublead}) [mm];Events / (0.01)', 80, -0.4, 0.4)", dir=MUONS).Fill(mu_sublead.trkd0, weight)
+        self.hist('h_musublead_trkd0sig', "ROOT.TH1F('$', ';d^{trk sig}_{0}(#mu_{sublead});Events / (0.1)', 100, 0., 10.)", dir=MUONS).Fill(mu_sublead.trkd0sig, weight)
+        self.hist('h_musublead_trkz0', "ROOT.TH1F('$', ';z^{trk}_{0}(#mu_{sublead}) [mm];Events / (0.1)', 40, -2, 2)", dir=MUONS).Fill(mu_sublead.trkz0, weight)
+        self.hist('h_musublead_trkz0sintheta', "ROOT.TH1F('$', ';z^{trk}_{0}sin#theta(#mu_{sublead}) [mm];Events / (0.01)', 200, -1, 1)", dir=MUONS).Fill(mu_sublead.trkz0sintheta, weight)
         
-        """ 
+        self.hist('h_musublead_topoetcone20', "ROOT.TH1F('$', ';topoetcone20/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_sublead.topoetcone20/mu_sublead.tlv.Pt(), weight)
+        self.hist('h_musublead_topoetcone30', "ROOT.TH1F('$', ';topoetcone30/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_sublead.topoetcone30/mu_sublead.tlv.Pt(), weight)
+        self.hist('h_musublead_topoetcone40', "ROOT.TH1F('$', ';topoetcone40/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_sublead.topoetcone40/mu_sublead.tlv.Pt(), weight)
+        self.hist('h_musublead_ptvarcone20', "ROOT.TH1F('$', ';ptvarcone20/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_sublead.ptvarcone20/mu_sublead.tlv.Pt(), weight)
+        self.hist('h_musublead_ptvarcone30', "ROOT.TH1F('$', ';ptvarcone30/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_sublead.ptvarcone30/mu_sublead.tlv.Pt(), weight)
+        self.hist('h_musublead_ptvarcone40', "ROOT.TH1F('$', ';ptvarcone40/p_{T}(#mu_{sublead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_sublead.ptvarcone40/mu_sublead.tlv.Pt(), weight)
+        
+        self.hist('h_mulead_ptcone20', "ROOT.TH1F('$', ';ptcone20/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.ptcone20/mu_lead.tlv.Pt(), weight)
+        self.hist('h_mulead_ptcone30', "ROOT.TH1F('$', ';ptcone30/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.ptcone30/mu_lead.tlv.Pt(), weight)
+        self.hist('h_mulead_ptcone40', "ROOT.TH1F('$', ';ptcone40/p_{T}(#mu_{lead}); Events / 0.001', 10000, 0.0, 10.0)", dir=MUONS).Fill(mu_lead.ptcone40/mu_lead.tlv.Pt(), weight)
+        
+        
         ## met plots
-        self.h_met_clus_et = self.hist('h_met_clus_et', "ROOT.TH1F('$', ';E^{miss}_{T}(clus) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET)
-        self.h_met_clus_phi = self.hist('h_met_clus_phi', "ROOT.TH1F('$', ';#phi(E^{miss}_{T}(clus));Events / (0.1)', 64, -3.2, 3.2)", dir=MET)
-        self.h_met_trk_et = self.hist('h_met_trk_et', "ROOT.TH1F('$', ';E^{miss}_{T}(trk) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET)
-        self.h_met_trk_phi = self.hist('h_met_trk_phi', "ROOT.TH1F('$', ';#phi(E^{miss}_{T}(trk));Events / (0.1)', 64, -3.2, 3.2)", dir=MET)
-        self.h_met_clus_sumet = self.hist('h_met_clus_sumet', "ROOT.TH1F('$', ';#Sigma E_{T}(clus) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET)
-        self.h_met_trk_sumet = self.hist('h_met_trk_sumet', "ROOT.TH1F('$', ';#Sigma E_{T}(trk) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET)
+        self.hist('h_met_clus_et', "ROOT.TH1F('$', ';E^{miss}_{T}(clus) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET).Fill(met_clus.tlv.Pt()/GeV, weight)
+        self.hist('h_met_clus_phi', "ROOT.TH1F('$', ';#phi(E^{miss}_{T}(clus));Events / (0.1)', 64, -3.2, 3.2)", dir=MET).Fill(met_clus.tlv.Phi(), weight)
+        self.hist('h_met_trk_et', "ROOT.TH1F('$', ';E^{miss}_{T}(trk) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET).Fill(met_trk.tlv.Pt()/GeV, weight)
+        self.hist('h_met_trk_phi', "ROOT.TH1F('$', ';#phi(E^{miss}_{T}(trk));Events / (0.1)', 64, -3.2, 3.2)", dir=MET).Fill(met_trk.tlv.Phi(), weight)
+        self.hist('h_met_clus_sumet', "ROOT.TH1F('$', ';#Sigma E_{T}(clus) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET).Fill(met_clus.sumet/GeV, weight)
+        self.hist('h_met_trk_sumet', "ROOT.TH1F('$', ';#Sigma E_{T}(trk) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=MET).Fill(met_trk.sumet/GeV, weight)
         
-        ## muons pairs
+        
         """
-        self.h_mumu_mVis = self.hist('h_mumu_mVis', "ROOT.TH1F('$', ';m_{vis}(#mu#mu) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=PAIRS)
-        self.h_mumu_mTtot = self.hist('h_mumu_mTtot', "ROOT.TH1F('$', ';m^{tot}_{T}(#mu#mu) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=PAIRS)
-        self.h_mumu_angle = self.hist('h_mumu_angle', "ROOT.TH1F('$', ';#omega(#mu#mu);Events', 320, 0.0, 3.2)", dir=PAIRS)
-        self.h_mumu_sumcosdphi = self.hist('h_mumu_sumcosdphi', "ROOT.TH1F('$', ';#Sigmacos#Delta#phi(#mu_{lead/sublead},E^{miss}_{T});Events / 0.1', 40, -2, 2)", dir=PAIRS)
-        self.h_mumu_mulead_pt = self.hist('h_mumu_mulead_pt', "ROOT.TH1F('$', ';p_{T}(#mu#mu_{lead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=PAIRS)
-        self.h_mumu_musublead_pt = self.hist('h_mumu_musublead_pt', "ROOT.TH1F('$', ';p_{T}(#mu#mu_{sublead}) [GeV];Events / (1 GeV)',2000,0.0,2000.0)",dir=PAIRS)
-        self.h_mumu_mulead_eta = self.hist('h_mumu_mulead_eta', "ROOT.TH1F('$', ';#eta(#mu#mu_{lead});Events / (0.1)', 50, -2.5, 2.5)", dir=PAIRS)
-        self.h_mumu_musublead_eta = self.hist('h_mumu_musublead_eta', "ROOT.TH1F('$', ';#eta(#mu#mu_{sublead});Events / (0.1)', 50, -2.5, 2.5)", dir=PAIRS)
-        self.h_mumu_mulead_phi = self.hist('h_mumu_mulead_phi', "ROOT.TH1F('$', ';#phi(#mu#mu_{lead});Events / (0.1)', 64, -3.2, 3.2)", dir=PAIRS)
-        self.h_mumu_musublead_phi = self.hist('h_mumu_musublead_phi', "ROOT.TH1F('$', ';#phi(#mu#mu_{sublead});Events / (0.1)', 64, -3.2, 3.2)", dir=PAIRS)
-        """ 
-        
-        # ---------------
-        # Fill histograms
-        # ---------------
-        if passed:
-          ## event plots
-          self.h_averageIntPerXing.Fill(self.chain.averageInteractionsPerCrossing, weight)
-          self.h_actualIntPerXing.Fill(self.chain.actualInteractionsPerCrossing, weight)
-          self.h_NPV.Fill(self.chain.NPV, weight)
-          self.h_nmuons.Fill(self.chain.nmuon, weight)
-          self.h_nelectrons.Fill(self.chain.nel, weight)
-          self.h_njets.Fill(self.chain.njets, weight)
-          #self.h_nmuonpairs.Fill(len(mupairs), weight)
-          
-          """
-          if bool(len(muons)==2):
-            self.h_muons_chargeprod.Fill(self.store['charge_product'], weight)
-            self.h_muons_dphi.Fill(self.store['muons_dphi'], weight)
-            self.h_muons_deta.Fill(self.store['muons_deta'], weight)
-            self.h_muons_mVis.Fill(self.store['mVis']/GeV, weight)
-            self.h_muons_mTtot.Fill(self.store['mTtot']/GeV, weight)
-          """ 
-
-          if bool(len(jets)) and bool(len(muons)):
-            self.h_mujet_dphi.Fill(self.store['mujet_dphi'], weight)
-            self.h_scdphi.Fill(self.store['scdphi'], weight)
+        ## muon pairs plots
+        for mp in mupairs:
          
-          ## jets plots
-          #if bool(len(jets)):
-          #  self.h_jetlead_pt.Fill(jet_lead.tlv.Pt()/GeV, weight)
-          
-          
-          ## muon plots
-          # leading
-          self.h_mulead_pt.Fill(mu_lead.tlv.Pt()/GeV, weight)
-          self.h_mulead_eta.Fill(mu_lead.tlv.Eta(), weight)
-          self.h_mulead_phi.Fill(mu_lead.tlv.Phi(), weight)
-          self.h_mulead_trkd0.Fill(mu_lead.trkd0, weight)
-          self.h_mulead_trkd0sig.Fill(mu_lead.trkd0sig, weight)
-          self.h_mulead_trkz0.Fill(mu_lead.trkz0, weight)
-          self.h_mulead_trkz0sintheta.Fill(mu_lead.trkz0sintheta, weight)
-         
-          self.h_mulead_topoetcone20.Fill(mu_lead.topoetcone20/mu_lead.tlv.Pt(), weight)
-          self.h_mulead_topoetcone30.Fill(mu_lead.topoetcone30/mu_lead.tlv.Pt(), weight)
-          self.h_mulead_topoetcone40.Fill(mu_lead.topoetcone40/mu_lead.tlv.Pt(), weight)
-          self.h_mulead_ptvarcone20.Fill(mu_lead.ptvarcone20/mu_lead.tlv.Pt(), weight)
-          self.h_mulead_ptvarcone30.Fill(mu_lead.ptvarcone30/mu_lead.tlv.Pt(), weight)
-          self.h_mulead_ptvarcone40.Fill(mu_lead.ptvarcone40/mu_lead.tlv.Pt(), weight)
-         
-          self.h_mulead_ptcone20.Fill(mu_lead.ptcone20/mu_lead.tlv.Pt(), weight)
-          self.h_mulead_ptcone30.Fill(mu_lead.ptcone30/mu_lead.tlv.Pt(), weight)
-          self.h_mulead_ptcone40.Fill(mu_lead.ptcone40/mu_lead.tlv.Pt(), weight)
-         
-         
-          # subleading
-          """
-          self.h_musublead_pt.Fill(mu_sublead.tlv.Pt()/GeV, weight)
-          self.h_musublead_eta.Fill(mu_sublead.tlv.Eta(), weight)
-          self.h_musublead_phi.Fill(mu_sublead.tlv.Phi(), weight)
-          self.h_musublead_trkd0.Fill(mu_sublead.trkd0, weight)
-          self.h_musublead_trkd0sig.Fill(mu_sublead.trkd0sig, weight)
-          self.h_musublead_trkz0.Fill(mu_sublead.trkz0, weight)
-          self.h_musublead_trkz0sintheta.Fill(mu_sublead.trkz0sintheta, weight)
-          
-          self.h_musublead_topoetcone20.Fill(mu_sublead.topoetcone20/mu_sublead.tlv.Pt(), weight)
-          self.h_musublead_topoetcone30.Fill(mu_sublead.topoetcone30/mu_sublead.tlv.Pt(), weight)
-          self.h_musublead_topoetcone40.Fill(mu_sublead.topoetcone40/mu_sublead.tlv.Pt(), weight)
-          self.h_musublead_ptvarcone20.Fill(mu_sublead.ptvarcone20/mu_sublead.tlv.Pt(), weight)
-          self.h_musublead_ptvarcone30.Fill(mu_sublead.ptvarcone30/mu_sublead.tlv.Pt(), weight)
-          self.h_musublead_ptvarcone40.Fill(mu_sublead.ptvarcone40/mu_sublead.tlv.Pt(), weight)
-          
-          self.h_musublead_ptcone20.Fill(mu_sublead.ptcone20/mu_sublead.tlv.Pt(), weight)
-          self.h_musublead_ptcone30.Fill(mu_sublead.ptcone30/mu_sublead.tlv.Pt(), weight)
-          self.h_musublead_ptcone40.Fill(mu_sublead.ptcone40/mu_sublead.tlv.Pt(), weight)
-          """ 
-          
-          ## met plots
-          self.h_met_clus_et.Fill(met_clus.tlv.Pt()/GeV, weight)
-          self.h_met_clus_phi.Fill(met_clus.tlv.Phi(), weight)
-          self.h_met_trk_et.Fill(met_trk.tlv.Pt()/GeV, weight)
-          self.h_met_trk_phi.Fill(met_trk.tlv.Phi(), weight)
-          self.h_met_clus_sumet.Fill(met_clus.sumet/GeV, weight)
-          self.h_met_trk_sumet.Fill(met_trk.sumet/GeV, weight)
-          
-          """
-          ## muon pairs plots
-          for mp in mupairs:
-           
-            pcut = True 
-            for c in list_cuts:
-             if c.startswith("MuPairs"):
-              #print c, mp.angle, mp.HasPassedCut(c)
-              pcut = pcut and mp.HasPassedCut(c)
+          pcut = True 
+          for c in list_cuts:
+           if c.startswith("MuPairs"):
+            pcut = pcut and mp.HasPassedCut(c)
              
-            pweight = 1.0
-            if list_weights:
-             for w in list_weights: 
-              if w.startswith("MuPairs"):
-               pweight *= mp.GetWeight(w)
-            
-            if pcut: 
-             #if mp.angle < 1.0 or mp.angle > 2.5: print "What the fuck"
-             self.h_mumu_angle.Fill(mp.angle, pweight * weight)
-             self.h_mumu_mVis.Fill(mp.m_vis/GeV, pweight * weight)
-             self.h_mumu_mTtot.Fill(mp.mt_tot/GeV, pweight * weight)
-             self.h_mumu_sumcosdphi.Fill(mp.SumCosDphi, pweight * weight)
-             self.h_mumu_mulead_pt.Fill(mp.lead.tlv.Pt()/GeV, pweight * weight)
-             self.h_mumu_musublead_pt.Fill(mp.sublead.tlv.Pt()/GeV,pweight*weight)
-             self.h_mumu_mulead_eta.Fill(mp.lead.tlv.Eta(), pweight * weight)
-             self.h_mumu_musublead_eta.Fill(mp.sublead.tlv.Eta(), pweight * weight)
-             self.h_mumu_mulead_phi.Fill(mp.lead.tlv.Phi(), pweight * weight)
-             self.h_mumu_musublead_phi.Fill(mp.sublead.tlv.Phi(), pweight * weight)
-          """   
+          pweight = 1.0
+          if list_weights:
+           for w in list_weights: 
+            if w.startswith("MuPairs"):
+             pweight *= mp.GetWeight(w)
+          
+          if pcut:           
+           self.hist('h_mumu_mVis', "ROOT.TH1F('$', ';m_{vis}(#mu#mu) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=PAIRS).Fill(mp.m_vis/GeV, pweight * weight)
+           self.hist('h_mumu_mTtot', "ROOT.TH1F('$', ';m^{tot}_{T}(#mu#mu) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=PAIRS).Fill(mp.mt_tot/GeV, pweight * weight)
+           self.hist('h_mumu_sumcosdphi', "ROOT.TH1F('$', ';#Sigmacos#Delta#phi(#mu_{lead/sublead},E^{miss}_{T});Events / 0.1', 40, -2, 2)", dir=PAIRS).Fill(mp.SumCosDphi, pweight * weight)
+           self.hist('h_mumu_mulead_pt', "ROOT.TH1F('$', ';p_{T}(#mu#mu_{lead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=PAIRS).Fill(mp.lead.tlv.Pt()/GeV, pweight * weight)
+           self.hist('h_mumu_musublead_pt', "ROOT.TH1F('$', ';p_{T}(#mu#mu_{sublead}) [GeV];Events / (1 GeV)',2000,0.0,2000.0)",dir=PAIRS).Fill(mp.sublead.tlv.Pt()/GeV,pweight*weight)
+           self.hist('h_mumu_mulead_eta', "ROOT.TH1F('$', ';#eta(#mu#mu_{lead});Events / (0.1)', 50, -2.5, 2.5)", dir=PAIRS).Fill(mp.lead.tlv.Eta(), pweight * weight)
+           self.hist('h_mumu_musublead_eta', "ROOT.TH1F('$', ';#eta(#mu#mu_{sublead});Events / (0.1)', 50, -2.5, 2.5)", dir=PAIRS).Fill(mp.sublead.tlv.Eta(), pweight * weight)
+           self.hist('h_mumu_mulead_phi', "ROOT.TH1F('$', ';#phi(#mu#mu_{lead});Events / (0.1)', 64, -3.2, 3.2)", dir=PAIRS).Fill(mp.lead.tlv.Phi(), pweight * weight)
+           self.hist('h_mumu_musublead_phi', "ROOT.TH1F('$', ';#phi(#mu#mu_{sublead});Events / (0.1)', 64, -3.2, 3.2)", dir=PAIRS).Fill(mp.sublead.tlv.Phi(), pweight * weight)
+        """
     
     #__________________________________________________________________________
     def check_region(self,cutnames):
@@ -1143,21 +903,6 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
             #    return False
         return cut_passed
     
-    
-    """ 
-    #__________________________________________________________________________
-    def get_obj_cutflow(self, obj_key, cut, list_weights=None, cut_prefix=""):
-        for o in self.store[obj_key]:
-          if hasattr(o,"cdict") and hasattr(o,"wdict"):
-            obj_weight = 1.0
-            if list_weights: 
-              for w in list_weights:
-                obj_weight *= o.GetWeight(w)
-                if cut_prefix: 
-                  if cut.startswith(cut_prefix): 
-                    obj_passed = o.HasPassedCut(cut) and passed
-            self.hists[self.region+"_"+obj_key].count_if(obj_passed, cut, obj_weight * weight)
-    """
 
     #__________________________________________________________________________
     def reset_attributes(self,objects):
@@ -1219,29 +964,6 @@ class VarsAlg(pyframe.core.Algorithm):
           self.store['mTtot']          = (muon1T + muon2T + met.tlv).M()  
           self.store['muons_dphi']     = muon2.tlv.DeltaPhi(muon1.tlv)
           self.store['muons_deta']     = muon2.tlv.Eta()-muon1.tlv.Eta()
-          
-          # definition of tag and probe 
-          """
-          lead_mu_is_tight = bool(muon1.isIsolated_FixedCutTightTrackOnly and muon1.trkd0sig<3.)
-          lead_mu_is_loose = bool(not muon1.isIsolated_FixedCutTightTrackOnly and muon1.trkd0sig<10.)
-
-          sublead_mu_is_tight = bool(muon2.isIsolated_FixedCutTightTrackOnly and muon2.trkd0sig<3.)
-          sublead_mu_is_loose = bool(not muon2.isIsolated_FixedCutTightTrackOnly and muon2.trkd0sig<10.)
-          
-          if lead_mu_is_tight and sublead_mu_is_tight:
-            if muon1.trkcharge > 0.0:
-              self.store['tag'] = copy(muon1)
-              self.store['probe'] = copy(muon2) 
-            else:
-              self.store['tag'] = copy(muon2)
-              self.store['probe'] = copy(muon1) 
-          elif lead_mu_is_loose or sublead_mu_is_tight:
-            self.store['tag'] = copy(muon2)
-            self.store['probe'] = copy(muon1) 
-          elif sublead_mu_is_loose or lead_mu_is_tight:
-            self.store['tag'] = copy(muon1)
-            self.store['probe'] = copy(muon2) 
-          """ 
         
         if bool(len(jets)) and bool(len(muons)):
           self.store['mujet_dphi'] = muons[0].tlv.DeltaPhi(jets[0].tlv)
@@ -1266,5 +988,10 @@ def log_bins_str(nbins,xmin,xmax):
     bins = log_bins(nbins,xmin,xmax)
     bins_str = "%d, array.array('f',%s)" % (len(bins)-1, str(bins))
     return bins_str 
+
+
+
+
+
 
 

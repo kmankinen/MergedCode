@@ -132,7 +132,7 @@ mulead_pt = Var(name = 'mulead_pt',
               xmin   = 0.,
               xmax   = 400.,
               rebin  = 20,
-              log    = False,
+              log    = True,
               )
 
 musublead_pt = Var(name = 'musublead_pt',
@@ -140,7 +140,7 @@ musublead_pt = Var(name = 'musublead_pt',
               xmin   = 0.,
               xmax   = 400.,
               rebin  = 20,
-              log    = False,
+              log    = True,
               )
 
 mulead_eta = Var(name = 'mulead_eta',
@@ -450,7 +450,6 @@ mumu_angle = Var(name = 'mumu_angle',
 
 
 vars_list = []
-"""
 vars_list.append(averageIntPerXing)
 vars_list.append(actualIntPerXing)
 vars_list.append(NPV)
@@ -459,12 +458,12 @@ vars_list.append(nelectrons)
 vars_list.append(njets)
 vars_list.append(nmuonpairs)
 vars_list.append(mujet_dphi)
-vars_list.append(scdphi)
-vars_list.append(muons_dphi)
-vars_list.append(muons_deta)
-vars_list.append(muons_mTtot)
-vars_list.append(muons_mVis)
-vars_list.append(muons_chargeprod)
+#vars_list.append(scdphi)
+#vars_list.append(muons_dphi)
+#vars_list.append(muons_deta)
+#vars_list.append(muons_mTtot)
+#vars_list.append(muons_mVis)
+#vars_list.append(muons_chargeprod)
 
 vars_list.append(mulead_pt)
 #vars_list.append(musublead_pt)
@@ -481,9 +480,7 @@ vars_list.append(mulead_trkz0)
 vars_list.append(mulead_trkz0sintheta)
 #vars_list.append(musublead_trkz0sintheta)
 
-"""
 #vars_list.append(jetlead_pt)
-"""
 
 #vars_list.append(mulead_topoetcone20)
 #vars_list.append(mulead_topoetcone30)
@@ -513,7 +510,7 @@ vars_list.append(mumu_mVis)
 vars_list.append(mumu_mTtot)
 vars_list.append(mumu_sumcosdphi)
 vars_list.append(mumu_angle)
-
+"""
 
 vars_dict = {}
 for var in vars_list: vars_dict[var.name] = var.__dict__

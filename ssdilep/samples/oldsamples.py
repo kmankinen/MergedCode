@@ -30,28 +30,27 @@ green = ROOT.kGreen+1
 GRL = []
 
 GRL += [
-        #2015
-        "276262","276329","276336","276416","276511","276689","276778","276790",
-        "276952","276954","278880","278912","278968","279169","279259","279279",
-        "279284","279345","279515","279598","279685","279813","279867","279928",
-        "279932","279984","280231","280273","280319","280368","280423","280464",
-        "280500","280520","280614","280673","280753","280853","280862","280950",
-        "280977","281070","281074","281075","281317","281385","281411","282625",
-        "282631","282712","282784","282992","283074","283155","283270","283429",
-        "283608","283780","284006","284154","284213","284285","284420","284427",
-        "284484",
-
-        #2016
-        "297730","298595","298609","298633","298687","298690","298771","298773",
-        "298862","298967","299055","299144","299147","299184","299243","299584",
-        "300279","300345","300415","300418","300487","300540","300571","300600",
-        "300655","300687","300784","300800","300863","300908","301912","301918",
-        "301932","301973","302053","302137","302265","302269","302300","302347",
-        "302380","302391","302393","302737","302831","302872","302919","302925",
-        "302956","303007","303079","303201","303208","303264","303266","303291",
-        "303304","303338","303421","303499","303560","303638","303832","303846",
-        "303892","303943","304006","304008","304128","304178","304198","304211",
-        "304243","304308","304337","304409","304431","304494",
+        # 2015 
+        "276262","276329","276336","276416","276511","276689",
+        "276778","276790","276952","276954","278880","278912",
+        "278968","279169","279259","279279","279284","279345",
+        "279515","279598","279685","279764","279813","279867",
+        "279928","279932","279984","280231","280319","280368",
+        "280423","280464","280500","280520","280614","280673",
+        "280753","280853","280862","280950","280977","281070",
+        "281074","281075","281317","281385","281411","282625",
+        "282631","282712","282784","282992","283074","283155",
+        "283270","283429","283608","283780","284006","284154",
+        "284213","284285","284420","284427","284484",
+        #2016 
+        "297730","298595","298609","298633","298687","298690",
+        "298771","298773","298862","298967","299055","299144",
+        "299147","299184","299243","299584","300279","300345",
+        "300415","300418","300487","300540","300571","300600",
+        "300655","300687","300784","300800","300863","300908",
+        "301912","301918","301932","301973","302053","302137",
+        "302265","302269","302300","302347","302380","302391",
+        "302393","302737", 
         ]
 
 ds_name = 'physics_Main_00%s'
@@ -66,7 +65,7 @@ for run in GRL:
 list_runs =[globals()[ds_name%(run)] for run in GRL]
 
 data = Sample(name         = "data",
-              tlatex       = "Data 2015+2016",
+              tlatex       = "Data 2015",
               fill_color   = white,
               fill_style   = 0,
               line_color   = black,
@@ -199,7 +198,7 @@ WZqqvv                     = Sample( name =  "WZqqvv",                    xsec =
 WZlvqq_mqq20               = Sample( name =  "WZlvqq_mqq20",              xsec = 10.086      )
 ZZvvqq_mqq20               = Sample( name =  "ZZvvqq_mqq20",              xsec = 3.9422      )
 ZZqqll_mqq20mll20          = Sample( name =  "ZZqqll_mqq20mll20",         xsec = 2.2699      )
-ZZllll_mll4_m4l_500_13000  = Sample( name =  "ZZllll_mll4_m4l_500_13000", xsec = 0.004658938 )
+ZZllll_mll4_m4l_500_13000  = Sample( name =  "ZZllll_mll4_m4l_500_13000", xsec = 0.004658938, feff =  0.0037 )
 
 diboson_powheg = Sample( name =   'diboson_powheg',
                   tlatex = 'Di-boson (Powheg)',
@@ -225,44 +224,45 @@ diboson_powheg = Sample( name =   'diboson_powheg',
 
 
 #-----------------------------------------------------------------------------
-# W + jets (Sherpa 2.2)
+# W + jets (Sherpa)
 # Notes:
-#       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryWjetsSherpa22Light (light filter)
-#                         https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryWjetsSherpa22C     (C filter) 
-#                         https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryWjetsSherpa22B     (B filter) 
+#       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryWjetsSherpaLight (light filter)
+#                         https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryWjetsSherpaC     (C filter) 
+#                         https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryWjetsSherpaB     (B filter) 
+# for my tags!!!
+# https://twiki.cern.ch/twiki/pub/AtlasProtected/CentralMC15ProductionList/XSections_13TeV_e3651_e4133.txt
 #-----------------------------------------------------------------------------
 
 #-----
 # Wenu
 #-----
 
-Wenu_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt0_70_CVetoBVeto",         xsec = 15813.6777927 ) 
-Wenu_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt70_140_CVetoBVeto",       xsec = 376.41531567  )
-Wenu_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt140_280_CVetoBVeto",      xsec = 50.191601517  )
-Wenu_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt280_500_CVetoBVeto",      xsec = 3.43565825    )
-Wenu_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt500_700_CVetoBVeto",      xsec = 0.211528021   )
-Wenu_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt700_1000_CVetoBVeto",     xsec = 0.036964172   )
-Wenu_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt1000_2000_CVetoBVeto",    xsec = 0.004645048   )
-Wenu_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt2000_E_CMS_CVetoBVeto",   xsec = 1.2973e-05    )
-                                                                                                             
-Wenu_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt0_70_CFilterBVeto",       xsec =  2684.61495225 )
-Wenu_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt70_140_CFilterBVeto",     xsec =  146.400460335 )
-Wenu_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt140_280_CFilterBVeto",    xsec =  22.599123229  )
-Wenu_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt280_500_CFilterBVeto",    xsec =  1.680719916   )
-Wenu_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt500_700_CFilterBVeto",    xsec =  0.107245951   )
-Wenu_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt700_1000_CFilterBVeto",   xsec =  0.019023648   )
-Wenu_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt1000_2000_CFilterBVeto",  xsec =  0.002444187   )
-Wenu_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt2000_E_CMS_CFilterBVeto", xsec =  2.364e-06     )
-                                                                                                             
-Wenu_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt0_70_BFilter",            xsec =  912.150989719)
-Wenu_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt70_140_BFilter",          xsec =  49.376826267 )
-Wenu_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt140_280_BFilter",         xsec =  8.635509901  )
-Wenu_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt280_500_BFilter",         xsec =  0.729320539  )
-Wenu_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt500_700_BFilter",         xsec =  0.051038517  )
-Wenu_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt700_1000_BFilter",        xsec =  0.00948474   )
-Wenu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt1000_2000_BFilter",       xsec =  0.001307192  )
-Wenu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt2000_E_CMS_BFilter",      xsec =  3.705e-06    )
-
+Wenu_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt0_70_CVetoBVeto",         xsec = 17217.7589809,  feff =  0.8907,  kfactor = 0.9082) 
+Wenu_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt70_140_CVetoBVeto",       xsec = 419.458902664,  feff =  0.7288,  kfactor = 0.9082)
+Wenu_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt140_280_CVetoBVeto",      xsec = 55.812213827,   feff =  0.6816,  kfactor = 0.9082)
+Wenu_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt280_500_CVetoBVeto",      xsec = 3.415293894 * 1.1,    feff =  0.6527,  kfactor = 0.9082)
+Wenu_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt500_700_CVetoBVeto",      xsec = 0.204156559 * 1.1,    feff =  0.6317,  kfactor = 0.9082)
+Wenu_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt700_1000_CVetoBVeto",     xsec = 0.033518757 * 1.1,    feff =  0.6096,  kfactor = 0.9082)
+Wenu_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt1000_2000_CVetoBVeto",    xsec = 0.004526723 * 1.1,    feff =  0.6292,  kfactor = 0.9082)
+Wenu_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt2000_E_CMS_CVetoBVeto",   xsec = 1.788e-05 * 1.1,      feff =  0.6384,  kfactor = 0.9082)
+                                                                                                                   
+Wenu_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt0_70_CFilterBVeto",       xsec = 957.166425598,  feff =  0.0493,  kfactor = 0.9082)
+Wenu_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt70_140_CFilterBVeto",     xsec = 101.537442087,  feff =  0.1768,  kfactor = 0.9082)
+Wenu_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt140_280_CFilterBVeto",    xsec = 16.838461137,   feff =  0.2059,  kfactor = 0.9082)
+Wenu_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt280_500_CFilterBVeto",    xsec = 1.159086019 * 1.1,    feff =  0.2215,  kfactor = 0.9082)
+Wenu_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt500_700_CFilterBVeto",    xsec = 0.076063692 * 1.1,    feff =  0.2436,  kfactor = 0.9082)
+Wenu_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt700_1000_CFilterBVeto",   xsec = 0.011205872 * 1.1,    feff =  0.2028,  kfactor = 0.9082)
+Wenu_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt1000_2000_CFilterBVeto",  xsec = 0.001755119 * 1.1,    feff =  0.238,   kfactor = 0.9082)
+Wenu_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt2000_E_CMS_CFilterBVeto", xsec = 7.71e-06 * 1.1,       feff =  0.2728,  kfactor = 0.9082)
+                                                                                                                   
+Wenu_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt0_70_BFilter",            xsec = 1161.20628355,  feff =  0.0598,  kfactor = 0.9082)
+Wenu_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt70_140_BFilter",          xsec = 55.459634594,   feff =  0.0967,  kfactor = 0.9082)
+Wenu_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt140_280_BFilter",         xsec = 9.19142934,     feff =  0.1123,  kfactor = 0.9082)
+Wenu_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt280_500_BFilter",         xsec = 0.679805485 * 1.1,    feff =  0.131,   kfactor = 0.9082)
+Wenu_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt500_700_BFilter",         xsec = 0.048845728 * 1.1,    feff =  0.1552,  kfactor = 0.9082)
+Wenu_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt700_1000_BFilter",        xsec = 0.00959807 * 1.1,     feff =  0.1687,  kfactor = 0.9082)
+Wenu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt1000_2000_BFilter",       xsec = 0.001258268 * 1.1,    feff =  0.1731,  kfactor = 0.9082)
+Wenu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Wenu_Pt2000_E_CMS_BFilter",      xsec = 4.68e-06 * 1.1,       feff =  0.1652,  kfactor = 0.9082)
 
 Wenu = Sample( name =   'Wenu',
                   tlatex = 'W #rightarrow e#nu+jets',
@@ -302,32 +302,32 @@ Wenu = Sample( name =   'Wenu',
 # Wmunu
 #------
 
-Wmunu_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt0_70_CVetoBVeto",         xsec =  15795.1948618)
-Wmunu_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt70_140_CVetoBVeto",       xsec =  377.749548487) 
-Wmunu_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt140_280_CVetoBVeto",      xsec =  50.151421849 )
-Wmunu_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt280_500_CVetoBVeto",      xsec =  3.533801265  )
-Wmunu_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt500_700_CVetoBVeto",      xsec =  0.213331248  )
-Wmunu_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt700_1000_CVetoBVeto",     xsec =  0.037111165  )
-Wmunu_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt1000_2000_CVetoBVeto",    xsec =  0.00478857   )
-Wmunu_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt2000_E_CMS_CVetoBVeto",   xsec =  1.2348e-05   )
-                                                                                                               
-Wmunu_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt0_70_CFilterBVeto",       xsec = 2675.17332482 )
-Wmunu_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt70_140_CFilterBVeto",     xsec = 145.131941493 )
-Wmunu_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt140_280_CFilterBVeto",    xsec = 22.576834194  )
-Wmunu_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt280_500_CFilterBVeto",    xsec = 1.686521076   )
-Wmunu_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt500_700_CFilterBVeto",    xsec = 0.107132134   )
-Wmunu_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt700_1000_CFilterBVeto",   xsec = 0.018196255   )
-Wmunu_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt1000_2000_CFilterBVeto",  xsec = 0.002494854   )
-Wmunu_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt2000_E_CMS_CFilterBVeto", xsec = 9.812e-06     )
-                                                                                                               
-Wmunu_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt0_70_BFilter",            xsec = 907.616822112 )
-Wmunu_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt70_140_BFilter",          xsec = 49.37500785   )
-Wmunu_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt140_280_BFilter",         xsec = 8.640805039   )
-Wmunu_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt280_500_BFilter",         xsec = 0.732282814   )
-Wmunu_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt500_700_BFilter",         xsec = 0.050487154   )
-Wmunu_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt700_1000_BFilter",        xsec = 0.009428206   )
-Wmunu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt1000_2000_BFilter",       xsec = 0.001284408   )
-Wmunu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt2000_E_CMS_BFilter",      xsec = 5.314e-06     )
+Wmunu_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt0_70_CVetoBVeto",         xsec = 17340.6393371, feff = 0.8925, kfactor = 0.9082)
+Wmunu_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt70_140_CVetoBVeto",       xsec = 419.506840815, feff = 0.7284, kfactor = 0.9082) 
+Wmunu_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt140_280_CVetoBVeto",      xsec = 55.841494484,  feff = 0.6842, kfactor = 0.9082)
+Wmunu_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt280_500_CVetoBVeto",      xsec = 3.432031461 * 1.1,   feff = 0.6536, kfactor = 0.9082)
+Wmunu_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt500_700_CVetoBVeto",      xsec = 0.202350513 * 1.1,   feff = 0.6311, kfactor = 0.9082)
+Wmunu_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt700_1000_CVetoBVeto",     xsec = 0.035335673 * 1.1,   feff = 0.6326, kfactor = 0.9082)
+Wmunu_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt1000_2000_CVetoBVeto",    xsec = 0.004290787 * 1.1,   feff = 0.5979, kfactor = 0.9082)
+Wmunu_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt2000_E_CMS_CVetoBVeto",   xsec = 1.7355e-05 * 1.1,    feff = 0.6179, kfactor = 0.9082)
+                                                                                                                     
+Wmunu_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt0_70_CFilterBVeto",       xsec = 919.838769744, feff =  0.0474,  kfactor = 0.9082)
+Wmunu_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt70_140_CFilterBVeto",     xsec = 100.564174092, feff =  0.175,   kfactor = 0.9082)
+Wmunu_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt140_280_CFilterBVeto",    xsec = 16.649629005,  feff =  0.2035,  kfactor = 0.9082)
+Wmunu_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt280_500_CFilterBVeto",    xsec = 1.160810758 * 1.1,   feff =  0.2225,  kfactor = 0.9082)
+Wmunu_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt500_700_CFilterBVeto",    xsec = 0.075282837 * 1.1,   feff =  0.2398,  kfactor = 0.9082)
+Wmunu_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt700_1000_CFilterBVeto",   xsec = 0.012748102 * 1.1,   feff =  0.2277,  kfactor = 0.9082)
+Wmunu_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt1000_2000_CFilterBVeto",  xsec = 0.001699121 * 1.1,   feff =  0.2364,  kfactor = 0.9082)
+Wmunu_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt2000_E_CMS_CFilterBVeto", xsec = 7.738e-06 * 1.1,     feff =  0.2679,  kfactor = 0.9082)
+                                                                                                                     
+Wmunu_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt0_70_BFilter",            xsec = 1158.97092326, feff =  0.0597,  kfactor = 0.9082)
+Wmunu_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt70_140_BFilter",          xsec = 55.568454407,  feff =  0.0967,  kfactor = 0.9082)
+Wmunu_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt140_280_BFilter",         xsec = 9.22013311,    feff =  0.1125,  kfactor = 0.9082)
+Wmunu_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt280_500_BFilter",         xsec = 0.680142792 * 1.1,   feff =  0.1307,  kfactor = 0.9082)
+Wmunu_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt500_700_BFilter",         xsec = 0.051706999 * 1.1,   feff =  0.1635,  kfactor = 0.9082)
+Wmunu_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt700_1000_BFilter",        xsec = 0.00874855 * 1.1,    feff =  0.1601,  kfactor = 0.9082)
+Wmunu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt1000_2000_BFilter",       xsec = 0.001139207 * 1.1,   feff =  0.1596,  kfactor = 0.9082)
+Wmunu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt2000_E_CMS_BFilter",      xsec = 6.058e-06 * 1.1,     feff =  0.1928,  kfactor = 0.9082)
 
 Wmunu = Sample( name =   'Wmunu',
                   tlatex = 'W #rightarrow #mu#nu+jets',
@@ -366,32 +366,32 @@ Wmunu = Sample( name =   'Wmunu',
 # Wtaunu
 #-------
 
-Wtaunu_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt0_70_CVetoBVeto",         xsec = 15821.9692868 )
-Wtaunu_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt70_140_CVetoBVeto",       xsec = 375.759077047 ) 
-Wtaunu_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt140_280_CVetoBVeto",      xsec = 50.173358226  )
-Wtaunu_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt280_500_CVetoBVeto",      xsec = 3.450438494   )
-Wtaunu_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt500_700_CVetoBVeto",      xsec = 0.209886778   )
-Wtaunu_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt700_1000_CVetoBVeto",     xsec = 0.039884689   )
-Wtaunu_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt1000_2000_CVetoBVeto",    xsec = 0.004868065   )
-Wtaunu_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_CVetoBVeto",   xsec = 1.4245e-05    )
-                                                                                                                 
-Wtaunu_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt0_70_CFilterBVeto",       xsec = 2683.83259267)
-Wtaunu_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt70_140_CFilterBVeto",     xsec = 144.539591316)
-Wtaunu_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt140_280_CFilterBVeto",    xsec = 22.558816959 )
-Wtaunu_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt280_500_CFilterBVeto",    xsec = 1.687956502  )
-Wtaunu_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt500_700_CFilterBVeto",    xsec = 0.108804181  )
-Wtaunu_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt700_1000_CFilterBVeto",   xsec = 0.01927425   )
-Wtaunu_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt1000_2000_CFilterBVeto",  xsec = 0.00251029   )
-Wtaunu_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_CFilterBVeto", xsec = 8.707e-06    )
-                                                                                                                 
-Wtaunu_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt0_70_BFilter",            xsec = 909.56502252)
-Wtaunu_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt70_140_BFilter",          xsec = 49.107324606)
-Wtaunu_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt140_280_BFilter",         xsec = 8.611129318 )
-Wtaunu_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt280_500_BFilter",         xsec = 0.711433732 )
-Wtaunu_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt500_700_BFilter",         xsec = 0.048001365 )
-Wtaunu_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt700_1000_BFilter",        xsec = 0.009455976 )
-Wtaunu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt1000_2000_BFilter",       xsec = 0.001236195 )
-Wtaunu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_BFilter",      xsec = 5.143e-06   )
+Wtaunu_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt0_70_CVetoBVeto",         xsec = 17314.4290983,  feff =  0.8914,  kfactor = 0.9082)
+Wtaunu_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt70_140_CVetoBVeto",       xsec = 419.122578495,  feff =  0.7261,  kfactor = 0.9082) 
+Wtaunu_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt140_280_CVetoBVeto",      xsec = 55.916387347,   feff =  0.684,   kfactor = 0.9082)
+Wtaunu_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt280_500_CVetoBVeto",      xsec = 3.406527101 * 1.1,    feff =  0.6474,  kfactor = 0.9082)
+Wtaunu_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt500_700_CVetoBVeto",      xsec = 0.197106496 * 1.1,    feff =  0.6289,  kfactor = 0.9082)
+Wtaunu_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt700_1000_CVetoBVeto",     xsec = 0.034681733 * 1.1,    feff =  0.6274,  kfactor = 0.9082)
+Wtaunu_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt1000_2000_CVetoBVeto",    xsec = 0.004373938 * 1.1,    feff =  0.6071,  kfactor = 0.9082)
+Wtaunu_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_CVetoBVeto",   xsec = 1.6536e-05 * 1.1,     feff =  0.5454,  kfactor = 0.9082)
+                                                                                                                       
+Wtaunu_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt0_70_CFilterBVeto",       xsec =  945.692972992, feff =  0.0487,  kfactor = 0.9082)
+Wtaunu_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt70_140_CFilterBVeto",     xsec =  101.503853138, feff =  0.1763,  kfactor = 0.9082)
+Wtaunu_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt140_280_CFilterBVeto",    xsec =  16.794548709,  feff =  0.205,   kfactor = 0.9082)
+Wtaunu_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt280_500_CFilterBVeto",    xsec =  1.149628406 * 1.1,   feff =  0.2189,  kfactor = 0.9082)
+Wtaunu_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt500_700_CFilterBVeto",    xsec =  0.074064213 * 1.1,   feff =  0.2305,  kfactor = 0.9082)
+Wtaunu_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt700_1000_CFilterBVeto",   xsec =  0.012089998 * 1.1,   feff =  0.22,    kfactor = 0.9082)
+Wtaunu_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt1000_2000_CFilterBVeto",  xsec =  0.001705245 * 1.1,   feff =  0.238,   kfactor = 0.9082)
+Wtaunu_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_CFilterBVeto", xsec =  6.707e-06 * 1.1,     feff =  0.2423,  kfactor = 0.9082)
+                                                                                                                       
+Wtaunu_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt0_70_BFilter",            xsec =  1159.25995066, feff =  0.0597,  kfactor = 0.9082)
+Wtaunu_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt70_140_BFilter",          xsec =  55.038425769,  feff =  0.0957,  kfactor = 0.9082)
+Wtaunu_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt140_280_BFilter",         xsec =  9.259878116,   feff =  0.1131,  kfactor = 0.9082)
+Wtaunu_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt280_500_BFilter",         xsec =  0.692107677 * 1.1,   feff =  0.1325,  kfactor = 0.9082)
+Wtaunu_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt500_700_BFilter",         xsec =  0.05020675 * 1.1,    feff =  0.1595,  kfactor = 0.9082)
+Wtaunu_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt700_1000_BFilter",        xsec =  0.008573241 * 1.1,   feff =  0.1555,  kfactor = 0.9082)
+Wtaunu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt1000_2000_BFilter",       xsec =  0.001282272 * 1.1,   feff =  0.176,   kfactor = 0.9082)
+Wtaunu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_BFilter",      xsec =  5.693e-06 * 1.1,     feff =  0.196,   kfactor = 0.9082)
 
 Wtaunu = Sample( name =   'Wtaunu',
                   tlatex = 'W #rightarrow #tau#nu+jets',
@@ -427,114 +427,12 @@ Wtaunu = Sample( name =   'Wtaunu',
                 ) 
 
 
-
-
-
-
-
 #-----------------------------------------------------------------------------
-# W + jets (Powheg)
+# Z + jets (Sherpa)
 # Notes:
-#       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryWjetsPowPy8Incl
-#                         
-#-----------------------------------------------------------------------------
-Wplusenu     = Sample( name =  "PowhegPythia8EvtGen_AZNLOCTEQ6L1_Wplusenu",     xsec = 11500.9154 ) 
-Wminusenu    = Sample( name =  "PowhegPythia8EvtGen_AZNLOCTEQ6L1_Wminusenu",    xsec = 8579.0011  ) 
-                                                                                                         
-Wplusmunu    = Sample( name =  "PowhegPythia8EvtGen_AZNLOCTEQ6L1_Wplusmunu",    xsec = 11500.9154 ) 
-Wminusmunu   = Sample( name =  "PowhegPythia8EvtGen_AZNLOCTEQ6L1_Wminusmunu",   xsec = 8579.0011  ) 
-
-Wplustaunu   = Sample( name =  "PowhegPythia8EvtGen_AZNLOCTEQ6L1_Wplustaunu",   xsec = 11500.9154 ) 
-Wminustaunu  = Sample( name =  "PowhegPythia8EvtGen_AZNLOCTEQ6L1_Wminustaunu",  xsec = 8579.0011  ) 
-
-
-WenuPowheg = Sample( name =   'WenuPowheg',
-                  tlatex = 'W #rightarrow e#nu+jets (Powheg)',
-                  fill_color = ROOT.kRed+1,
-                  line_color =  ROOT.kRed+2,
-                  marker_color =  ROOT.kRed+2,
-                  daughters = [
-                               Wplusenu,        
-                               Wminusenu,                                    
-                              ],
-                ) 
-
-
-WmunuPowheg = Sample( name =   'WmunuPowheg',
-                  tlatex = 'W #rightarrow #mu#nu+jets (Powheg)',
-                  fill_color = ROOT.kGreen+1,
-                  line_color =  ROOT.kGreen+2,
-                  marker_color =  ROOT.kGreen+2,
-                  daughters = [
-                               Wplusmunu,        
-                               Wminusmunu,                                    
-                              ],
-                ) 
-
-
-WtaunuPowheg = Sample( name =   'WtaunuPowheg',
-                  tlatex = 'W #rightarrow #tau#nu+jets (Powheg)',
-                  fill_color = ROOT.kBlue+1,
-                  line_color =  ROOT.kBlue+2,
-                  marker_color =  ROOT.kBlue+2,
-                  daughters = [
-                               Wplustaunu,        
-                               Wminustaunu,                                    
-                              ],
-                ) 
-
-
-#-----------------------------------------------------------------------------
-# Z + jets (Powheg)
-# Notes:
-#       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryZjetsPowPy8Incl
-#                         
-#-----------------------------------------------------------------------------
-
-ZeePP       = Sample( name  = "PowhegPythia8EvtGen_AZNLOCTEQ6L1_Zee",     xsec = 1950.6321 ) 
-ZmumuPP     = Sample( name  = "PowhegPythia8EvtGen_AZNLOCTEQ6L1_Zmumu",   xsec = 1950.6321 ) 
-ZtautauPP   = Sample( name  = "PowhegPythia8EvtGen_AZNLOCTEQ6L1_Ztautau", xsec = 1950.6321 ) 
-
-
-ZeePowheg       = Sample( name         = "ZeePowheg",     
-                          tlatex       = 'Z #rightarrow ee+jets',
-                          fill_color   =  ROOT.kOrange+1,
-                          line_color   =  ROOT.kOrange+2,
-                          marker_color =  ROOT.kOrange+2,
-                          daughters = [
-                               ZeePP,     
-                              ],
-                  ) 
-
-
-ZmumuPowheg     = Sample( name         = "ZmumuPowheg",   
-                          tlatex       = 'Z #rightarrow #mu#mu+jets',
-                          fill_color   = ROOT.kSpring+1,
-                          line_color   = ROOT.kSpring+2,
-                          marker_color = ROOT.kSpring+2,
-                          daughters = [
-                               ZmumuPP,     
-                              ],
-                  ) 
-
-
-ZtautauPowheg   = Sample( name         = "ZtautauPowheg", 
-                          tlatex       = 'Z #rightarrow #tau#tau+jets',
-                          fill_color   = ROOT.kAzure-4,
-                          line_color   = ROOT.kAzure-5,
-                          marker_color = ROOT.kAzure-5,
-                          daughters = [
-                               ZtautauPP,     
-                              ],
-                  ) 
-
-
-#-----------------------------------------------------------------------------
-# Z + jets (Sherpa 2.2)
-# Notes:
-#       * cross sections:  https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryZjetsSherpa22Light (light filter)
-#                          https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryZjetsSherpa22C     (C filter) 
-#                          https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryZjetsSherpa22B     (B filter) 
+#       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryZjetsSherpaLight (light filter)
+#                         https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryZjetsSherpaC     (C filter) 
+#                         https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryZjetsSherpaB     (B filter) 
 # for my tags!!!
 # https://twiki.cern.ch/twiki/pub/AtlasProtected/CentralMC15ProductionList/XSections_13TeV_e3651_e4133.txt
 #-----------------------------------------------------------------------------
@@ -543,32 +441,32 @@ ZtautauPowheg   = Sample( name         = "ZtautauPowheg",
 # Zee
 #-----
 
-Zee_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt0_70_CVetoBVeto",                xsec = 1641.4628707  ) 
-Zee_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt70_140_CVetoBVeto",              xsec = 46.790575075  )
-Zee_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt140_280_CVetoBVeto",             xsec = 6.789837772   )
-Zee_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt280_500_CVetoBVeto",             xsec = 0.48716142    )
-Zee_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt500_700_CVetoBVeto",             xsec = 0.02875511    )
-Zee_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt700_1000_CVetoBVeto",            xsec = 0.005414517   )
-Zee_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt1000_2000_CVetoBVeto",           xsec = 0.000697776   )
-Zee_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt2000_E_CMS_CVetoBVeto",          xsec = 2.524e-06     ) 
+Zee_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt0_70_CVetoBVeto",                xsec = 1549.26000693, feff =  0.779,   kfactor = 0.9013 ) 
+Zee_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt70_140_CVetoBVeto",              xsec = 44.22776987,   feff =  0.6469,  kfactor = 0.9013 )
+Zee_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt140_280_CVetoBVeto",             xsec = 6.506584189,   feff =  0.6172,  kfactor = 0.9013 )
+Zee_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt280_500_CVetoBVeto",             xsec = 0.407251422 * 1.1,   feff =  0.5889,  kfactor = 0.9013 )
+Zee_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt500_700_CVetoBVeto",             xsec = 0.024016122 * 1.1,   feff =  0.5773,  kfactor = 0.9013 )
+Zee_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt700_1000_CVetoBVeto",            xsec = 0.004150103 * 1.1,   feff =  0.5661,  kfactor = 0.9013 )
+Zee_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt1000_2000_CVetoBVeto",           xsec = 0.000504024 * 1.1,   feff =  0.5369,  kfactor = 0.9013 )
+Zee_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt2000_E_CMS_CVetoBVeto",          xsec = 2.004e-06 * 1.1,     feff =  0.5197,  kfactor = 0.9013 )
                                                                                                          
-Zee_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt0_70_CFilterBVeto",              xsec = 241.466440999 )
-Zee_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt70_140_CFilterBVeto",            xsec = 14.049268454  )
-Zee_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt140_280_CFilterBVeto",           xsec = 2.42660918    )
-Zee_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt280_500_CFilterBVeto",           xsec = 0.198314112   )
-Zee_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt500_700_CFilterBVeto",           xsec = 0.012936803   )
-Zee_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt700_1000_CFilterBVeto",          xsec = 0.002400844   )
-Zee_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt1000_2000_CFilterBVeto",         xsec = 0.00033278    )
-Zee_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt2000_E_CMS_CFilterBVeto",        xsec = 1.218e-06     )
+Zee_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt0_70_CFilterBVeto",              xsec = 282.772058138, feff =  0.1423,  kfactor = 0.9013 )
+Zee_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt70_140_CFilterBVeto",            xsec = 14.952742932,  feff =  0.2182,  kfactor = 0.9013 )
+Zee_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt140_280_CFilterBVeto",           xsec = 2.538900646,   feff =  0.2449,  kfactor = 0.9013 )
+Zee_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt280_500_CFilterBVeto",           xsec = 0.17993672 * 1.1,    feff =  0.2617,  kfactor = 0.9013 )
+Zee_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt500_700_CFilterBVeto",           xsec = 0.011351653 * 1.1,   feff =  0.2714,  kfactor = 0.9013 )
+Zee_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt700_1000_CFilterBVeto",          xsec = 0.002197952 * 1.1,   feff =  0.3002,  kfactor = 0.9013 )
+Zee_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt1000_2000_CFilterBVeto",         xsec = 0.000296457 * 1.1,   feff =  0.3098,  kfactor = 0.9013 )
+Zee_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt2000_E_CMS_CFilterBVeto",        xsec = 1.538e-06 * 1.1,     feff =  0.3932,  kfactor = 0.9013 )
                                                                                                          
-Zee_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt0_70_BFilter",                   xsec = 140.517436867 )
-Zee_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt70_140_BFilter",                 xsec = 8.850204229   )
-Zee_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt140_280_BFilter",                xsec = 1.558081087   )
-Zee_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt280_500_BFilter",                xsec = 0.123000982   )
-Zee_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt500_700_BFilter",                xsec = 0.007968854   )
-Zee_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt700_1000_BFilter",               xsec = 0.001494724   )
-Zee_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt1000_2000_BFilter",              xsec = 0.000189395   )
-Zee_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt2000_E_CMS_BFilter",             xsec = 6.99e-07      )
+Zee_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt0_70_BFilter",                   xsec = 158.396126791, feff =  0.0797,   kfactor = 0.9013 )
+Zee_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt70_140_BFilter",                 xsec = 8.994572804,   feff =  0.1311,   kfactor = 0.9013 )
+Zee_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt140_280_BFilter",                xsec = 1.579281881,   feff =  0.1504,   kfactor = 0.9013 )
+Zee_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt280_500_BFilter",                xsec = 0.107766448 * 1.1,   feff =  0.1562,   kfactor = 0.9013 )
+Zee_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt500_700_BFilter",                xsec = 0.007056014 * 1.1,   feff =  0.1685,   kfactor = 0.9013 )
+Zee_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt700_1000_BFilter",               xsec = 0.001344726 * 1.1,   feff =  0.1829,   kfactor = 0.9013 )
+Zee_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt1000_2000_BFilter",              xsec = 0.000183289 * 1.1,   feff =  0.1919,   kfactor = 0.9013 )
+Zee_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt2000_E_CMS_BFilter",             xsec = 8.3e-07 * 1.1,       feff =  0.2221,   kfactor = 0.9013 )
 
 Zee = Sample( name =   'Zee',
                   tlatex = 'Z #rightarrow ee+jets',
@@ -608,32 +506,32 @@ Zee = Sample( name =   'Zee',
 # Zmumu
 #-------
 
-Zmumu_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt0_70_CVetoBVeto",              xsec = 1642.54477535  )
-Zmumu_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt70_140_CVetoBVeto",            xsec = 46.639099307   ) 
-Zmumu_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt140_280_CVetoBVeto",           xsec = 6.776899365    )
-Zmumu_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt280_500_CVetoBVeto",           xsec = 0.481671305    )
-Zmumu_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt500_700_CVetoBVeto",           xsec = 0.030237082    )
-Zmumu_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt700_1000_CVetoBVeto",          xsec = 0.005363995    )
-Zmumu_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt1000_2000_CVetoBVeto",         xsec = 0.00069072     )
-Zmumu_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_CVetoBVeto",        xsec = 2.451e-06      )
+Zmumu_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt0_70_CVetoBVeto",              xsec = 1545.03412569, feff = 0.7784,  kfactor = 0.9013 )
+Zmumu_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt70_140_CVetoBVeto",            xsec = 44.406818306,  feff = 0.6491,  kfactor = 0.9013 ) 
+Zmumu_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt140_280_CVetoBVeto",           xsec = 6.403162188,   feff = 0.61,    kfactor = 0.9013 )
+Zmumu_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt280_500_CVetoBVeto",           xsec = 0.402575488 * 1.1,   feff = 0.5808,  kfactor = 0.9013 )
+Zmumu_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt500_700_CVetoBVeto",           xsec = 0.023490348 * 1.1,   feff = 0.5664,  kfactor = 0.9013 )
+Zmumu_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt700_1000_CVetoBVeto",          xsec = 0.004066761 * 1.1,   feff = 0.5613,  kfactor = 0.9013 )
+Zmumu_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt1000_2000_CVetoBVeto",         xsec = 0.000566401 * 1.1,   feff = 0.5491,  kfactor = 0.9013 )
+Zmumu_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_CVetoBVeto",        xsec = 2.213e-06 * 1.1,     feff = 0.5973,  kfactor = 0.9013 )
                                                                                                         
-Zmumu_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt0_70_CFilterBVeto",            xsec = 240.030832472  )
-Zmumu_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt70_140_CFilterBVeto",          xsec = 14.009508576   )
-Zmumu_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt140_280_CFilterBVeto",         xsec = 2.407495134    )
-Zmumu_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt280_500_CFilterBVeto",         xsec = 0.195283767    )
-Zmumu_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt500_700_CFilterBVeto",         xsec = 0.01296887     )
-Zmumu_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt700_1000_CFilterBVeto",        xsec = 0.002371048    )
-Zmumu_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt1000_2000_CFilterBVeto",       xsec = 0.000318973    )
-Zmumu_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_CFilterBVeto",      xsec = 1.38e-06       )
+Zmumu_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt0_70_CFilterBVeto",            xsec =  281.969546386, feff = 0.1419,  kfactor = 0.9013 )
+Zmumu_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt70_140_CFilterBVeto",          xsec =  15.044569464,  feff = 0.2193,  kfactor = 0.9013 )
+Zmumu_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt140_280_CFilterBVeto",         xsec =  2.535541296,   feff = 0.2412,  kfactor = 0.9013 )
+Zmumu_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt280_500_CFilterBVeto",         xsec =  0.185533832 * 1.1,   feff = 0.2721,  kfactor = 0.9013 )
+Zmumu_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt500_700_CFilterBVeto",         xsec =  0.011157277 * 1.1,   feff = 0.2659,  kfactor = 0.9013 )
+Zmumu_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt700_1000_CFilterBVeto",        xsec =  0.002053806 * 1.1,   feff = 0.2887,  kfactor = 0.9013 )
+Zmumu_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt1000_2000_CFilterBVeto",       xsec =  0.000265446 * 1.1,   feff = 0.2825,  kfactor = 0.9013 )
+Zmumu_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_CFilterBVeto",      xsec =  1.207e-06 * 1.1,     feff = 0.3258,  kfactor = 0.9013 )
                                                                                                         
-Zmumu_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt0_70_BFilter",                 xsec = 142.586650552  )
-Zmumu_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt70_140_BFilter",               xsec = 8.955685233    )
-Zmumu_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt140_280_BFilter",              xsec = 1.561047731    )
-Zmumu_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt280_500_BFilter",              xsec = 0.123565964    )
-Zmumu_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt500_700_BFilter",              xsec = 0.007654784    )
-Zmumu_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt700_1000_BFilter",             xsec = 0.001495305    )
-Zmumu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt1000_2000_BFilter",            xsec = 0.000184686    )
-Zmumu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_BFilter",           xsec = 6.69e-07       )
+Zmumu_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt0_70_BFilter",                 xsec =  158.199011129, feff =  0.0796, kfactor = 0.9013 )
+Zmumu_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt70_140_BFilter",               xsec =  8.937479488,   feff =  0.1303, kfactor = 0.9013 )
+Zmumu_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt140_280_BFilter",              xsec =  1.554540292,   feff =  0.148,  kfactor = 0.9013 )
+Zmumu_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt280_500_BFilter",              xsec =  0.113373913 * 1.1,   feff =  0.163,  kfactor = 0.9013 )
+Zmumu_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt500_700_BFilter",              xsec =  0.007371738 * 1.1,   feff =  0.1764, kfactor = 0.9013 )
+Zmumu_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt700_1000_BFilter",             xsec =  0.001297194 * 1.1,   feff =  0.1786, kfactor = 0.9013 )
+Zmumu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt1000_2000_BFilter",            xsec =  0.000190262 * 1.1,   feff =  0.198,  kfactor = 0.9013 )
+Zmumu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_BFilter",           xsec =  9.39e-07 * 1.1,      feff =  0.2466, kfactor = 0.9013 )
 
 Zmumu = Sample( name =   'Zmumu',
                   tlatex = 'Z #rightarrow #mu#mu+jets',
@@ -672,33 +570,32 @@ Zmumu = Sample( name =   'Zmumu',
 # Ztautau
 #---------
 
-Ztautau_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt0_70_CVetoBVeto",         xsec = 1643.85019048 )
-Ztautau_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt70_140_CVetoBVeto",       xsec = 6.73378408    ) 
-Ztautau_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt140_280_CVetoBVeto",      xsec = 0.486837566   )
-Ztautau_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt280_500_CVetoBVeto",      xsec = 0.030084735   )
-Ztautau_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt500_700_CVetoBVeto",      xsec = 0.005386908   )
-Ztautau_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt700_1000_CVetoBVeto",     xsec = 0.0006955     )
-Ztautau_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt1000_2000_CVetoBVeto",    xsec = 2.416e-06     )
-Ztautau_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt2000_E_CMS_CVetoBVeto",   xsec = 46.751851426  )
+Ztautau_Pt0_70_CVetoBVeto         = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt0_70_CVetoBVeto",         xsec = 1540.4178651, feff = 0.7781,  kfactor = 0.9013 )
+Ztautau_Pt70_140_CVetoBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt70_140_CVetoBVeto",       xsec = 44.65676361,  feff = 0.6479,  kfactor = 0.9013 ) 
+Ztautau_Pt140_280_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt140_280_CVetoBVeto",      xsec = 6.455693712,  feff = 0.6145,  kfactor = 0.9013 )
+Ztautau_Pt280_500_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt280_500_CVetoBVeto",      xsec = 0.401065 * 1.1,     feff = 0.581,   kfactor = 0.9013 )
+Ztautau_Pt500_700_CVetoBVeto      = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt500_700_CVetoBVeto",      xsec = 0.02348807 * 1.1,   feff = 0.5639,  kfactor = 0.9013 )
+Ztautau_Pt700_1000_CVetoBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt700_1000_CVetoBVeto",     xsec = 0.004107715 * 1.1,  feff = 0.5602,  kfactor = 0.9013 )
+Ztautau_Pt1000_2000_CVetoBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt1000_2000_CVetoBVeto",    xsec = 0.000532212 * 1.1,  feff = 0.5636,  kfactor = 0.9013 )
+Ztautau_Pt2000_E_CMS_CVetoBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt2000_E_CMS_CVetoBVeto",   xsec = 2.183e-06 * 1.1,    feff = 0.5954,  kfactor = 0.9013 )
                                                                                                         
-Ztautau_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt0_70_CFilterBVeto",       xsec = 240.97383023 )
-Ztautau_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt70_140_CFilterBVeto",     xsec = 14.026868379 )
-Ztautau_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt140_280_CFilterBVeto",    xsec = 2.413076391  )
-Ztautau_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt280_500_CFilterBVeto",    xsec = 0.196832713  )
-Ztautau_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt500_700_CFilterBVeto",    xsec = 0.013210254  )
-Ztautau_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt700_1000_CFilterBVeto",   xsec = 0.002395235  )
-Ztautau_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt1000_2000_CFilterBVeto",  xsec = 0.000317704  )
-Ztautau_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt2000_E_CMS_CFilterBVeto", xsec = 1.285e-06    )
+Ztautau_Pt0_70_CFilterBVeto       = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt0_70_CFilterBVeto",       xsec = 282.756352896, feff = 0.1423, kfactor = 0.9013 )
+Ztautau_Pt70_140_CFilterBVeto     = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt70_140_CFilterBVeto",     xsec = 15.209340192,  feff = 0.222,  kfactor = 0.9013 )
+Ztautau_Pt140_280_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt140_280_CFilterBVeto",    xsec = 2.529223599,   feff = 0.2417, kfactor = 0.9013 )
+Ztautau_Pt280_500_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt280_500_CFilterBVeto",    xsec = 0.176406172 * 1.1,   feff = 0.2558, kfactor = 0.9013 )
+Ztautau_Pt500_700_CFilterBVeto    = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt500_700_CFilterBVeto",    xsec = 0.011224933 * 1.1,   feff = 0.2704, kfactor = 0.9013 )
+Ztautau_Pt700_1000_CFilterBVeto   = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt700_1000_CFilterBVeto",   xsec = 0.002156445 * 1.1,   feff = 0.2984, kfactor = 0.9013 )
+Ztautau_Pt1000_2000_CFilterBVeto  = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt1000_2000_CFilterBVeto",  xsec = 0.000329597 * 1.1,   feff = 0.3483, kfactor = 0.9013 )
+Ztautau_Pt2000_E_CMS_CFilterBVeto = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt2000_E_CMS_CFilterBVeto", xsec = 1.415e-06 * 1.1,     feff = 0.36,   kfactor = 0.9013 )
                                                                                                         
-Ztautau_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt0_70_BFilter",            xsec = 140.512238804 )
-Ztautau_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt70_140_BFilter",          xsec = 8.832529157   )
-Ztautau_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt140_280_BFilter",         xsec = 1.555402702   )
-Ztautau_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt280_500_BFilter",         xsec = 0.124324067   )
-Ztautau_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt500_700_BFilter",         xsec = 0.008163159   )
-Ztautau_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt700_1000_BFilter",        xsec = 0.001473957   )
-Ztautau_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt1000_2000_BFilter",       xsec = 0.000144828   )
-Ztautau_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt2000_E_CMS_BFilter",      xsec = 8.36e-07      )
-
+Ztautau_Pt0_70_BFilter            = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt0_70_BFilter",            xsec = 157.407818354, feff =  0.0792, kfactor = 0.9013 )
+Ztautau_Pt70_140_BFilter          = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt70_140_BFilter",          xsec = 8.971250612,   feff =  0.1312, kfactor = 0.9013 )
+Ztautau_Pt140_280_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt140_280_BFilter",         xsec = 1.494293679,   feff =  0.1421, kfactor = 0.9013 )
+Ztautau_Pt280_500_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt280_500_BFilter",         xsec = 0.108832258 * 1.1,   feff =  0.1589, kfactor = 0.9013 )
+Ztautau_Pt500_700_BFilter         = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt500_700_BFilter",         xsec = 0.007076053 * 1.1,   feff =  0.1705, kfactor = 0.9013 )
+Ztautau_Pt700_1000_BFilter        = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt700_1000_BFilter",        xsec = 0.001318545 * 1.1,   feff =  0.1801, kfactor = 0.9013 )
+Ztautau_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt1000_2000_BFilter",       xsec = 0.000161628 * 1.1,   feff =  0.1685, kfactor = 0.9013 )
+Ztautau_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Ztautau_Pt2000_E_CMS_BFilter",      xsec = 9.85e-07 * 1.1,      feff =  0.2508, kfactor = 0.9013 )
 
 Ztautau = Sample( name =   'Ztautau',
                   tlatex = 'Z #rightarrow #tau#tau+jets',
@@ -727,7 +624,7 @@ Ztautau = Sample( name =   'Ztautau',
                                Ztautau_Pt140_280_BFilter,        
                                Ztautau_Pt280_500_BFilter,   
                                Ztautau_Pt500_700_BFilter,        
-                               #Ztautau_Pt700_1000_BFilter,       
+                               Ztautau_Pt700_1000_BFilter,       
                                Ztautau_Pt1000_2000_BFilter,      
                                Ztautau_Pt2000_E_CMS_BFilter,     
                               ],
@@ -809,9 +706,9 @@ singletop = Sample( name =   'singletop',
 # Notes:
 #       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryTTbar 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-ttbar_hdamp172p5_nonallhad            = Sample( name =  "ttbar_hdamp172p5_nonallhad", xsec = 451.645679998 )
-ttbar_hdamp172p5_allhad               = Sample( name =  "ttbar_hdamp172p5_allhad",    xsec = 380.11432     )
-ttbar_nonallhad                       = Sample( name =  "ttbar_nonallhad",            xsec = 451.645680001 )
+ttbar_hdamp172p5_nonallhad            = Sample( name =  "ttbar_hdamp172p5_nonallhad", xsec = 451.645679998,  feff = 0.543,  kfactor = 1.1949  )
+ttbar_hdamp172p5_allhad               = Sample( name =  "ttbar_hdamp172p5_allhad",    xsec = 380.11432,      feff = 0.457,  kfactor =  1.1947 )
+ttbar_nonallhad                       = Sample( name =  "ttbar_nonallhad",            xsec = 451.645680001,  feff = 0.543,  kfactor =  1.1975 )
 
 ttbar = Sample( name =  'ttbar',
                     tlatex = 'ttbar',
@@ -830,18 +727,18 @@ ttbar = Sample( name =  'ttbar',
 # Notes:
 #       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryTTbarSliced 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-ttbar_hdamp172p5_nonallhad_mtt_1      = Sample( name =  "ttbar_hdamp172p5_nonallhad_mtt_1",  xsec = 3.926242464   )
-ttbar_hdamp172p5_nonallhad_mtt_2      = Sample( name =  "ttbar_hdamp172p5_nonallhad_mtt_2",  xsec = 1.617309099   )                         
-ttbar_hdamp172p5_nonallhad_mtt_3      = Sample( name =  "ttbar_hdamp172p5_nonallhad_mtt_3",  xsec = 0.718018025   )
-ttbar_hdamp172p5_nonallhad_mtt_4      = Sample( name =  "ttbar_hdamp172p5_nonallhad_mtt_4",  xsec = 0.431858588   )
-ttbar_hdamp172p5_nonallhad_mtt_5      = Sample( name =  "ttbar_hdamp172p5_nonallhad_mtt_5",  xsec = 0.25723035    )
-ttbarHT6c_1k_hdamp172p5_nonAH         = Sample( name =  "ttbarHT6c_1k_hdamp172p5_nonAH",     xsec = 19.068284245  )
-ttbarHT1k_1k5_hdamp172p5_nonAH        = Sample( name =  "ttbarHT1k_1k5_hdamp172p5_nonAH",    xsec = 2.665728834   )
-ttbarHT1k5_hdamp172p5_nonAH           = Sample( name =  "ttbarHT1k5_hdamp172p5_nonAH",       xsec = 0.470232424   )
-ttbarMET200_hdamp172p5_nonAH          = Sample( name =  "ttbarMET200_hdamp172p5_nonAH",      xsec = 7.669803669   )
-ttbar_hdamp345_down_nonallhad         = Sample( name =  "ttbar_hdamp345_down_nonallhad",     xsec = 451.645679999 ) 
-ttbar_hdamp172_up_nonallhad           = Sample( name =  "ttbar_hdamp172_up_nonallhad",       xsec = 451.64568     )
-ttbar_hdamp172p5_nonallhad            = Sample( name =  "ttbar_hdamp172p5_nonallhad",        xsec = 451.645679998 )
+ttbar_hdamp172p5_nonallhad_mtt_1      = Sample( name =  "ttbar_hdamp172p5_nonallhad_mtt_1",  xsec = 3.926242464,   feff = 0.0047,  kfactor = 1.1949 )
+ttbar_hdamp172p5_nonallhad_mtt_2      = Sample( name =  "ttbar_hdamp172p5_nonallhad_mtt_2",  xsec = 1.617309099,   feff = 0.0019,  kfactor = 1.1949 )                         
+ttbar_hdamp172p5_nonallhad_mtt_3      = Sample( name =  "ttbar_hdamp172p5_nonallhad_mtt_3",  xsec = 0.718018025,   feff = 0.0009,  kfactor = 1.1949 )
+ttbar_hdamp172p5_nonallhad_mtt_4      = Sample( name =  "ttbar_hdamp172p5_nonallhad_mtt_4",  xsec = 0.431858588,   feff = 0.0005,  kfactor = 1.1949 )
+ttbar_hdamp172p5_nonallhad_mtt_5      = Sample( name =  "ttbar_hdamp172p5_nonallhad_mtt_5",  xsec = 0.25723035,    feff = 0.0003,  kfactor = 1.1949 )
+ttbarHT6c_1k_hdamp172p5_nonAH         = Sample( name =  "ttbarHT6c_1k_hdamp172p5_nonAH",     xsec = 19.068284245,  feff = 0.0229,  kfactor = 1.1949 )
+ttbarHT1k_1k5_hdamp172p5_nonAH        = Sample( name =  "ttbarHT1k_1k5_hdamp172p5_nonAH",    xsec = 2.665728834,   feff = 0.0032,  kfactor = 1.1949 )
+ttbarHT1k5_hdamp172p5_nonAH           = Sample( name =  "ttbarHT1k5_hdamp172p5_nonAH",       xsec = 0.470232424,   feff = 0.0006,  kfactor = 1.1949 )
+ttbarMET200_hdamp172p5_nonAH          = Sample( name =  "ttbarMET200_hdamp172p5_nonAH",      xsec = 7.669803669,   feff = 0.0092,  kfactor = 1.1949 )
+ttbar_hdamp345_down_nonallhad         = Sample( name =  "ttbar_hdamp345_down_nonallhad",     xsec = 451.645679999, feff = 0.543,   kfactor = 1.0613 ) 
+ttbar_hdamp172_up_nonallhad           = Sample( name =  "ttbar_hdamp172_up_nonallhad",       xsec = 451.64568,     feff = 0.543,   kfactor = 1.3611 )
+ttbar_hdamp172p5_nonallhad            = Sample( name =  "ttbar_hdamp172p5_nonallhad",        xsec = 451.645679998, feff = 0.543,   kfactor = 1.1949 )
 
 
 ttbar_slices = Sample( name =  'ttbar_slices',
@@ -938,27 +835,16 @@ all_data = data.daughters
 all_mc = []
 #all_mc += diboson_sherpa.daughters
 #all_mc += diboson_powheg.daughters
-
 all_mc += Wenu.daughters
 all_mc += Wmunu.daughters
 all_mc += Wtaunu.daughters
-
-all_mc += WenuPowheg.daughters
-all_mc += WmunuPowheg.daughters
-all_mc += WtaunuPowheg.daughters
-
 all_mc += Zee.daughters
 all_mc += Zmumu.daughters
 all_mc += Ztautau.daughters
-
-all_mc += ZeePowheg.daughters
-all_mc += ZmumuPowheg.daughters
-all_mc += ZtautauPowheg.daughters
-
-#####all_mc += ttX.daughters
+#all_mc += ttX.daughters
 all_mc += singletop.daughters
-#####all_mc += ttbar.daughters
-#####all_mc += all_DCH.daughters
-#####all_mc += single_DCH
+#all_mc += ttbar.daughters
+#all_mc += all_DCH.daughters
+#all_mc += single_DCH
 
 ## EOF

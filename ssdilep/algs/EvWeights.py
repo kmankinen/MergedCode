@@ -44,7 +44,26 @@ class TrigPresc(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def execute(self, weight):
         if "data" in self.sampletype: 
-            trigpresc = self.chain.triggerPrescales.at(0)
+            #trigpresc = self.chain.triggerPrescales.at(0)
+            print self.chain.triggerPrescales
+            #if self.key: self.store[self.key] = trigpresc
+            #self.set_weight(trigpresc*weight)
+        return True
+
+#------------------------------------------------------------------------------
+class DataUnPresc(pyframe.core.Algorithm):
+    """
+    Algorithm to unprescale data
+    """
+    #__________________________________________________________________________
+    def __init__(self, cutflow=None,key=None):
+        pyframe.core.Algorithm.__init__(self, name="TrigPresc", isfilter=True)
+        self.cutflow = cutflow
+        self.key = key
+    #__________________________________________________________________________
+    def execute(self, weight):
+        if "data" in self.sampletype: 
+            trigpresc = self.chain.prescale_DataWeight
             if self.key: self.store[self.key] = trigpresc
             self.set_weight(trigpresc*weight)
         return True
