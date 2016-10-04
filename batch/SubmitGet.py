@@ -20,7 +20,8 @@ parser.add_option('-s', '--samp', dest='sample',
 user  = "fscutti"
 samp  = options.sample
 
-jtag  = "ntuples.*%s*" % samp
+#jtag  = "HIGG3D3_v3_p2689.*%s*" % samp
+jtag  = "EXOT12_v3_l3_p2689.*%s*" % samp
 jtype = "SSDiLep"
 sys   = None
 if not sys: sys = "nominal"
@@ -29,7 +30,8 @@ if not sys: sys = "nominal"
 
 # --------------
 SCRIPT     = "Get.sh"
-OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/ntuples"
+#OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v3_p2689"
+OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_v3_l3_p2689"
 
 OUTMERGED  = os.path.join(OUTDIR,"merged",sys)
 OUTTREE    = os.path.join(OUTDIR,"tree",sys)

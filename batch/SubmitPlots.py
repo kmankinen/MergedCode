@@ -15,8 +15,8 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-indir    = 'HistNewMatchFF'
-outdir   = 'PlotsNewMatchFF'
+indir    = 'Hist18SepSys'
+outdir   = 'Plots18SepSys'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -48,8 +48,8 @@ job_vars['OUTDIR']    = OUTDIR
 job_vars['INDIR']     = INDIR
 job_vars['SCRIPT']    = SCRIPT
 
-fake_estimate = "FakeFactor"
-#fake_estimate = "Subtraction"
+#fake_estimate = "FakeFactor"
+fake_estimate = "Subtraction"
 
 regions = {}
 # use it as such:
@@ -92,31 +92,32 @@ regions["FAKESVR7_LLDEN"] = [6,"VR7 loose+loose"]
 """
 
 
-regions["FAKESFR1_NUM"]   = [9,  "di-jet numerator"]
-regions["FAKESFR1_DEN"]   = [9,  "di-jet denominator"]
+regions["FAKESFR1_NUM"]   = [8,  "di-jet numerator", "Sherpa"]
+#regions["FAKESFR1_DEN"]   = [8,  "di-jet denominator", "Sherpa"]
 
-regions["FAKESFR2_NUM"]   = [9,  "di-jet numerator"]
-regions["FAKESFR2_DEN"]   = [9,  "di-jet denominator"]
+"""
+regions["FAKESFR2_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
+regions["FAKESFR2_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
 
 
-regions["FAKESFR3_NUM"]   = [9,  "di-jet numerator"]
-regions["FAKESFR3_DEN"]   = [9,  "di-jet denominator"]
+regions["FAKESFR3_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
+regions["FAKESFR3_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
 
-regions["FAKESFR4_NUM"]   = [9,  "di-jet numerator"]
-regions["FAKESFR4_DEN"]   = [9,  "di-jet denominator"]
+regions["FAKESFR4_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
+regions["FAKESFR4_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
 
-regions["FAKESFR5_NUM"]   = [9,  "di-jet numerator"]
-regions["FAKESFR5_DEN"]   = [9,  "di-jet denominator"]
+regions["FAKESFR5_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
+regions["FAKESFR5_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
 
-regions["FAKESFR6_NUM"]   = [9,  "di-jet numerator"]
-regions["FAKESFR6_DEN"]   = [9,  "di-jet denominator"]
+regions["FAKESFR6_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
+regions["FAKESFR6_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
 
-regions["FAKESFR7_NUM"]   = [9,  "di-jet numerator"]
-regions["FAKESFR7_DEN"]   = [9,  "di-jet denominator"]
+regions["FAKESFR7_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
+regions["FAKESFR7_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
 
-regions["FAKESFR8_NUM"]   = [9,  "di-jet numerator"]
-regions["FAKESFR8_DEN"]   = [9,  "di-jet denominator"]
-
+regions["FAKESFR8_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
+regions["FAKESFR8_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
+"""
 
 #---------------------
 # Make input tarball
@@ -143,6 +144,7 @@ for REG,OPT in regions.iteritems():
     job_vars['REG']      = REG
     job_vars['ICUT']     = OPT[0]
     job_vars['LAB']      = OPT[1]
+    job_vars['TAG']      = OPT[2]
     job_vars['MAKEPLOT'] = True
     job_vars['FAKEST']   = fake_estimate
     

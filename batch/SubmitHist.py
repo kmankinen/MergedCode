@@ -17,7 +17,9 @@ USER   = os.getenv('USER')
 ## global config
 # inputs
 #NTUP='/coepp/cephfs/mel/fscutti/ssdilep/presc/merged' # input NTUP path
-NTUP='/coepp/cephfs/mel/fscutti/ssdilep/menu_singlemu/merged' # input NTUP path
+#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/menu_singlemu/merged' # input NTUP path
+#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_p2666_p2667_v1_presc/merged' # input NTUP path
+NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_p2689/merged' # input NTUP path
 
 JOBDIR = "/coepp/cephfs/mel/%s/jobdir" % USER # Alright this is twisted...
 INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%m_y%Y_H%H_M%M_S%S")) )
@@ -25,20 +27,21 @@ INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-RUN = "HistTEST"
+#RUN = "Hist17SepDataWeight"
+RUN = "Hist18SepSys"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 OUTFILE="ntuple.root"         # file output by pyframe job 
 
 # running
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
-#SCRIPT="./ssdilep/run/j.plotter_FF.py"  # pyframe job script
+SCRIPT="./ssdilep/run/j.plotter_FF.py"  # pyframe job script
 #SCRIPT="./ssdilep/run/j.plotter_VR_TwoMu.py"  # pyframe job script
-SCRIPT="./ssdilep/run/j.plotter_VR_MuPairs.py"  # pyframe job script
+#SCRIPT="./ssdilep/run/j.plotter_VR_MuPairs.py"  # pyframe job script
 BEXEC="Hist.sh"                      # exec script (probably dont change) 
 DO_NOM = True                        # submit the nominal job
 DO_NTUP_SYS = False                  # submit the NTUP systematics jobs
-DO_PLOT_SYS = True                 # submit the plot systematics jobs
+DO_PLOT_SYS = False                 # submit the plot systematics jobs
 TESTMODE = False                    # submit only 1 sub-job (for testing)
 
 
@@ -70,6 +73,8 @@ def main():
     all_data = samples.all_data
 
     nominal = all_data + all_mc 
+    #nominal = all_mc 
+    #nominal = all_data
     
     ntup_sys = [
         ['SYS1_UP',                  all_mc],
