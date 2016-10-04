@@ -15,8 +15,8 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-indir    = 'Hist18SepSys'
-outdir   = 'Plots18SepSys'
+indir    = 'HistTEST'
+outdir   = 'PlotsTEST'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -53,44 +53,7 @@ fake_estimate = "Subtraction"
 
 regions = {}
 # use it as such:
-#regions["FOLDERNAME"]     = [icut, "plot label"]
-"""
-regions["FAKESVR1_NUM"]   = [5,  "VR1 numerator"]
-regions["FAKESVR1_LTDEN"] = [5,"VR1 loose+tight"]
-regions["FAKESVR1_TLDEN"] = [5,"VR1 tight+loose"]
-regions["FAKESVR1_LLDEN"] = [5,"VR1 loose+loose"]
-
-regions["FAKESVR2_NUM"]   = [5,  "VR2 numerator"]
-regions["FAKESVR2_LTDEN"] = [5,"VR2 loose+tight"]
-regions["FAKESVR2_TLDEN"] = [5,"VR2 tight+loose"]
-regions["FAKESVR2_LLDEN"] = [5,"VR2 loose+loose"]
-
-regions["FAKESVR3_NUM"]   = [4,  "VR3 numerator"]
-regions["FAKESVR3_LTDEN"] = [4,"VR3 loose+tight"]
-regions["FAKESVR3_TLDEN"] = [4,"VR3 tight+loose"]
-regions["FAKESVR3_LLDEN"] = [4,"VR3 loose+loose"]
-
-regions["FAKESVR4_NUM"]   = [5,  "VR4 numerator"]
-regions["FAKESVR4_LTDEN"] = [5,"VR4 loose+tight"]
-regions["FAKESVR4_TLDEN"] = [5,"VR4 tight+loose"]
-regions["FAKESVR4_LLDEN"] = [5,"VR4 loose+loose"]
-
-regions["FAKESVR5_NUM"]   = [6,  "VR5 numerator"]
-regions["FAKESVR5_LTDEN"] = [6,"VR5 loose+tight"]
-regions["FAKESVR5_TLDEN"] = [6,"VR5 tight+loose"]
-regions["FAKESVR5_LLDEN"] = [6,"VR5 loose+loose"]
-
-regions["FAKESVR6_NUM"]   = [7,  "VR6 numerator"]
-regions["FAKESVR6_LTDEN"] = [7,"VR6 loose+tight"]
-regions["FAKESVR6_TLDEN"] = [7,"VR6 tight+loose"]
-regions["FAKESVR6_LLDEN"] = [7,"VR6 loose+loose"]
-
-regions["FAKESVR7_NUM"]   = [6,  "VR7 numerator"]
-regions["FAKESVR7_LTDEN"] = [6,"VR7 loose+tight"]
-regions["FAKESVR7_TLDEN"] = [6,"VR7 tight+loose"]
-regions["FAKESVR7_LLDEN"] = [6,"VR7 loose+loose"]
-"""
-
+#regions["FOLDERNAME"]     = [icut, "plot label", "file label"]
 
 regions["FAKESFR1_NUM"]   = [8,  "di-jet numerator", "Sherpa"]
 #regions["FAKESFR1_DEN"]   = [8,  "di-jet denominator", "Sherpa"]

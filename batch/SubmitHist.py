@@ -16,9 +16,6 @@ USER   = os.getenv('USER')
 
 ## global config
 # inputs
-#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/presc/merged' # input NTUP path
-#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/menu_singlemu/merged' # input NTUP path
-#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_p2666_p2667_v1_presc/merged' # input NTUP path
 NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_p2689/merged' # input NTUP path
 
 JOBDIR = "/coepp/cephfs/mel/%s/jobdir" % USER # Alright this is twisted...
@@ -27,8 +24,7 @@ INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-#RUN = "Hist17SepDataWeight"
-RUN = "Hist18SepSys"
+RUN = "HistTEST"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 OUTFILE="ntuple.root"         # file output by pyframe job 
