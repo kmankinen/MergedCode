@@ -37,34 +37,26 @@ class MuAllSF(pyframe.core.Algorithm):
     """
     #__________________________________________________________________________
     def __init__(self, name="MuAllSF",
-            mu_index       = None,
-            #mu_level       = None,
-            key            = None,
-            scale          = None,
+            mu_index   = None,
+            mu_iso     = None,
+            mu_reco    = None,
+            mu_ttva    = None, # not really any choice here!
+            key        = None,
+            scale      = None,
             ):
         pyframe.core.Algorithm.__init__(self, name=name)
-        self.mu_index       = mu_index
-        #self.mu_level       = mu_level
-        self.key            = key
-        self.scale          = scale
+        self.mu_index  = mu_index
+        self.mu_iso    = mu_iso
+        self.mu_reco   = mu_reco
+        self.mu_ttva   = mu_ttva
+        self.key       = key
+        self.scale     = scale
 
         assert key, "Must provide key for storing mu iso sf"
     
     #_________________________________________________________________________
     def initialize(self): 
       pass
-      """
-      self.reco_levels = {"Loose":"Loose", "Medium":"Loose",         "Tight":"Loose"}
-      self.iso_levels  = {"Loose":"Loose", "Medium":"FixedCutLoose", "Tight":"FixedCutTightTrackOnly"}
-      self.ttva_levels = {"Loose": None,   "Medium": None,           "Tight": None}
-
-      self.mu_levels = ["Loose", "Medium", "Tight"]
-      if self.mu_level.startswith("Not"):
-        self.mu_levels.remove(self.mu_level.replace("Not",""))
-      else:
-        assert self.mu_level in self.mu_levels, "ERROR: mu_level %s not recognised!!!" % self.lead_mu_level
-        self.mu_levels = [self.mu_level]
-      """
     
     #_________________________________________________________________________
     def execute(self, weight):
@@ -74,17 +66,11 @@ class MuAllSF(pyframe.core.Algorithm):
           muon = muons[self.mu_index]
           
           if muon.isTruthMatchedToMuon:
-            
-            sf *= getattr(muon,"_".join(["RecoEff","SF","Loose"])).at(0)
+            if not ("Not" in self.mu_iso):
+              sf *= getattr(muon,"_".join(["IsoEff","SF",self.mu_iso])).at(0)
+            if not ("Not" in self.mu_reco):
+              sf *= getattr(muon,"_".join(["RecoEff","SF",self.mu_reco])).at(0)
             sf *= getattr(muon,"_".join(["TTVAEff","SF"])).at(0)
-            
-            if getattr(muon,"isIsolated_FixedCutTightTrackOnly"):
-              sf *= getattr(muon,"_".join(["IsoEff","SF","FixedCutTightTrackOnly"])).at(0)
-            #elif getattr(muon,"isIsolated_FixedCutLoose"):
-            #  sf *= getattr(muon,"_".join(["IsoEff","SF","FixedCutLoose"])).at(0)
-            elif getattr(muon,"isIsolated_Loose"):
-              sf *= getattr(muon,"_".join(["IsoEff","SF","Loose"])).at(0)
-            else: pass
 
             if self.scale: pass
 
