@@ -67,6 +67,12 @@ class CutAlg(pyframe.core.Algorithm):
         return self.chain.nmuon > 0
     
     #__________________________________________________________________________
+    def cut_AtLeastOneMuPt27(self):
+        muons = self.store['muons']
+        for m in muons:
+          if m.tlv.Pt()>27*GeV: return True
+        return False
+    #__________________________________________________________________________
     def cut_AtLeastTwoMuons(self):
       return self.chain.nmuon > 1
     
@@ -112,6 +118,14 @@ class CutAlg(pyframe.core.Algorithm):
       passed = True
       for m in muons:
         passed = passed and m.tlv.Pt()>=22.0*GeV
+      return passed
+    
+    #__________________________________________________________________________
+    def cut_AllMuPt24(self):
+      muons = self.store['muons']
+      passed = True
+      for m in muons:
+        passed = passed and m.tlv.Pt()>=24.0*GeV
       return passed
     
     #__________________________________________________________________________
@@ -394,14 +408,13 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_MatchSingleMuIsoChain(self):
       muons = self.store['muons']
-      #trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":1, "HLT_mu50":2} # for the "ntuples" file
-      trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":0, "HLT_mu50":1}
+      trig = {"HLT_mu26_imedium":0, "HLT_mu50":1}
       for m in muons:
-        if m.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or m.isTrigMatchedToChain.at(trig["HLT_mu50"]) : return True
+        if m.isTrigMatchedToChain.at(trig["HLT_mu26_imedium"]) or m.isTrigMatchedToChain.at(trig["HLT_mu50"]) : return True
       return False
     #__________________________________________________________________________
     def cut_PassSingleMuIsoChain(self):
-      chain = ["HLT_mu20_iloose_L1MU15","HLT_mu50"]
+      chain = ["HLT_mu26_imedium","HLT_mu50"]
       for i in xrange(self.chain.passedTriggers.size()):
         if self.chain.passedTriggers.at(i) in chain: return True
       return False
@@ -673,6 +686,10 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_MuSubLeadZ0SinThetaNot005(self):
       muons = self.store['muons']
       return abs(muons[1].trkz0sintheta)>0.05 
+    #__________________________________________________________________________
+    def cut_OneZ0SinThetaNot01(self):
+      muons = self.store['muons']
+      return abs(muons[0].trkz0sintheta)>0.1 or abs(muons[1].trkz0sintheta)>0.1
     
     
     #__________________________________________________________________________
@@ -906,8 +923,8 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         muons      = self.store['muons'] 
         mu_lead    = muons[0]
         #mu_sublead = muons[1]
-        jets       = self.store['jets']
-        jet_lead   = jets[0]
+        #jets       = self.store['jets']
+        #jet_lead   = jets[0]
         
         met_trk    = self.store['met_trk']
         met_clus   = self.store['met_clus']
@@ -917,7 +934,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         EVT    = os.path.join(region, 'event')
         MUONS  = os.path.join(region, 'muons')
         MET    = os.path.join(region, 'met')
-        JETS   = os.path.join(region, 'jets')
+        #JETS   = os.path.join(region, 'jets')
         #PAIRS  = os.path.join(region, 'pairs')
         
         # -----------------
@@ -942,7 +959,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         self.h_scdphi = self.hist('h_scdphi', "ROOT.TH1F('$', ';#Sigma cos#Delta#phi;Events ', 400, -2., 2.)", dir=EVT)
         
         ## jets plots
-        self.h_jetlead_pt = self.hist('h_jetlead_pt', "ROOT.TH1F('$', ';p_{T}(jet_{lead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=JETS)
+        #self.h_jetlead_pt = self.hist('h_jetlead_pt', "ROOT.TH1F('$', ';p_{T}(jet_{lead}) [GeV];Events / (1 GeV)', 2000, 0.0, 2000.0)", dir=JETS)
 
 
         ## muon plots
@@ -1033,9 +1050,9 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
             self.h_muons_mTtot.Fill(self.store['mTtot']/GeV, weight)
           """ 
 
-          if bool(len(jets)) and bool(len(muons)):
-            self.h_mujet_dphi.Fill(self.store['mujet_dphi'], weight)
-            self.h_scdphi.Fill(self.store['scdphi'], weight)
+          #if bool(len(jets)) and bool(len(muons)):
+          #  self.h_mujet_dphi.Fill(self.store['mujet_dphi'], weight)
+          #  self.h_scdphi.Fill(self.store['scdphi'], weight)
          
           ## jets plots
           #if bool(len(jets)):
