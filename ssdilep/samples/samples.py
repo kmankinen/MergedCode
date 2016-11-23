@@ -80,45 +80,6 @@ data = Sample(name         = "data",
 #-------------------------------------------------------------------------------
 # data-driven background
 #-------------------------------------------------------------------------------
-"""
-fakes_TL = Sample( name         = 'fakes_TL',
-                   tlatex       = 'Fakes TL',
-                   fill_color   = ROOT.kGreen,
-                   line_color   = ROOT.kGreen,
-                   marker_color = ROOT.kGreen,
-                   daughters    = list_runs,
-                   type         = "datadriven",
-                   )
-
-fakes_LT = Sample( name         = 'fakes_LT',
-                   tlatex       = 'Fakes LT',
-                   fill_color   = ROOT.kBlue,
-                   line_color   = ROOT.kBlue,
-                   marker_color = ROOT.kBlue,
-                   daughters    = list_runs,
-                   type         = "datadriven",
-                   )
-
-fakes_TT = Sample( name         = 'fakes_TT',
-                   tlatex       = 'Fakes TT',
-                   fill_color   = ROOT.kRed,
-                   line_color   = ROOT.kRed,
-                   marker_color = ROOT.kRed,
-                   daughters    = list_runs,
-                   type         = "datadriven",
-                   )
-
-"""
-fakes_cr    = Sample( name      = "fakes_cr",
-                   tlatex       = "Fakes CR",
-                   fill_color   = ROOT.kGray,
-                   line_color   = ROOT.kGray+1,
-                   line_style   = 1,
-                   marker_color = ROOT.kGray+1,
-                   marker_style = 20,
-                   type         = "datadriven",
-                   )
-
 
 fakes    = Sample( name         = "fakes",
                    tlatex       = "Fakes",
@@ -127,7 +88,6 @@ fakes    = Sample( name         = "fakes",
                    line_style   = 1,
                    marker_color = ROOT.kGray+1,
                    marker_style = 20,
-                   #daughters    = [fakes_TL,fakes_LT,fakes_TT],
                    daughters    = list_runs,
                    type         = "datadriven",
                    )
@@ -1257,30 +1217,6 @@ singletop = Sample( name =   'singletop',
                                 ],
                 ) 
 
-
-"""
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# ttbar bulk samples
-# Notes:
-#       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryTTbar 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-ttbar_hdamp172p5_nonallhad              = Sample( name =  "ttbar_hdamp172p5_nonallhad", xsec = 451.645679998 )
-ttbar_hdamp172p5_allhad                 = Sample( name =  "ttbar_hdamp172p5_allhad",    xsec = 380.11432     )
-ttbar_nonallhad                         = Sample( name =  "ttbar_nonallhad",            xsec = 451.645680001 )
-aMcAtNloHerwigppEvtGen_ttbar_nonallhad  = Sample( name =  "aMcAtNloHerwigppEvtGen_ttbar_nonallhad",            xsec = 451.645680001 )
-
-ttbar = Sample( name =  'ttbar',
-                    tlatex = 'ttbar',
-                    fill_color = ROOT.kCyan+1,
-                    line_color =  ROOT.kCyan+2,
-                    marker_color =  ROOT.kCyan+2,
-                    daughters = [
-                                 #ttbar_hdamp172p5_nonallhad,
-                                 #ttbar_hdamp172p5_allhad,   
-                                 aMcAtNloHerwigppEvtGen_ttbar_nonallhad,           
-                                ],
-                ) 
-"""
 
 #------------------------------------------------------------------------------------------------------
 # Doubly charged Higss 
