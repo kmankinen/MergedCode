@@ -55,9 +55,6 @@ regions = {}
 # use it as such:
 #regions["FOLDERNAME"]     = [icut, "plot label"]
 
-#regions["ZCR"]   = [6,  "ZCR", "Sherpa221"]
-
-
 regions["FAKESVR1_NUM"]     = [4,  "VR", "incl"]
 regions["FAKESVR1_LLDEN"]   = [4,  "VR", "incl"]
 regions["FAKESVR1_TLDEN"]   = [4,  "VR", "incl"]
