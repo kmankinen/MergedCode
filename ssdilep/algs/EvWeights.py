@@ -6,9 +6,6 @@ weights applied
 to the event
 """
 
-#import fnmatch
-#import os
-#import sys
 from math import sqrt
 from array import array
 from copy import copy
@@ -326,112 +323,6 @@ class EffCorrPair(pyframe.core.Algorithm):
           self.store[self.key] = corr_eff
 
         return True
-
-
-
-
-
-
-
-#------------------------------------------------------------------------------
-class EffCorr(pyframe.core.Algorithm):
-    """
-    Applies trigger efficiency correction for muon pairs
-    """
-    #__________________________________________________________________________
-    def __init__(self, name="EffCorrector",
-            config_file     = None,
-            mu_lead_type    = None,
-            mu_sublead_type = None,
-            key             = None,
-            scale           = None
-            ):
-        pyframe.core.Algorithm.__init__(self,name=name)
-        self.config_file     = config_file
-        self.mu_lead_type    = mu_lead_type
-        self.mu_sublead_type = mu_sublead_type
-        self.key             = key
-        self.scale           = scale
-        
-        assert config_file, "Must provide config file!"
-        assert key, "Must provide key for storing fakefactor"
-    #_________________________________________________________________________
-    def initialize(self):
-        f = ROOT.TFile.Open(self.config_file)
-        assert f, "Failed to open config file for efficiency correction: %s"%(self.config_file)
-
-        g_loose_eff = f.Get("g_loose_eff")
-        g_tight_eff = f.Get("g_tight_eff")
-        
-        assert self.mu_lead_type in ["Loose","Tight"], "mu_lead_type not Loose or Tight"
-        assert self.mu_sublead_type in ["Loose","Tight"], "mu_sublead_type not Loose or Tight"
-        
-        assert g_loose_eff, "Failed to get 'g_loose_eff' from %s"%(self.config_file)
-        assert g_tight_eff, "Failed to get 'g_tight_eff' from %s"%(self.config_file)
-        
-        self.g_loose_eff = g_loose_eff.Clone()
-        self.g_tight_eff = g_tight_eff.Clone()
-        f.Close()
-    #_________________________________________________________________________
-    def execute(self, weight):
-        muons = self.store['muons']
-        mu_lead    = muons[0]
-        mu_sublead = muons[1]
-        
-        pt_lead    = mu_lead.tlv.Pt()/GeV  
-        pt_sublead = mu_sublead.tlv.Pt()/GeV  
-       
-        g_lead_eff    = None
-        g_sublead_eff = None
-
-        if self.mu_lead_type == "Loose":      g_lead_eff = self.g_loose_eff
-        elif self.mu_lead_type == "Tight":    g_lead_eff = self.g_tight_eff
-        
-        if self.mu_sublead_type == "Loose":   g_sublead_eff = self.g_loose_eff
-        elif self.mu_sublead_type == "Tight": g_sublead_eff = self.g_tight_eff
-
-        eff_lead = 0.0
-        eff_sublead = 0.0
-        eff_lead_tight = 0.0
-        eff_sublead_tight = 0.0
-
-        for ibin_lead in xrange(1,g_lead_eff.GetN()):
-          for ibin_sublead in xrange(1,g_sublead_eff.GetN()):
-          
-            edlow_lead = g_lead_eff.GetX()[ibin_lead] - g_lead_eff.GetEXlow()[ibin_lead]
-            edhi_lead  = g_lead_eff.GetX()[ibin_lead] + g_lead_eff.GetEXhigh()[ibin_lead]
-            if pt_lead>=edlow_lead and pt_lead<edhi_lead: 
-              eff_lead = g_lead_eff.GetY()[ibin_lead]
-              eff_lead_tight = self.g_tight_eff.GetY()[ibin_lead]
-              
-            edlow_sublead = g_sublead_eff.GetX()[ibin_sublead] - g_sublead_eff.GetEXlow()[ibin_sublead]
-            edhi_sublead  = g_sublead_eff.GetX()[ibin_sublead] + g_sublead_eff.GetEXhigh()[ibin_sublead]
-            if pt_sublead>=edlow_sublead and pt_sublead<edhi_sublead: 
-              eff_sublead = g_sublead_eff.GetY()[ibin_sublead]
-              eff_sublead_tight = self.g_tight_eff.GetY()[ibin_sublead]
-         
-        num_pair_eff = 1 - ( 1 - eff_lead_tight ) * ( 1 - eff_sublead_tight )
-        den_pair_eff = 1 - ( 1 - eff_lead ) * ( 1 - eff_sublead ) 
-       
-        corr_eff = 1.0
-        if den_pair_eff != 0:
-          corr_eff =  num_pair_eff / den_pair_eff
-
-        # error bars are asymmetric
-        #eff_up_mu = self.g_ff.GetEYhigh()[ibin_mu]
-        #eff_dn_mu = self.g_ff.GetEYlow()[ibin_mu]
-        
-        if self.scale == 'up': pass
-        if self.scale == 'dn': pass
-       
-        if self.key: 
-          self.store[self.key] = corr_eff
-
-        return True
-
-
-
-
 
 
 # EOF
