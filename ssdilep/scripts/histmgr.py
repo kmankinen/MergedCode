@@ -253,9 +253,6 @@ class Estimator(BaseEstimator):
             kfactor = self.sample.kfactor
             Ntotal  = self.hm.get_nevents(self.sample.name,sys,mode)
             
-            # skip kfactor if it has to be provided by the LPX tool
-            #if self.sample.kfactor == -999.: self.sample.kfactor = 1.
-            
             self.mc_lumi_frac[sys] = (xsec * feff * kfactor) / Ntotal if Ntotal else 0.0
         return self.mc_lumi_frac[sys]
 
