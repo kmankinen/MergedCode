@@ -223,65 +223,6 @@ class CutAlg(pyframe.core.Algorithm):
     
     
     
-    
-    
-    
-    
-    #__________________________________________________________________________
-    def cut_AntiMuTT(self):
-      muons = self.store['muons']
-      lead_is_tight    = bool(muons[0].isIsolated_FixedCutTightTrackOnly and muons[0].trkd0sig>3.)
-      sublead_is_tight = bool(muons[1].isIsolated_FixedCutTightTrackOnly and muons[1].trkd0sig>3.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        lead_is_real     = muons[0].isTrueIsoMuon()
-        sublead_is_real  = muons[1].isTrueIsoMuon()
-        pass_mc_filter   = lead_is_real and sublead_is_real     
-
-      return lead_is_tight and sublead_is_tight and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_AntiMuTL(self):
-      muons = self.store['muons']
-      lead_is_tight    = bool(muons[0].isIsolated_FixedCutTightTrackOnly and muons[0].trkd0sig>3.)
-      sublead_is_loose = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and muons[1].trkd0sig<10.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        sublead_is_real  = muons[1].isTrueIsoMuon()
-        pass_mc_filter   = sublead_is_real   
-
-      return lead_is_tight and sublead_is_loose and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_AntiMuLT(self):
-      muons = self.store['muons']
-      sublead_is_tight = bool(muons[1].isIsolated_FixedCutTightTrackOnly and muons[1].trkd0sig>3.)
-      lead_is_loose = bool(not muons[0].isIsolated_FixedCutTightTrackOnly and muons[0].trkd0sig<10.)
-      pass_mc_filter   = True
-      
-      if self.sampletype=="mc":
-        lead_is_real   = muons[0].isTrueIsoMuon()
-        pass_mc_filter = lead_is_real   
-
-      return lead_is_loose and sublead_is_tight and pass_mc_filter
-    #__________________________________________________________________________
-    def cut_AntiMuLL(self):
-      muons = self.store['muons']
-      lead_is_loose = bool(not muons[0].isIsolated_FixedCutTightTrackOnly and muons[0].trkd0sig<10.)
-      sublead_is_loose = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and muons[1].trkd0sig<10.)
-      pass_mc_filter   = True
-
-      if self.sampletype=="mc":
-        lead_is_real     = muons[0].isTrueIsoMuon()
-        sublead_is_real  = muons[1].isTrueIsoMuon()
-        pass_mc_filter   = lead_is_real or sublead_is_real     
-
-      return lead_is_loose and sublead_is_loose and pass_mc_filter
-    
-    
-    
-    
-    
     #__________________________________________________________________________
     def cut_LeadMuIsLoose(self):
       muons = self.store['muons']
@@ -352,105 +293,6 @@ class CutAlg(pyframe.core.Algorithm):
     
     
     #__________________________________________________________________________
-    def cut_MuPairsIsoTight(self):
-      cname = "MuPairsIsoTight"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc": pass
-          #if not p.isTruthMatchedToMuonPair(): continue
-        if not (p.lead.isIsolated_FixedCutTightTrackOnly and p.sublead.isIsolated_FixedCutTightTrackOnly): 
-          p.StoreCut(cname,False)
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuPairsLeadIsoTightSubLeadIsoNotTight(self):
-      cname = "MuPairsLeadIsoTightSubLeadIsoNotTight"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc": pass
-          #if not p.isTruthMatchedToMuonPair(): continue
-        if not (p.lead.isIsolated_FixedCutTightTrackOnly and (p.sublead.isIsolated_Loose or p.sublead.isIsolated_FixedCutLoose)): 
-          p.StoreCut(cname,False)
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuPairsLeadIsoNotTightSubLeadIsoTight(self):
-      cname = "MuPairsLeadIsoNotTightSubLeadIsoTight"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc": pass
-          #if not p.isTruthMatchedToMuonPair(): continue
-        if not (p.sublead.isIsolated_FixedCutTightTrackOnly and (p.lead.isIsolated_Loose or p.lead.isIsolated_FixedCutLoose)): 
-          p.StoreCut(cname,False)
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuPairsLeadIsoNotTightSubLeadIsoNotTight(self):
-      cname = "MuPairsLeadIsoNotTightSubLeadIsoNotTight"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc": pass
-          #if not p.isTruthMatchedToMuonPair(): continue
-        if not ((p.sublead.isIsolated_Loose or p.sublead.isIsolated_FixedCutLoose) and (p.lead.isIsolated_Loose or p.lead.isIsolated_FixedCutLoose)): 
-          p.StoreCut(cname,False)
-      return True
-
-    #__________________________________________________________________________
-    def cut_MuPairsLeadPt25SubLeadPt22(self):
-      cname = "MuPairsLeadPt25SubLeadPt22"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if p.lead.tlv.Pt()<25*GeV and p.sublead.tlv.Pt()<22*GeV: 
-          p.StoreCut(cname,False)
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuPairsLeadPt20SubLeadPt15(self):
-      cname = "MuPairsLeadPt20SubLeadPt15"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if p.lead.tlv.Pt()<20*GeV and p.sublead.tlv.Pt()<15*GeV: 
-          p.StoreCut(cname,False)
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuPairsLeadPt25SubLeadPt20(self):
-      cname = "MuPairsLeadPt25SubLeadPt20"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if p.lead.tlv.Pt()<25*GeV and p.sublead.tlv.Pt()<20*GeV: 
-          p.StoreCut(cname,False)
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuPairsMVis15(self):
-      cname = "MuPairsMVis15"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if p.m_vis<15*GeV: 
-          p.StoreCut(cname,False)
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuPairsMZwindow(self):
-      cname = "MuPairsMZwindow"
-      mZ = 91.1876*GeV
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if abs(p.m_vis - mZ)<10*GeV: 
-          p.StoreCut(cname,False)
-      return True
-
-    #__________________________________________________________________________
     def cut_MZwindow(self):
       mZ = 91.1876*GeV
       muons = self.store['muons']
@@ -507,106 +349,6 @@ class CutAlg(pyframe.core.Algorithm):
 
       return abs(m_vis)<200*GeV
 
-    #__________________________________________________________________________
-    def cut_MuPairsInvMZwindow(self):
-      cname = "MuPairsInvMZwindow"
-      mZ = 91.1876*GeV
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if abs(p.m_vis - mZ)>10*GeV: 
-          p.StoreCut(cname,False)
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuPairsAreSS(self):
-      cname = "MuPairsAreSS"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if p.charge_product<0.0: 
-          p.StoreCut(cname,False)
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuPairsAreOS(self):
-      cname = "MuPairsAreOS"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if p.charge_product>0.0: 
-          p.StoreCut(cname,False)
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuPairsDeltaRJet04(self):
-      cname = "MuPairsDeltaRJet04"
-      jets = self.store['jets']
-      pairs = self.store['mu_pairs']
-      
-      for p in pairs:
-        p.StoreCut(cname,True)
-        for j in jets:
-          if j.tlv.DeltaR(p.lead.tlv)<0.4 or j.tlv.DeltaR(p.sublead.tlv)<0.4:
-            p.StoreCut(cname,False)
-      return True
-    
-    
-    #__________________________________________________________________________
-    def cut_MuPairsTT(self):
-      cname = "MuPairsTT"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        lead_is_tight = bool(p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<3.)
-        sublead_is_tight = bool(p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<3.)
-        p.StoreCut(cname,lead_is_tight and sublead_is_tight)
-      return True 
-    #__________________________________________________________________________
-    def cut_MuPairsTL(self):
-      cname = "MuPairsTL"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        lead_is_tight = bool(p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<3.)
-        sublead_is_loose = bool(not p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<10.)
-        p.StoreCut(cname,lead_is_tight and sublead_is_loose)
-      return True 
-    #__________________________________________________________________________
-    def cut_MuPairsLT(self):
-      cname = "MuPairsLT"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        lead_is_loose = bool(not p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<10.)
-        sublead_is_tight = bool(p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<3.)
-        p.StoreCut(cname,lead_is_loose and sublead_is_tight)
-      return True 
-    #__________________________________________________________________________
-    def cut_MuPairsLL(self):
-      cname = "MuPairsLL"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        lead_is_loose = bool(not p.lead.isIsolated_FixedCutTightTrackOnly and p.lead.trkd0sig<10.)
-        sublead_is_loose = bool(not p.sublead.isIsolated_FixedCutTightTrackOnly and p.sublead.trkd0sig<10.)
-        p.StoreCut(cname,lead_is_loose and sublead_is_loose)
-      return True 
-    
-    #__________________________________________________________________________
-    def cut_MuPairsMatchSingleMuIsoChain(self):
-      cname = "MuPairsMatchSingleMuIsoChain"
-      pairs = self.store['mu_pairs']
-      #trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":1, "HLT_mu50":2} # for the "ntuples" file
-      trig = {"HLT_mu20_L1MU15":0, "HLT_mu20_iloose_L1MU15":0, "HLT_mu50":1}
-      
-      for p in pairs:
-        p.StoreCut(cname,False)
-        
-        if p.lead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.lead.isTrigMatchedToChain.at(trig["HLT_mu50"]):
-          if p.sublead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.sublead.isTrigMatchedToChain.at(trig["HLT_mu50"]): 
-            p.StoreCut(cname,True)
-        
-        #if p.lead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.lead.isTrigMatchedToChain.at(trig["HLT_mu50"]) : p.StoreCut(cname,True)
-        #if p.sublead.isTrigMatchedToChain.at(trig["HLT_mu20_iloose_L1MU15"]) or p.sublead.isTrigMatchedToChain.at(trig["HLT_mu50"]) : p.StoreCut(cname,True)
-      
-      return True
 
     #__________________________________________________________________________
     def cut_MatchSingleMuExtIsoChain(self):
@@ -725,82 +467,6 @@ class CutAlg(pyframe.core.Algorithm):
           if not m.isTrueIsoMuon(): return False
       return True 
     
-    #__________________________________________________________________________
-    def cut_MuPairsTruthFilter(self):
-      cname = "MuPairsTruthFilter"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc":
-          if not (p.lead.isTrueIsoMuon() and p.sublead.isTrueIsoMuon()):
-            p.StoreCut(cname,False)
-      return True
-   
-    #__________________________________________________________________________
-    def cut_MuPairsAngleHi10Low25(self):
-      cname = "MuPairsAngleHi10Low25"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if p.angle < 1.0 or p.angle > 2.5:
-          p.StoreCut(cname,False)
-      
-      for p in pairs:
-        if (p.angle < 1.0 or p.angle > 2.5):
-         print p, p.cdict, len(pairs), p.angle
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuPairsZ0SinThetaNot002(self):
-      cname = "MuPairsZ0SinThetaNot002"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if not (abs(p.lead.trkz0sintheta)>0.02 and abs(p.sublead.trkz0sintheta)>0.02):
-          p.StoreCut(cname,False)
-      return True
-   
-    #__________________________________________________________________________
-    def cut_MuPairsFilterTT(self):
-      cname = "MuPairsFilterTT"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc":
-          if not (p.lead.isTrueIsoMuon() and p.sublead.isTrueIsoMuon()):
-            p.StoreCut(cname,False)
-      return True
-    #__________________________________________________________________________
-    def cut_MuPairsFilterLT(self):
-      cname = "MuPairsFilterLT"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc":
-          if not (p.lead.isTrueNonIsoMuon() and p.sublead.isTrueIsoMuon()):
-            p.StoreCut(cname,False)
-      return True
-    #__________________________________________________________________________
-    def cut_MuPairsFilterTL(self):
-      cname = "MuPairsFilterTL"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc":
-          if not (p.lead.isTrueIsoMuon() and p.sublead.isTrueNonIsoMuon()):
-            p.StoreCut(cname,False)
-      return True
-    #__________________________________________________________________________
-    def cut_MuPairsFilterLL(self):
-      cname = "MuPairsFilterLL"
-      pairs = self.store['mu_pairs']
-      for p in pairs:
-        p.StoreCut(cname,True)
-        if self.sampletype == "mc":
-          if not (p.lead.isTrueNonIsoMuon() and p.sublead.isTrueNonIsoMuon()):
-            p.StoreCut(cname,False)
-      return True
-   
    
     #__________________________________________________________________________
     def cut_LeadMuD0Sig2(self):
@@ -933,17 +599,6 @@ class CutAlg(pyframe.core.Algorithm):
       muons = self.store['muons']
       return abs(muons[1].trkz0sintheta)>0.05 
     
-    
-    #__________________________________________________________________________
-    def cut_AllMuPairsMedium(self):
-      pairs = self.store['mu_pairs']
-      passed = True
-      
-      for p in pairs:
-        if "mc" in self.sampletype:
-          if not (p.lead.isTruthMatchedToMuon and p.sublead.isTruthMatchedToMuon): continue
-        passed = passed and p.lead.isMedium and p.sublead.isMedium
-      return passed 
     
     #__________________________________________________________________________
     def cut_METlow40(self):
@@ -1126,29 +781,11 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
             ## if plot_all is True, plot after each cut, 
             ## else only plot after full selection
             
-            # obj cutflow is computed at the end of the cutflow
-            #if len(list_cuts)==len(self.cut_flow):
-            if self.obj_keys:
-             for k in self.obj_keys:
-              for o in self.store[k]:
-               if hasattr(o,"cdict") and hasattr(o,"wdict"):
-                obj_passed = True
-                obj_weight = 1.0
-                if list_weights:
-                 for w in list_weights:
-                  if w.startswith("MuPairs"):
-                   obj_weight *= o.GetWeight(w) 
-                for c in list_cuts:
-                 if c.startswith("MuPairs"):
-                  obj_passed = o.HasPassedCut(c) and obj_passed
-                self.hists[self.region+"_"+k].count_if(obj_passed and passed, c, obj_weight * weight)
-            
             if (self.plot_all or len(list_cuts)==len(self.cut_flow)):
                region_name = os.path.join(self.region,'_'.join(list_cuts))
                region_name = region_name.replace('!', 'N')
                region = os.path.join('/regions/', region_name)
                
-               #if passed:             
                self.plot(region, passed, list_cuts, cut, list_weights=list_weights, weight=weight)
 
         return True
@@ -1171,14 +808,12 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         
         met_trk    = self.store['met_trk']
         met_clus   = self.store['met_clus']
-        #mupairs    = self.store['mu_pairs']
         
         ## plot directories
         EVT    = os.path.join(region, 'event')
         MUONS  = os.path.join(region, 'muons')
         MET    = os.path.join(region, 'met')
         #JETS   = os.path.join(region, 'jets')
-        #PAIRS  = os.path.join(region, 'pairs')
         
         # -----------------
         # Create histograms
@@ -1357,36 +992,6 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
           self.h_met_clus_sumet.Fill(met_clus.sumet/GeV, weight)
           self.h_met_trk_sumet.Fill(met_trk.sumet/GeV, weight)
           
-          """
-          ## muon pairs plots
-          for mp in mupairs:
-           
-            pcut = True 
-            for c in list_cuts:
-             if c.startswith("MuPairs"):
-              #print c, mp.angle, mp.HasPassedCut(c)
-              pcut = pcut and mp.HasPassedCut(c)
-             
-            pweight = 1.0
-            if list_weights:
-             for w in list_weights: 
-              if w.startswith("MuPairs"):
-               pweight *= mp.GetWeight(w)
-            
-            if pcut: 
-             #if mp.angle < 1.0 or mp.angle > 2.5: print "What the fuck"
-             self.h_mumu_angle.Fill(mp.angle, pweight * weight)
-             self.h_mumu_mVis.Fill(mp.m_vis/GeV, pweight * weight)
-             self.h_mumu_mTtot.Fill(mp.mt_tot/GeV, pweight * weight)
-             self.h_mumu_sumcosdphi.Fill(mp.SumCosDphi, pweight * weight)
-             self.h_mumu_mulead_pt.Fill(mp.lead.tlv.Pt()/GeV, pweight * weight)
-             self.h_mumu_musublead_pt.Fill(mp.sublead.tlv.Pt()/GeV,pweight*weight)
-             self.h_mumu_mulead_eta.Fill(mp.lead.tlv.Eta(), pweight * weight)
-             self.h_mumu_musublead_eta.Fill(mp.sublead.tlv.Eta(), pweight * weight)
-             self.h_mumu_mulead_phi.Fill(mp.lead.tlv.Phi(), pweight * weight)
-             self.h_mumu_musublead_phi.Fill(mp.sublead.tlv.Phi(), pweight * weight)
-          """   
-    
     #__________________________________________________________________________
     def check_region(self,cutnames):
         cut_passed = True
@@ -1407,21 +1012,6 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         return cut_passed
     
     
-    """ 
-    #__________________________________________________________________________
-    def get_obj_cutflow(self, obj_key, cut, list_weights=None, cut_prefix=""):
-        for o in self.store[obj_key]:
-          if hasattr(o,"cdict") and hasattr(o,"wdict"):
-            obj_weight = 1.0
-            if list_weights: 
-              for w in list_weights:
-                obj_weight *= o.GetWeight(w)
-                if cut_prefix: 
-                  if cut.startswith(cut_prefix): 
-                    obj_passed = o.HasPassedCut(cut) and passed
-            self.hists[self.region+"_"+obj_key].count_if(obj_passed, cut, obj_weight * weight)
-    """
-
     #__________________________________________________________________________
     def reset_attributes(self,objects):
         for o in objects:
