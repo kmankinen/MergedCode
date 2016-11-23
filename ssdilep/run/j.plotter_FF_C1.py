@@ -186,10 +186,10 @@ def analyze(config):
     ## make plots
     ##-------------------------------------------------------------------------
     
-    ## C1
+    ## FR1
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKES_NUM_C1',
+            region    = 'FAKESFR1_NUM',
             plot_all  = False,
             cut_flow  = [
               ['MatchSingleMuPrescChain',['DataUnPresc']],
@@ -197,10 +197,15 @@ def analyze(config):
               ['LeadMuIsLoose',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta05',None],
+              ['METlow40',None],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKES_DEN_C1',
+            region    = 'FAKESFR1_DEN',
             plot_all  = False,
             cut_flow  = [
               ['MatchSingleMuPrescChain',['DataUnPresc']],
@@ -208,57 +213,257 @@ def analyze(config):
               ['LeadMuIsLoose',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['LeadMuTruthFilter',None],
-              ],
-            )
-    ## C2
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKES_NUM_C2',
-            plot_all  = False,
-            cut_flow  = [
-              ['MatchSingleMuPrescChain',['DataUnPresc']],
-              ['PassSingleMuPrescChain',['MuTrigSFRecoMedium']],
-              ['LeadMuIsMedium',None],
-              ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyMedium']],
-              ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig15',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METlow40',None],
               ],
             )
     
-    ## C3
+    ## FR2
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKES_NUM_C3',
+            region    = 'FAKESFR2_NUM',
             plot_all  = False,
             cut_flow  = [
               ['MatchSingleMuPrescChain',['DataUnPresc']],
               ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
               ['LeadMuIsLoose',None],
-              ['LeadMuIsoGradient',['MuSFGradientLoose']],
+              ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta05',None],
+              ['METlow30',None],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKES_DEN_C3',
+            region    = 'FAKESFR2_DEN',
             plot_all  = False,
             cut_flow  = [
               ['MatchSingleMuPrescChain',['DataUnPresc']],
               ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
               ['LeadMuIsLoose',None],
-              ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig15',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METlow30',None],
               ],
             )
-    ## C4
+    
+    ## FR3
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKES_NUM_C4',
+            region    = 'FAKESFR3_NUM',
             plot_all  = False,
             cut_flow  = [
               ['MatchSingleMuPrescChain',['DataUnPresc']],
-              ['PassSingleMuPrescChain',['MuTrigSFRecoMedium']],
-              ['LeadMuIsMedium',None],
-              ['LeadMuIsoGradient',['MuSFGradientMedium']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta05',None],
+              ['METlow50',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR3_DEN',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChain',['DataUnPresc']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
+              ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig15',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METlow50',None],
+              ],
+            )
+    
+    ## FR4
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR4_NUM',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChain',['DataUnPresc']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
+              ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt40',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta05',None],
+              ['METlow40',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR4_DEN',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChain',['DataUnPresc']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
+              ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt40',None],
+              ['LeadMuD0Sig15',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METlow40',None],
+              ],
+            )
+    
+    ## FR5
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR5_NUM',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChain',['DataUnPresc']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
+              ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig2',None],
+              ['LeadMuZ0SinTheta05',None],
+              ['METlow40',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR5_DEN',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChain',['DataUnPresc']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
+              ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig15',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METlow40',None],
+              ],
+            )
+    
+    ## FR6
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR6_NUM',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChain',['DataUnPresc']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
+              ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig4',None],
+              ['LeadMuZ0SinTheta05',None],
+              ['METlow40',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR6_DEN',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChain',['DataUnPresc']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
+              ['LeadMuTruthFilter',None],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig15',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METlow40',None],
+              ],
+            )
+    
+    
+    ## FR7
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR7_NUM',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChain',['DataUnPresc']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
+              ['LeadMuTruthFilter',None],
+              ['MuJetDphi28',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta05',None],
+              ['METlow40',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR7_DEN',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChain',['DataUnPresc']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
+              ['LeadMuTruthFilter',None],
+              ['MuJetDphi28',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig15',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METlow40',None],
+              ],
+            )
+    
+    ## FR8
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR8_NUM',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChain',['DataUnPresc']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
+              ['LeadMuTruthFilter',None],
+              ['MuJetDphi26',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta05',None],
+              ['METlow40',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR8_DEN',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChain',['DataUnPresc']],
+              ['PassSingleMuPrescChain',['MuTrigSFRecoLoose']],
+              ['LeadMuIsLoose',None],
+              ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
+              ['LeadMuTruthFilter',None],
+              ['MuJetDphi26',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig15',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METlow40',None],
               ],
             )
     

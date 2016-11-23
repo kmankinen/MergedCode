@@ -7,7 +7,6 @@ import os
 
 from ssdilep.samples import samples
 from ssdilep.plots   import vars_mumu
-#from ssdilep.plots   import vars_fakes
 from systematics     import *
 
 from optparse import OptionParser
@@ -42,8 +41,6 @@ parser.add_option('-t', '--tag', dest='tag',
 #-----------------
 # Configuration
 #-----------------
-#lumi =  3158.13
-#lumi =  3212.96
 lumi =  18232.8
 
 # Control regions
@@ -53,6 +50,9 @@ if options.makeplot == "False":
 plotsfile.append(options.vname)
 plotsfile.append(options.region)
 plotsfile.append(options.tag)
+
+for s in plotsfile:
+  if not s: plotsfile.remove(s)
 
 plotsfile = "_".join(plotsfile)+".root"
 plotsfile = os.path.join(options.outdir,plotsfile)
@@ -69,19 +69,34 @@ data = samples.data
 ## backgrounds 
 
 mc_backgrounds = [
-    ##samples.diboson_sherpa,
+    #samples.diboson_sherpa,
+    samples.diboson_incl_sherpa,
     ##samples.diboson_powheg,
-    samples.Wenu,
-    samples.Wmunu,
-    samples.Wtaunu,
-    samples.Zee,
+    samples.WenuSherpa22,
+    samples.WmunuSherpa22,
+    samples.WtaunuSherpa22,
+    samples.ZeeSherpa22,
+    samples.ZmumuSherpa22,
+    samples.ZtautauSherpa22,
+    samples.ttX,
+    samples.singletop,
+    samples.ttbar,
+   ]
+"""
+mc_backgrounds = [
+    samples.diboson_sherpa,
+    ##samples.diboson_powheg,
+    #samples.Wenu,
+    #samples.Wmunu,
+    #samples.Wtaunu,
+    #samples.Zee,
     samples.Zmumu,
     samples.Ztautau,
     #samples.ttX,
-    samples.singletop,
-    ##samples.ttbar,
+    #samples.singletop,
+    samples.ttbar,
    ]
-
+"""
 """
 mc_backgrounds = [
     ##samples.diboson_sherpa,
@@ -149,7 +164,6 @@ mc_sys = [
 #fakes_mumu.estimator.add_systematics(FF)
 
 mumu_vdict  = vars_mumu.vars_dict
-#fakes_vdict = vars_fakes.vars_dict
 
 #-----------------
 # Plotting 
@@ -158,19 +172,35 @@ mumu_vdict  = vars_mumu.vars_dict
 ## order backgrounds for plots
 mumu_backgrounds = [
     ##samples.diboson_sherpa,
+    samples.diboson_incl_sherpa,
     ##samples.diboson_powheg,
-    samples.Wenu,
-    samples.Wmunu,
-    samples.Wtaunu,
-    samples.Zee,
+    samples.WenuSherpa22,
+    samples.WmunuSherpa22,
+    samples.WtaunuSherpa22,
+    samples.ZeeSherpa22,
+    samples.ZmumuSherpa22,
+    samples.ZtautauSherpa22,
+    samples.ttX,
+    samples.singletop,
+    samples.ttbar,
+    fakes_mumu,
+    ]
+"""
+mumu_backgrounds = [
+    samples.diboson_sherpa,
+    ##samples.diboson_powheg,
+    #samples.Wenu,
+    #samples.Wmunu,
+    #samples.Wtaunu,
+    #samples.Zee,
     samples.Zmumu,
     samples.Ztautau,
-    ##samples.ttX,
-    samples.singletop,
-    ##samples.ttbar,
+    #samples.ttX,
+    #samples.singletop,
+    samples.ttbar,
     #fakes_mumu,
     ]
-
+"""
 """
 mumu_backgrounds = [
     ##samples.diboson_sherpa,
@@ -203,7 +233,7 @@ if options.makeplot == "True":
     icut          = int(options.icut),
     #sys_dict      = sys_dict,
     sys_dict      = None,
-    do_ratio_plot = False,
+    do_ratio_plot = True,
     save_eps      = True,
     plotsfile     = plotsfile,
     )

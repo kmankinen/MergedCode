@@ -26,7 +26,7 @@ def analyze(config):
     ##-------------------------------------------------------------------------
     ## setup
     ##-------------------------------------------------------------------------
-    config['tree']       = 'physics'
+    config['tree']       = 'physics/nominal'
     config['do_var_log'] = True
     main_path = os.getenv('MAIN')
     
@@ -89,12 +89,6 @@ def analyze(config):
    
     ## initialize and/or decorate objects
     ## ---------------------------------------
-    loop += ssdilep.algs.vars.PairsBuilder(
-        obj_keys=['muons'],
-        pair_key='mu_pairs',
-        met_key='met_clus', 
-        )
-    
     loop += ssdilep.algs.algs.VarsAlg(key_muons='muons',key_jets='jets')   
 
     ## start preselection cutflow 
@@ -108,64 +102,61 @@ def analyze(config):
    
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastTwoMuons') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt22') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TwoOSMuons') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='NPV12') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt24') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastOneMuPt27') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
+
     
     ## weights configuration
     ## ---------------------------------------
     ## event
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.EvWeights.MuTrigSF(
-            is_single_mu = True,
-            mu_trig_level="Loose_Loose",
-            mu_trig_chain="HLT_mu20_iloose_L1MU15_OR_HLT_mu50",
-            key='SingleMuonTrigSF',
-            scale=None,
+            is_single_mu  = True,
+            mu_reco       = "Loose",
+            key           = "MuTrigSFRecoLoose",
+            scale         = None,
             )
     
-    ## pairs
+    ## objects
     ## +++++++++++++++++++++++++++++++++++++++
-    loop += ssdilep.algs.PairWeights.MuPairsAllSF(
-            key='MuPairsAllSF',
-            scale=None,
+    loop += ssdilep.algs.ObjWeights.MuAllSF(
+            mu_index      = 0,
+            mu_iso        = "FixedCutTightTrackOnly",
+            mu_reco       = "Loose",
+            key           = "MuLeadAllSF",
+            scale         = None,
             )
-    
-    ## fake-factors
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/g_DebugFF_ff.root'),
-            mu_index=0,
-            key='MuPairsLeadFF',
-            scale=None,
+    loop += ssdilep.algs.ObjWeights.MuAllSF(
+            mu_index      = 1,
+            mu_iso        = "FixedCutTightTrackOnly",
+            mu_reco       = "Loose",
+            key           = "MuSubLeadAllSF",
+            scale         = None,
             )
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/g_DebugFF_ff.root'),
-            mu_index=1,
-            key='MuPairsSubLeadFF',
-            scale=None,
-            )
-    loop += ssdilep.algs.PairWeights.MuPairsFakeFactor(
-            config_file=os.path.join(main_path,'ssdilep/data/g_DebugFF_ff.root'),
-            mu_index=2,
-            key='MuPairsLeadSubLeadFF',
-            scale=None,
-            )
-    
     
     ##-------------------------------------------------------------------------
     ## make plots
     ##-------------------------------------------------------------------------
     
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'TEST',
+            region    = 'ZCR',
             plot_all  = False,
-            obj_keys  = ["mu_pairs"],
             cut_flow  = [
-              ['MuPairsAngleHi10Low25',None],
+              ['M15',None],
+              ['MZwindow',None],
+              ['MatchSingleMuIsoChain',None],
+              ['PassSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['LeadMuZ0SinTheta05',None],
+              ['SubLeadMuZ0SinTheta05',None],
+              ['MuTT',['MuLeadAllSF','MuSubLeadAllSF']],
               ],
             )
-
-
+    
+    
+    
     loop += pyframe.algs.HistCopyAlg()
 
     ##-------------------------------------------------------------------------

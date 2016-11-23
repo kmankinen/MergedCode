@@ -26,7 +26,7 @@ def analyze(config):
     ##-------------------------------------------------------------------------
     ## setup
     ##-------------------------------------------------------------------------
-    config['tree']       = 'physics'
+    config['tree']       = 'physics/nominal'
     config['do_var_log'] = True
     main_path = os.getenv('MAIN')
     
@@ -44,11 +44,11 @@ def analyze(config):
     config.setdefault('sys',None)
     systematic = config['sys']
 
-    sys_ff    = None
+    sys_somesys    = None
 
     if   systematic == None: pass
-    elif systematic == 'FF_UP':      sys_ff    = 'up'
-    elif systematic == 'FF_DN':      sys_ff    = 'dn'
+    elif systematic == 'SOMESYS_UP':      sys_somesys    = 'up'
+    elif systematic == 'SOMESYS_DN':      sys_somesys    = 'dn'
     else: 
         assert False, "Invalid systematic %s!"%(systematic)
 
@@ -86,7 +86,8 @@ def analyze(config):
         prefix='metFinalTrk',
         key = 'met_trk',
         )
-   
+    
+    
     ## initialize and/or decorate objects
     ## ---------------------------------------
     loop += ssdilep.algs.vars.PairsBuilder(
@@ -105,38 +106,28 @@ def analyze(config):
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.EvWeights.MCEventWeight(cutflow='presel',key='weight_mc_event')
     loop += ssdilep.algs.EvWeights.Pileup(cutflow='presel',key='weight_pileup')
-    #loop += ssdilep.algs.EvWeights.TrigPresc(cutflow='presel',key='trigger_prescale')
+    #loop += ssdilep.algs.EvWeights.TrigPresc(cutflow='presel',key='trigger_prescale') # Does not work any longer!
+    loop += ssdilep.algs.EvWeights.DataUnPresc(cutflow='presel',key='data_unprescale') 
    
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastOneMuon') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TwoMuons') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TwoSSMuons') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneMuon') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt20') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt22') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt20') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt12') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneJet') 
 
     
     ## weights configuration
     ## ---------------------------------------
     ## event
     ## +++++++++++++++++++++++++++++++++++++++
+    """
+    No trigger scale factors!!!
     loop += ssdilep.algs.EvWeights.MuTrigSF(
             is_single_mu = True,
             mu_trig_level="Loose_Loose",
-            mu_trig_chain="HLT_mu20_iloose_L1MU15_OR_HLT_mu50",
+            mu_trig_chain="HLT_mu20_L1MU15",
             key='SingleMuonTrigSF',
-            scale=None,
-            )
-    """
-    loop += ssdilep.algs.EvWeights.MuTrigSF(
-            is_di_mu = True,
-            mu_trig_level="Loose_Loose",
-            mu_trig_chain="HLT_2mu10",
-            key='DiMuonTrigSF',
             scale=None,
             )
     """ 
@@ -149,104 +140,71 @@ def analyze(config):
             key='MuLeadAllSF',
             scale=None,
             )
-    """
-    loop += ssdilep.algs.ObjWeights.MuAllSF(
-            #mu_level="NotTight",
-            mu_index=1,
-            key='MuSubLeadAllSF',
-            scale=None,
-            )
-    """
-    loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_DebugFF_ff.root'),
-            mu_index=0,
-            key='MuLeadFF',
-            scale=sys_ff,
-            )
-    """
-    loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_DebugFF_ff.root'),
-            mu_index=1,
-            key='MuSubLeadFF',
-            scale=sys_ff,
-            )
-    """
     
     ##-------------------------------------------------------------------------
     ## make plots
     ##-------------------------------------------------------------------------
     
-    ## di-jet control region fakes numerator
+    ## FR1 (nominal, only with 2015 trigger)
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKESVR2_NUM',
+            region    = 'FAKESFR1_NUM',
             plot_all  = False,
             cut_flow  = [
-              ['OneJet',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
+              ['MatchSingleMuPrescChainLow',None],
+              ['PassSingleMuPrescChainLow',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
               ['LeadMuD0Sig3',None],
               ['LeadMuZ0SinTheta1',None],
-              ['METhigher40',None],
-              
+              ['METlow40',None],
               ],
             )
-    ## di-jet control region fakes denominator
-    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKESVR2_DEN',
+            region    = 'FAKESFR1_DEN',
             plot_all  = False,
             cut_flow  = [
-              ['OneJet',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['LeadMuIsoTight',['MuLeadAllSF','MuLeadFF']],
+              ['MatchSingleMuPrescChainLow',None],
+              ['PassSingleMuPrescChainLow',None],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoNotTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
               ['LeadMuD0Sig10',None],
               ['LeadMuZ0SinTheta1',None],
-              ['METhigher40',None],
+              ['METlow40',None],
               ],
             )
     
     
-    
-    ## di-jet control region fakes numerator
+    ## FR2 (no muon weights)
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKESVR3_NUM',
+            region    = 'FAKESFR2_NUM',
             plot_all  = False,
             cut_flow  = [
-              ['AtLeastTwoJets',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['LeadMuIsoTight',['MuLeadAllSF']],
-              #['MuJetDphi27',None],
+              ['MatchSingleMuPrescChainLow',None],
+              ['PassSingleMuPrescChainLow',None],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoTight',None],
+              ['MuJetDphi27',None],
               ['AllJetPt35',None],
               ['LeadMuD0Sig3',None],
               ['LeadMuZ0SinTheta1',None],
               ['METlow40',None],
-              
               ],
             )
-    ## di-jet control region fakes denominator
-    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKESVR3_DEN',
+            region    = 'FAKESFR2_DEN',
             plot_all  = False,
             cut_flow  = [
-              ['AtLeastTwoJets',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['LeadMuIsoTight',['MuLeadAllSF','MuLeadFF']],
-              #['MuJetDphi27',None],
+              ['MatchSingleMuPrescChainLow',None],
+              ['PassSingleMuPrescChainLow',None],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoNotTight',None],
+              ['MuJetDphi27',None],
               ['AllJetPt35',None],
               ['LeadMuD0Sig10',None],
               ['LeadMuZ0SinTheta1',None],
@@ -255,37 +213,31 @@ def analyze(config):
             )
     
     
-    
-    
-    ## di-jet control region fakes numerator
+    ## FR3 (tighter z0sintheta in num)
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKESVR4_NUM',
+            region    = 'FAKESFR3_NUM',
             plot_all  = False,
             cut_flow  = [
-              ['OneJet',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
+              ['MatchSingleMuPrescChainLow',None],
+              ['PassSingleMuPrescChainLow',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
-              ['LeadMuD0Sig10',None],
-              ['LeadMuZ0SinTheta01',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta05',None],
               ['METlow40',None],
               ],
             )
-    ## di-jet control region fakes denominator
-    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'FAKESVR4_DEN',
+            region    = 'FAKESFR3_DEN',
             plot_all  = False,
             cut_flow  = [
-              ['OneJet',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['LeadMuIsoTight',['MuLeadAllSF','MuLeadFF']],
+              ['MatchSingleMuPrescChainLow',None],
+              ['PassSingleMuPrescChainLow',None],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoNotTight',['MuLeadAllSF']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
               ['LeadMuD0Sig10',None],
@@ -295,7 +247,111 @@ def analyze(config):
             )
     
     
+    ## FR4 (consider both prescaled triggers)
+    ## meaningful results are only expected with getDataWeight
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR4_NUM',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChainAll',None],
+              ['PassSingleMuPrescChainAll',None],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoTight',['MuLeadAllSF']],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METlow40',None],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR4_DEN',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChainAll',None],
+              ['PassSingleMuPrescChainAll',None],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoNotTight',['MuLeadAllSF']],
+              ['MuJetDphi27',None],
+              ['AllJetPt35',None],
+              ['LeadMuD0Sig10',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METlow40',None],
+              ],
+            )
     
+    ## FR5 (W+jets CR)
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR5_NUM',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChainLow',None],
+              ['PassSingleMuPrescChainLow',None],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoTight',['MuLeadAllSF']],
+              #['MuJetDphi27',None],
+              #['AllJetPt35',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METhigher40',None],
+              ],
+            )
+    
+    ## FR6 (W+jets CR with higher MET)
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR6_NUM',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChainLow',None],
+              ['PassSingleMuPrescChainLow',None],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoTight',['MuLeadAllSF']],
+              #['MuJetDphi27',None],
+              #['AllJetPt35',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METhigher50',None],
+              ],
+            )
+    
+    ## FR7 (W+jets CR with no mu weights)
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR7_NUM',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChainLow',None],
+              ['PassSingleMuPrescChainLow',None],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoTight',None],
+              #['MuJetDphi27',None],
+              #['AllJetPt35',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METhigher40',None],
+              ],
+            )
+    
+    ## FR8 (W+jets CR will all triggers)
+    ## ---------------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region    = 'FAKESFR8_NUM',
+            plot_all  = False,
+            cut_flow  = [
+              ['MatchSingleMuPrescChainAll',None],
+              ['PassSingleMuPrescChainAll',None],
+              ['LeadMuTruthFilter',None],
+              ['LeadMuIsoTight',['MuLeadAllSF']],
+              #['MuJetDphi27',None],
+              #['AllJetPt35',None],
+              ['LeadMuD0Sig3',None],
+              ['LeadMuZ0SinTheta1',None],
+              ['METhigher40',None],
+              ],
+            )
     
     
     loop += pyframe.algs.HistCopyAlg()

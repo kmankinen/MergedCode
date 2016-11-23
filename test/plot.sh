@@ -1,45 +1,16 @@
 #!bin/bash
 
 # Strings are passed to the scrieta but this is redundant!
-
-
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR1_NUM" --lab="numerator" --tag="Sherpa" --icut="8" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=True --fakest="Subtraction"
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR1_DEN" --lab="numerator" --tag="Sherpa" --icut="8" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=True --fakest="Subtraction"
-
-<<"COMMENT"
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR2_NUM" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR2_DEN" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR3_NUM" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR3_DEN" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR4_NUM" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR4_DEN" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR5_NUM" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR5_DEN" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR6_NUM" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR6_DEN" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR7_NUM" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR7_DEN" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR8_NUM" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR8_DEN" --lab="numerator" --tag="Sherpa" --icut="9" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist18SepSys" --output="./" --makeplot=False --fakest="Subtraction"
-COMMENT
-
-<<"COMMENT"
-#python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR8_NUM" --lab="WjetsAllTrig" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist17SepDataWeight" --output="./" --makeplot=True --fakest="Subtraction"
-#python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR6_NUM" --lab="numerator" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist17SepDataWeight" --output="./" --makeplot=True --fakest="Subtraction"
-
-#python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR5_NUM" --lab="Wjets CR" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist17SepDataWeight" --output="./" --makeplot=True --fakest="Subtraction"
-#python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR6_NUM" --lab="high MET" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist17SepDataWeight" --output="./" --makeplot=True --fakest="Subtraction"
-#python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR7_NUM" --lab="lowpT no weights" --icut="6" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist17SepDataWeight" --output="./" --makeplot=True --fakest="Subtraction"
-
-#python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR4_NUM" --lab="numerator" --icut="8" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist17SepDataWeight" --output="./" --makeplot=True --fakest="Subtraction"
-#python ../ssdilep/scripts/merge.py --var="mulead_eta" --reg="FAKESFR4_DEN" --lab="denominator" --icut="8" --input="/coepp/cephfs/mel/fscutti/ssdilep/Hist17SepDataWeight" --output="./" --makeplot=True --fakest="Subtraction"
-COMMENT
+python ../ssdilep/scripts/merge.py --var="nmuons" --reg="FAKESVR1_NUM" --lab="newxs" --tag="TEST" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistMultiMu" --output="./" --makeplot=True --fakest="FakeFactor"
+python ../ssdilep/scripts/merge.py --var="nmuons" --reg="FAKESVR2_NUM" --lab="newxs" --tag="TEST" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistMultiMu" --output="./" --makeplot=True --fakest="FakeFactor"
+python ../ssdilep/scripts/merge.py --var="nmuons" --reg="FAKESVR3_NUM" --lab="newxs" --tag="TEST" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistMultiMu" --output="./" --makeplot=True --fakest="FakeFactor"
+python ../ssdilep/scripts/merge.py --var="nmuons" --reg="FAKESVR4_NUM" --lab="newxs" --tag="TEST" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistMultiMu" --output="./" --makeplot=True --fakest="FakeFactor"
+python ../ssdilep/scripts/merge.py --var="nmuons" --reg="FAKESVR5_NUM" --lab="newxs" --tag="TEST" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistMultiMu" --output="./" --makeplot=True --fakest="FakeFactor"
+python ../ssdilep/scripts/merge.py --var="nmuons" --reg="FAKESVR6_NUM" --lab="newxs" --tag="TEST" --icut="5" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistMultiMu" --output="./" --makeplot=True --fakest="FakeFactor"
 
 
 
+
+#python ../ssdilep/scripts/merge.py --var="nmuons" --reg="FAKESVR1_TLDEN" --lab="newxs" --tag="TEST" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistMultiMu" --output="./" --makeplot=True --fakest="FakeFactor"
+#python ../ssdilep/scripts/merge.py --var="nmuons" --reg="FAKESVR1_LTDEN" --lab="newxs" --tag="TEST" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistMultiMu" --output="./" --makeplot=True --fakest="FakeFactor"
+#python ../ssdilep/scripts/merge.py --var="nmuons" --reg="FAKESVR1_LLDEN" --lab="newxs" --tag="TEST" --icut="4" --input="/coepp/cephfs/mel/fscutti/ssdilep/HistMultiMu" --output="./" --makeplot=True --fakest="FakeFactor"

@@ -14,6 +14,10 @@ cutflow_weighted          = Var(name = 'cutflow_weighted_mumu',log=False)
 cutflow                   = Var(name = 'cutflow_mumu',log=False)
 cutflow_weighted_mu_pairs = Var(name = 'cutflow_weighted_mumu_mu_pairs',log=False)
 cutflow_mu_pairs          = Var(name = 'cutflow_mumu_mu_pairs',log=False)
+cutflow_presel            = Var(name = 'cutflow_presel',log=False)
+cutflow_weighted_presel   = Var(name = 'cutflow_weighted_presel',log=False)
+cutflow_ZCR               = Var(name = 'cutflow_ZCR',log=False)
+cutflow_weighted_ZCR      = Var(name = 'cutflow_weighted_ZCR',log=False)
 
 
 
@@ -72,7 +76,7 @@ mujet_dphi = Var(name = 'mujet_dphi',
               path    = 'event',
               xmin    = -3.2,
               xmax    = 3.2,
-              rebin   = 2,
+              rebin   = 4,
               log     = False,
               )
 
@@ -80,14 +84,14 @@ scdphi = Var(name     = 'scdphi',
               path    = 'event',
               xmin    = -2.,
               xmax    = 2.,
-              rebin   = 2,
+              rebin   = 4,
               log     = False,
               )
 
 muons_mVis = Var(name     = 'muons_mVis',
               path    = 'event',
               xmin    = 0.,
-              xmax    = 500.,
+              xmax    = 800.,
               rebin   = 40,
               log     = False,
               )
@@ -95,7 +99,7 @@ muons_mVis = Var(name     = 'muons_mVis',
 muons_mTtot = Var(name     = 'muons_mTtot',
               path    = 'event',
               xmin    = 0.,
-              xmax    = 500.,
+              xmax    = 800.,
               rebin   = 40,
               log     = False,
               )
@@ -104,7 +108,7 @@ muons_dphi = Var(name = 'muons_dphi',
               path    = 'event',
               xmin    = -3.2,
               xmax    = 3.2,
-              rebin   = 2,
+              rebin   = 4,
               log     = False,
               )
 
@@ -112,7 +116,7 @@ muons_deta = Var(name = 'muons_deta',
               path    = 'event',
               xmin    = -2.5,
               xmax    = 2.5,
-              rebin  = 2,
+              rebin  = 4,
               log     = False,
               )
 
@@ -132,7 +136,7 @@ mulead_pt = Var(name = 'mulead_pt',
               xmin   = 0.,
               xmax   = 400.,
               rebin  = 20,
-              log    = True,
+              log    = False,
               )
 
 musublead_pt = Var(name = 'musublead_pt',
@@ -140,14 +144,14 @@ musublead_pt = Var(name = 'musublead_pt',
               xmin   = 0.,
               xmax   = 400.,
               rebin  = 20,
-              log    = True,
+              log    = False,
               )
 
 mulead_eta = Var(name = 'mulead_eta',
               path    = 'muons',
               xmin    = -2.5,
               xmax    = 2.5,
-              rebin   = 4,
+              rebin   = 5,
               log     = False,
               )
 
@@ -155,7 +159,7 @@ musublead_eta = Var(name = 'musublead_eta',
               path    = 'muons',
               xmin    = -2.5,
               xmax    = 2.5,
-              rebin   = 4,
+              rebin   = 5,
               log     = False,
               )
 
@@ -177,17 +181,17 @@ musublead_phi = Var(name = 'musublead_phi',
 
 mulead_trkd0 = Var(name = 'mulead_trkd0',
               path    = 'muons',
-              xmin    = -0.4,
-              xmax    = 0.4,
-              rebin  = 2,
+              xmin    = -0.2,
+              xmax    = 0.2,
+              rebin  = 1,
               log     = False,
               )
 
 musublead_trkd0 = Var(name = 'musublead_trkd0',
               path    = 'muons',
-              xmin    = -0.4,
-              xmax    = 0.4,
-              rebin   = 2,
+              xmin    = -0.2,
+              xmax    = 0.2,
+              rebin   = 1,
               log     = False,
               )
 
@@ -209,32 +213,32 @@ musublead_trkd0sig = Var(name = 'musublead_trkd0sig',
 
 mulead_trkz0 = Var(name = 'mulead_trkz0',
               path    = 'muons',
-              xmin    = -2.0,
-              xmax    = 2.0,
-              rebin   = 2,
+              xmin    = -1.0,
+              xmax    = 1.0,
+              rebin   = 1,
               log     = False,
               )
 
 musublead_trkz0 = Var(name = 'musublead_trkz0',
               path    = 'muons',
-              xmin    = -2.0,
-              xmax    = 2.0,
-              rebin   = 2,
+              xmin    = -1.0,
+              xmax    = 1.0,
+              rebin   = 1,
               log     = False,
               )
 
 mulead_trkz0sintheta = Var(name = 'mulead_trkz0sintheta',
               path    = 'muons',
-              xmin    = -0.8,
-              xmax    = 0.8,
+              xmin    = -0.7,
+              xmax    = 0.7,
               rebin   = 2,
               log     = False,
               )
 
 musublead_trkz0sintheta = Var(name = 'musublead_trkz0sintheta',
               path    = 'muons',
-              xmin    = -0.8,
-              xmax    = 0.8,
+              xmin    = -0.7,
+              xmax    = 0.7,
               rebin   = 2,
               log     = False,
               )
@@ -321,7 +325,7 @@ met_clus_et = Var(name = 'met_clus_et',
               path    = 'met',
               xmin    = 0.,
               xmax    = 200.,
-              rebin   = 10,
+              rebin   = 20,
               log     = False,
               )
 
@@ -329,7 +333,7 @@ met_clus_phi = Var(name = 'met_clus_phi',
               path    = 'met',
               xmin    = -3.2,
               xmax    = 3.2,
-              rebin   = 2,
+              rebin   = 4,
               log     = False,
               )
 
@@ -337,7 +341,7 @@ met_trk_et = Var(name = 'met_trk_et',
               path    = 'met',
               xmin    = 0.,
               xmax    = 200.,
-              rebin   = 10,
+              rebin   = 20,
               log     = False,
               )
 
@@ -427,16 +431,16 @@ mumu_sumcosdphi = Var(name = 'mumu_sumcosdphi',
 mumu_mVis = Var(name = 'mumu_mVis',
               path    = 'pairs',
               xmin    = 0.,
-              xmax    = 500.,
-              rebin   = 20,
+              xmax    = 200.,
+              rebin   = 5,
               log     = False,
               )
 
 mumu_mTtot = Var(name = 'mumu_mTtot',
               path    = 'pairs',
               xmin    = 0.,
-              xmax    = 500.,
-              rebin   = 20,
+              xmax    = 200.,
+              rebin   = 5,
               log     = False,
               )
 
@@ -459,46 +463,46 @@ vars_list.append(njets)
 vars_list.append(nmuonpairs)
 vars_list.append(mujet_dphi)
 #vars_list.append(scdphi)
-#vars_list.append(muons_dphi)
-#vars_list.append(muons_deta)
-#vars_list.append(muons_mTtot)
-#vars_list.append(muons_mVis)
-#vars_list.append(muons_chargeprod)
+vars_list.append(muons_dphi)
+vars_list.append(muons_deta)
+vars_list.append(muons_mTtot)
+vars_list.append(muons_mVis)
+vars_list.append(muons_chargeprod)
 
 vars_list.append(mulead_pt)
-#vars_list.append(musublead_pt)
+vars_list.append(musublead_pt)
 vars_list.append(mulead_eta)
-#vars_list.append(musublead_eta)
+vars_list.append(musublead_eta)
 vars_list.append(mulead_phi)
-#vars_list.append(musublead_phi)
+vars_list.append(musublead_phi)
 vars_list.append(mulead_trkd0)
-#vars_list.append(musublead_trkd0)
+vars_list.append(musublead_trkd0)
 vars_list.append(mulead_trkd0sig)
-#vars_list.append(musublead_trkd0sig)
+vars_list.append(musublead_trkd0sig)
 vars_list.append(mulead_trkz0)
-#vars_list.append(musublead_trkz0)
+vars_list.append(musublead_trkz0)
 vars_list.append(mulead_trkz0sintheta)
-#vars_list.append(musublead_trkz0sintheta)
+vars_list.append(musublead_trkz0sintheta)
 
 #vars_list.append(jetlead_pt)
-
-#vars_list.append(mulead_topoetcone20)
-#vars_list.append(mulead_topoetcone30)
-#vars_list.append(mulead_topoetcone40)
-#vars_list.append(mulead_ptvarcone20)
-#vars_list.append(mulead_ptvarcone30)
-#vars_list.append(mulead_ptvarcone40)
-#vars_list.append(mulead_ptcone20)
-#vars_list.append(mulead_ptcone30)
-#vars_list.append(mulead_ptcone40)
-
+"""
+vars_list.append(mulead_topoetcone20)
+vars_list.append(mulead_topoetcone30)
+vars_list.append(mulead_topoetcone40)
+vars_list.append(mulead_ptvarcone20)
+vars_list.append(mulead_ptvarcone30)
+vars_list.append(mulead_ptvarcone40)
+vars_list.append(mulead_ptcone20)
+vars_list.append(mulead_ptcone30)
+vars_list.append(mulead_ptcone40)
+"""
 
 vars_list.append(met_clus_et)
 vars_list.append(met_clus_phi)
 vars_list.append(met_clus_sumet)
-vars_list.append(met_trk_et)
-vars_list.append(met_trk_phi)
-vars_list.append(met_trk_sumet)
+#vars_list.append(met_trk_et)
+#vars_list.append(met_trk_phi)
+#vars_list.append(met_trk_sumet)
 """
 vars_list.append(mumu_mulead_pt)
 vars_list.append(mumu_musublead_pt)
@@ -511,6 +515,12 @@ vars_list.append(mumu_mTtot)
 vars_list.append(mumu_sumcosdphi)
 vars_list.append(mumu_angle)
 """
+
+#vars_list.append(cutflow_presel)
+#vars_list.append(cutflow_weighted_presel)
+#vars_list.append(cutflow_ZCR)
+#vars_list.append(cutflow_weighted_ZCR)
+
 
 vars_dict = {}
 for var in vars_list: vars_dict[var.name] = var.__dict__

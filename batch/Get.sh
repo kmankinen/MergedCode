@@ -112,6 +112,9 @@ cp ${MERGEDTREE} ${TMPDIR}/${MYDIR}
 echo "-----> cd ${TMPDIR}/${MYDIR}"
 cd ${TMPDIR}/${MYDIR}
 
+echo "-----> rm -rf ${TMPDIR}/${MYDIR}/${TREEFILE}"
+rm -rf ${TMPDIR}/${MYDIR}/${TREEFILE}
+
 echo "-----> ls ${TMPDIR}/${MYDIR} -la"
 ls ${TMPDIR}/${MYDIR} -la
 
@@ -139,6 +142,9 @@ cp ${MERGEDMETA} ${TMPDIR}/${MYDIR}
 
 echo "-----> cd ${TMPDIR}/${MYDIR}"
 cd ${TMPDIR}/${MYDIR}
+
+echo "-----> rm -rf ${TMPDIR}/${MYDIR}/${METAFILE}"
+rm -rf ${TMPDIR}/${MYDIR}/${METAFILE}
 
 echo "-----> ls ${TMPDIR}/${MYDIR} -la"
 ls ${TMPDIR}/${MYDIR} -la
@@ -168,6 +174,9 @@ cp ${MERGEDCUTFLOW} ${TMPDIR}/${MYDIR}
 echo "-----> cd ${TMPDIR}/${MYDIR}"
 cd ${TMPDIR}/${MYDIR}
 
+echo "-----> rm -rf ${TMPDIR}/${MYDIR}/${CUTFLOWFILE}"
+rm -rf ${TMPDIR}/${MYDIR}/${CUTFLOWFILE}
+
 echo "-----> ls ${TMPDIR}/${MYDIR} -la"
 ls ${TMPDIR}/${MYDIR} -la
 
@@ -188,9 +197,6 @@ cd ${TMPDIR}
 
 echo "-----> rm -rf ${MYDIR}"
 rm -rf ${MYDIR}
-
-#echo "-----> rm -rf *.root"
-#rm -rf *.root
 
 echo "-----> ls ${TMPDIR} -la"
 ls ${TMPDIR} -la

@@ -70,11 +70,13 @@ class HistMgr():
             assert mode in ['up','dn'], "mode must be either 'up' or 'dn'"
 
         path_to_file = self.get_file_path(samplename,sys,mode)
+
         f = ROOT.TFile.Open(path_to_file)
         assert f, 'Failed to open input file!'
 
         ## get hist path
         path_to_hist = ''
+        
         if region != None:
            path_to_hist = os.path.join('regions',region)
            
@@ -92,6 +94,7 @@ class HistMgr():
            path_to_hist = os.path.join(path_to_hist,cutflow)
           
         path_to_hist = os.path.join(path_to_hist,histname)
+        
         h = f.Get(path_to_hist)
 
         if not h:
@@ -249,9 +252,8 @@ class Estimator(BaseEstimator):
             feff    = self.sample.feff
             kfactor = self.sample.kfactor
             Ntotal  = self.hm.get_nevents(self.sample.name,sys,mode)
-            # there seems to be no need for feff and kfactor
+            
             self.mc_lumi_frac[sys] = (xsec * feff * kfactor) / Ntotal if Ntotal else 0.0
-            #self.mc_lumi_frac[sys] = xsec / Ntotal if Ntotal else 0.0
         return self.mc_lumi_frac[sys]
 
 

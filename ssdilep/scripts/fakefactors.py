@@ -6,22 +6,23 @@ from array import array
 # -------------------------------------------------------------------------------------
 # config
 # -------------------------------------------------------------------------------------
-indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesDir"
+indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesSTUDY"
 tag       = "Sherpa"
-name      = "18SepSys"
+name      = "STUDY"
 
 # pt 
-'''
 var       = "mulead_pt"
 new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,45.,60.,200.])
-'''
 
+'''
 # eta
 new_bins = array('d', [-2.5, -2.0, -1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5,])
 var       = "mulead_eta"
+'''
 
-infile    = "hists_"+var+"_FAKESFR%s_%s_"+tag+".root"
-outfile   = "ff_"+var+"_"+name+"_"+tag+"_FR%s.root"
+#infile    = "hists_"+var+"_FAKESTR%s_%s_"+tag+".root"
+infile    = "hists_"+var+"_FAKESTR%s_%s_"+tag+".root"
+outfile   = "ff_"+var+"_"+name+"_"+tag+"_TR%s.root"
 outmerged = "merged_ff_"+var+"_"+name+"_"+tag+".root"
 
 # -------------------------------------------------------------------------------------
@@ -67,13 +68,13 @@ c_all.SetTicky()
 
 merged_ff_file = ROOT.TFile.Open(os.path.join(indir,outmerged),"UPDATE")
 
-for i in xrange(1,9):
+for i in xrange(1,8):
   num_file = ROOT.TFile.Open(os.path.join(indir,infile%(i,"NUM")),"READ")
   den_file = ROOT.TFile.Open(os.path.join(indir,infile%(i,"DEN")),"READ")
 
-  h_num = num_file.Get("h_FAKESFR%s_NUM_nominal_fakes"%i).Clone()
+  h_num = num_file.Get("h_FAKESTR%s_NUM_nominal_fakes"%i).Clone()
   h_num.SetNameTitle("h_num","h_num")
-  h_den = den_file.Get("h_FAKESFR%s_DEN_nominal_fakes"%i).Clone()
+  h_den = den_file.Get("h_FAKESTR%s_DEN_nominal_fakes"%i).Clone()
   h_den.SetNameTitle("h_den","h_den")
 
  
@@ -83,7 +84,7 @@ for i in xrange(1,9):
   h_ff = h_new_num.Clone()
   h_ff.Divide(h_new_den)
  
-  h_ff.SetNameTitle("h_ff_FR%s"%i,"")
+  h_ff.SetNameTitle("h_ff_TR%s"%i,"")
   h_ff.GetYaxis().SetTitle("Fake-factor")
   
   h_ff.GetYaxis().SetTitleSize(0.045)
@@ -97,14 +98,14 @@ for i in xrange(1,9):
   h_ff.SetLineColor(rcol[i-1])
   h_ff.SetMarkerColor(rcol[i-1])
   h_ff.SetMarkerSize(0.01)
-  h_ff.SetMaximum(1.0)
+  h_ff.SetMaximum(5.0)
   h_ff.SetMinimum(0)
   
   #c_all.cd()
   #if i==1: h_ff.Draw("E1 SAME")
   #else: h_ff.Draw("E1 SAME")
   
-  c = ROOT.TCanvas("c_ff_FR%s"%i,"c_ff_FR%s"%i,650,600)
+  c = ROOT.TCanvas("c_ff_TR%s"%i,"c_ff_TR%s"%i,650,600)
   c.SetTopMargin(0.05)
   c.SetBottomMargin(0.13)
   c.SetLeftMargin(0.13)
