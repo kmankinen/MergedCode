@@ -243,6 +243,7 @@ class ParticlesBuilder(pyframe.core.Algorithm):
     def execute(self,weight):
         self.store[self.key] = [Particle(copy(l)) for l in self.store[self.key]]
 
+
 # EOF 
 
 

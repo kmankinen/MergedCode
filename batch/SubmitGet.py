@@ -5,7 +5,7 @@ import subprocess
 from pyutils.utils import recreplace, mcstrings
 
 ## list jobs output
-## it wildcards around jtag!
+## it wildcards around jtagsamp!
 
 from optparse import OptionParser
 
@@ -18,10 +18,12 @@ parser.add_option('-s', '--samp', dest='sample',
 
 # --------------
 user  = "fscutti"
+#user  = "gucchiel"
 samp  = options.sample
+jtag  =  "HIGG3D3_v5"
 
-#jtag  = "HIGG3D3_v3_p2689.*%s*" % samp
-jtag  = "EXOT12_v3_l3_p2689.*%s*" % samp
+jtagsamp  = "%s.*%s*" % (jtag,samp)
+
 jtype = "SSDiLep"
 sys   = None
 if not sys: sys = "nominal"
@@ -29,16 +31,16 @@ if not sys: sys = "nominal"
 
 
 # --------------
-SCRIPT     = "Get.sh"
-#OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v3_p2689"
-OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_v3_l3_p2689"
+SCRIPT     = os.path.join("/coepp/cephfs/mel/fscutti/Analysis/batch","Get.sh")
+#OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/%s" % (jtag)
+OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/testV1"
 
 OUTMERGED  = os.path.join(OUTDIR,"merged",sys)
 OUTTREE    = os.path.join(OUTDIR,"tree",sys)
 OUTMETA    = os.path.join(OUTDIR,"metadata",sys)
 OUTCUTFLOW = os.path.join(OUTDIR,"cutflow",sys)
 OUTLOGS    = os.path.join(OUTDIR,"log",sys)
-JOB_TAG    = jtag
+JOB_TAG    = jtagsamp
 QUEUE      = "long"
 # --------------
 
@@ -60,9 +62,9 @@ for d in dir_list:
  if not os.path.exists(d):
    os.makedirs(d)
 
-outjobs_tree = "%s_%s_%s_tree.txt" % (user, jtype, jtag)
-outjobs_meta = "%s_%s_%s_metadata.txt" % (user, jtype, jtag)
-outjobs_cutflow = "%s_%s_%s_cutflow.txt" % (user, jtype, jtag)
+outjobs_tree = "%s_%s_%s_tree.txt" % (user, jtype, jtagsamp)
+outjobs_meta = "%s_%s_%s_metadata.txt" % (user, jtype, jtagsamp)
+outjobs_cutflow = "%s_%s_%s_cutflow.txt" % (user, jtype, jtagsamp)
 
 outjobs_tree = recreplace(outjobs_tree,[["*","X"]])
 outjobs_meta = recreplace(outjobs_meta,[["*","X"]])
@@ -76,7 +78,7 @@ infile_cutflow = os.path.join(JOBDIR,outjobs_cutflow)
 with open(infile_tree,"w") as f:
   cmd = "rucio list-dids"
   cmd += " %s.%s:" % ("user",user)
-  cmd += "%s.%s.%s.*%s*tree*" % ("user",user,jtype,jtag)
+  cmd += "%s.%s.%s.*%s*tree*" % ("user",user,jtype,jtagsamp)
   print cmd
   m = subprocess.Popen(cmd,shell=True,stdout=f)
   print m.communicate()[0]
@@ -85,7 +87,7 @@ f.close()
 with open(infile_meta,"w") as f:
   cmd = "rucio list-dids"
   cmd += " %s.%s:" % ("user",user)
-  cmd += "%s.%s.%s.*%s*metadata*" % ("user",user,jtype,jtag)
+  cmd += "%s.%s.%s.*%s*metadata*" % ("user",user,jtype,jtagsamp)
   print cmd
   m = subprocess.Popen(cmd,shell=True,stdout=f)
   print m.communicate()[0]
@@ -94,7 +96,7 @@ f.close()
 with open(infile_cutflow,"w") as f:
   cmd = "rucio list-dids"
   cmd += " %s.%s:" % ("user",user)
-  cmd += "%s.%s.%s.*%s*cutflow*" % ("user",user,jtype,jtag)
+  cmd += "%s.%s.%s.*%s*cutflow*" % ("user",user,jtype,jtagsamp)
   print cmd
   m = subprocess.Popen(cmd,shell=True,stdout=f)
   print m.communicate()[0]
@@ -107,7 +109,7 @@ rep.append([" ",""])
 rep.append(["\n",""])
 rep.append(["|",""])
 rep.append(["CONTAINER",""])
-rep.append(["user.fscutti:",""])
+rep.append(["user.%s:"%user,""])
 
 with open(infile_tree) as f: lines = f.readlines()
 for l in lines:
@@ -176,4 +178,3 @@ for k,v in outputs.iteritems():
   print cmd
   m = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
   print m.communicate()[0]
-

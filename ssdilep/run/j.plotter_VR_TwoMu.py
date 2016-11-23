@@ -26,7 +26,7 @@ def analyze(config):
     ##-------------------------------------------------------------------------
     ## setup
     ##-------------------------------------------------------------------------
-    config['tree']       = 'physics'
+    config['tree']       = 'physics/nominal'
     config['do_var_log'] = True
     main_path = os.getenv('MAIN')
     
@@ -104,14 +104,19 @@ def analyze(config):
     ## weights
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.EvWeights.MCEventWeight(cutflow='presel',key='weight_mc_event')
+    loop += ssdilep.algs.EvWeights.LPXKfactor(cutflow='presel',key='weight_kfactor')
     loop += ssdilep.algs.EvWeights.Pileup(cutflow='presel',key='weight_pileup')
-    #loop += ssdilep.algs.EvWeights.TrigPresc(cutflow='presel',key='trigger_prescale')
    
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TwoMuons') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt22') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastTwoSSMuons') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllPairsM20') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt24') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PassDiMuChain') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='MatchSingleMuIsoChain') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PassSingleMuIsoChain') 
 
     
     ## weights configuration
@@ -119,37 +124,80 @@ def analyze(config):
     ## event
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.EvWeights.MuTrigSF(
-            is_single_mu = True,
-            mu_trig_level="Loose_Loose",
-            mu_trig_chain="HLT_mu20_iloose_L1MU15_OR_HLT_mu50",
-            key='SingleMuonTrigSF',
-            scale=None,
+            is_single_mu  = True,
+            mu_reco       = "Loose",
+            key           = "MuTrigSFRecoLoose",
+            scale         = None,
+            )
+    
+    loop += ssdilep.algs.EvWeights.EffCorrPair(
+            config_file=os.path.join(main_path,'ssdilep/data/g_corr_eff.root'),
+            mu_lead_type    = "Tight",
+            mu_sublead_type = "Loose",
+            key             = "EffCorrTL",
+            scale           = None,
+            )
+    loop += ssdilep.algs.EvWeights.EffCorrPair(
+            config_file=os.path.join(main_path,'ssdilep/data/g_corr_eff.root'),
+            mu_lead_type    = "Loose",
+            mu_sublead_type = "Tight",
+            key             = "EffCorrLT",
+            scale           = None,
+            )
+    loop += ssdilep.algs.EvWeights.EffCorrPair(
+            config_file=os.path.join(main_path,'ssdilep/data/g_corr_eff.root'),
+            mu_lead_type    = "Loose",
+            mu_sublead_type = "Loose",
+            key             = "EffCorrLL",
+            scale           = None,
             )
     
     ## objects
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.ObjWeights.MuAllSF(
-            mu_index=0,
-            key='MuLeadAllSF',
-            scale=None,
+            mu_index      = 0,
+            mu_iso        = "NotFixedCutTightTrackOnly",
+            mu_reco       = "Loose",
+            key           = "MuLeadRecoSF",
+            scale         = None,
             )
     loop += ssdilep.algs.ObjWeights.MuAllSF(
-            mu_index=1,
-            key='MuSubLeadAllSF',
-            scale=None,
+            mu_index      = 0,
+            mu_iso        = "FixedCutTightTrackOnly",
+            mu_reco       = "Loose",
+            key           = "MuLeadAllSF",
+            scale         = None,
             )
+    loop += ssdilep.algs.ObjWeights.MuAllSF(
+            mu_index      = 1,
+            mu_iso        = "NotFixedCutTightTrackOnly",
+            mu_reco       = "Loose",
+            key           = "MuSubLeadRecoSF",
+            scale         = None,
+            )
+    loop += ssdilep.algs.ObjWeights.MuAllSF(
+            mu_index      = 1,
+            mu_iso        = "FixedCutTightTrackOnly",
+            mu_reco       = "Loose",
+            key           = "MuSubLeadAllSF",
+            scale         = None,
+            )
+    
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_DebugFF_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_STUDY_ff.root'),
             mu_index=0,
             key='MuLeadFF',
             scale=sys_ff,
             )
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_DebugFF_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_STUDY_ff.root'),
             mu_index=1,
             key='MuSubLeadFF',
             scale=sys_ff,
             )
+    
+    
+    
     
     ##-------------------------------------------------------------------------
     ## make plots
@@ -161,11 +209,10 @@ def analyze(config):
             region    = 'FAKESVR1_NUM',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['MZwindow',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
               ['MuTT',['MuLeadAllSF','MuSubLeadAllSF']],
               ],
             )
@@ -173,39 +220,35 @@ def analyze(config):
             region    = 'FAKESVR1_LTDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['MZwindow',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuLT',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuLT',['MuLeadRecoSF','MuSubLeadAllSF','MuLeadFF','EffCorrLT']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR1_TLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['MZwindow',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuTL',['MuLeadAllSF','MuSubLeadAllSF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuTL',['MuLeadAllSF','MuSubLeadRecoSF','MuSubLeadFF','EffCorrTL']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR1_LLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['MZwindow',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuLL',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuLL',['MuLeadRecoSF','MuSubLeadRecoSF','MuLeadFF','MuSubLeadFF','EffCorrLL']],
               ],
             )
-    
     
     
     ## VR2
@@ -214,12 +257,10 @@ def analyze(config):
             region    = 'FAKESVR2_NUM',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['MZwindow',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['METhigher40',None],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
               ['MuTT',['MuLeadAllSF','MuSubLeadAllSF']],
               ],
             )
@@ -227,42 +268,35 @@ def analyze(config):
             region    = 'FAKESVR2_LTDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['MZwindow',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['METhigher40',None],
-              ['MuLT',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuLT',['MuLeadRecoSF','MuSubLeadAllSF','MuLeadFF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR2_TLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['MZwindow',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['METhigher40',None],
-              ['MuTL',['MuLeadAllSF','MuSubLeadAllSF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuTL',['MuLeadAllSF','MuSubLeadRecoSF','MuSubLeadFF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR2_LLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['MZwindow',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['METhigher40',None],
-              ['MuLL',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuLL',['MuLeadRecoSF','MuSubLeadRecoSF','MuLeadFF','MuSubLeadFF']],
               ],
             )
-    
     
     ## VR3
     ## ---------------------------------------
@@ -270,12 +304,10 @@ def analyze(config):
             region    = 'FAKESVR3_NUM',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['TwoSSMuons',None],
-              ['Z0SinThetaNot005',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
+              ['Mlow200',None],
+              ['PassSingleMuExtIsoChain',None],
+              ['MatchSingleMuExtIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
               ['MuTT',['MuLeadAllSF','MuSubLeadAllSF']],
               ],
             )
@@ -283,39 +315,33 @@ def analyze(config):
             region    = 'FAKESVR3_LTDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['TwoSSMuons',None],
-              ['Z0SinThetaNot005',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuLT',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuExtIsoChain',None],
+              ['MatchSingleMuExtIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuLT',['MuLeadRecoSF','MuSubLeadAllSF','MuLeadFF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR3_TLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['TwoSSMuons',None],
-              ['Z0SinThetaNot005',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuTL',['MuLeadAllSF','MuSubLeadAllSF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuExtIsoChain',None],
+              ['MatchSingleMuExtIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuTL',['MuLeadAllSF','MuSubLeadRecoSF','MuSubLeadFF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR3_LLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['TwoSSMuons',None],
-              ['Z0SinThetaNot005',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuLL',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuExtIsoChain',None],
+              ['MatchSingleMuExtIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuLL',['MuLeadRecoSF','MuSubLeadRecoSF','MuLeadFF','MuSubLeadFF']],
               ],
             )
     
@@ -326,12 +352,10 @@ def analyze(config):
             region    = 'FAKESVR4_NUM',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['TwoSSMuons',None],
-              ['Z0SinThetaNot002',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AllMuPt30',None],
               ['MuTT',['MuLeadAllSF','MuSubLeadAllSF']],
               ],
             )
@@ -339,42 +363,35 @@ def analyze(config):
             region    = 'FAKESVR4_LTDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['TwoSSMuons',None],
-              ['Z0SinThetaNot002',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuLT',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AllMuPt30',None],
+              ['MuLT',['MuLeadRecoSF','MuSubLeadAllSF','MuLeadFF','EffCorrLT']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR4_TLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['TwoSSMuons',None],
-              ['Z0SinThetaNot002',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuTL',['MuLeadAllSF','MuSubLeadAllSF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AllMuPt30',None],
+              ['MuTL',['MuLeadAllSF','MuSubLeadRecoSF','MuSubLeadFF','EffCorrTL']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR4_LLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
-              ['TwoSSMuons',None],
-              ['Z0SinThetaNot002',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuLL',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AllMuPt30',None],
+              ['MuLL',['MuLeadRecoSF','MuSubLeadRecoSF','MuLeadFF','MuSubLeadFF','EffCorrLL']],
               ],
             )
-    
     
     
     ## VR5
@@ -383,12 +400,11 @@ def analyze(config):
             region    = 'FAKESVR5_NUM',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
               ['TwoSSMuons',None],
-              ['OneZ0SinThetaNot002',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AllMuPt30',None],
               ['MuTT',['MuLeadAllSF','MuSubLeadAllSF']],
               ],
             )
@@ -396,43 +412,38 @@ def analyze(config):
             region    = 'FAKESVR5_LTDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
               ['TwoSSMuons',None],
-              ['OneZ0SinThetaNot002',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuLT',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AllMuPt30',None],
+              ['MuLT',['MuLeadRecoSF','MuSubLeadAllSF','MuLeadFF','EffCorrLT']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR5_TLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
               ['TwoSSMuons',None],
-              ['OneZ0SinThetaNot002',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuTL',['MuLeadAllSF','MuSubLeadAllSF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AllMuPt30',None],
+              ['MuTL',['MuLeadAllSF','MuSubLeadRecoSF','MuSubLeadFF','EffCorrTL']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR5_LLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
               ['TwoSSMuons',None],
-              ['OneZ0SinThetaNot002',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuLL',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AllMuPt30',None],
+              ['MuLL',['MuLeadRecoSF','MuSubLeadRecoSF','MuLeadFF','MuSubLeadFF','EffCorrLL']],
               ],
             )
-    
-    
     
     ## VR6
     ## ---------------------------------------
@@ -440,12 +451,11 @@ def analyze(config):
             region    = 'FAKESVR6_NUM',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
               ['TwoSSMuons',None],
-              ['OneZ0SinThetaNot005',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
               ['MuTT',['MuLeadAllSF','MuSubLeadAllSF']],
               ],
             )
@@ -453,42 +463,39 @@ def analyze(config):
             region    = 'FAKESVR6_LTDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
               ['TwoSSMuons',None],
-              ['OneZ0SinThetaNot005',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuLT',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuLT',['MuLeadRecoSF','MuSubLeadAllSF','MuLeadFF','EffCorrLT']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR6_TLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
               ['TwoSSMuons',None],
-              ['OneZ0SinThetaNot005',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuTL',['MuLeadAllSF','MuSubLeadAllSF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuTL',['MuLeadAllSF','MuSubLeadRecoSF','MuSubLeadFF','EffCorrTL']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKESVR6_LLDEN',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
               ['TwoSSMuons',None],
-              ['OneZ0SinThetaNot005',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['SingleMuonTrigSF']],
-              ['MuTruthFilter',None],
-              ['MuLL',['MuLeadAllSF','MuSubLeadAllSF','MuLeadFF','MuSubLeadFF']],
+              ['Mlow200',None],
+              ['PassSingleMuIsoChain',None],
+              ['MatchSingleMuIsoChain',['MuTrigSFRecoLoose']],
+              ['AtLeastOneMuPt28',None],
+              ['MuLL',['MuLeadRecoSF','MuSubLeadRecoSF','MuLeadFF','MuSubLeadFF','EffCorrLL']],
               ],
             )
-
+    
     loop += pyframe.algs.HistCopyAlg()
 
     ##-------------------------------------------------------------------------
