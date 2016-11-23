@@ -7,7 +7,6 @@ import os
 
 from ssdilep.samples import samples
 from ssdilep.plots   import vars_mumu
-#from ssdilep.plots   import vars_fakes
 from systematics     import *
 
 from optparse import OptionParser
@@ -42,8 +41,6 @@ parser.add_option('-t', '--tag', dest='tag',
 #-----------------
 # Configuration
 #-----------------
-#lumi =  3158.13
-#lumi =  3212.96
 lumi =  18232.8
 
 # Control regions
@@ -167,7 +164,6 @@ mc_sys = [
 #fakes_mumu.estimator.add_systematics(FF)
 
 mumu_vdict  = vars_mumu.vars_dict
-#fakes_vdict = vars_fakes.vars_dict
 
 #-----------------
 # Plotting 
