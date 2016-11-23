@@ -6,9 +6,6 @@ weights applied
 to single objects
 """
 
-#import fnmatch
-#import os
-#import sys
 from math import sqrt
 from array import array
 # logging
@@ -33,7 +30,7 @@ GeV = 1000.0
 #------------------------------------------------------------------------------
 class MuAllSF(pyframe.core.Algorithm):
     """
-    Single muon reco efficiency
+    Single muon efficiencies: reco + iso + ttva
     """
     #__________________________________________________________________________
     def __init__(self, name="MuAllSF",
@@ -111,8 +108,6 @@ class MuFakeFactorGraph(pyframe.core.Algorithm):
         #muons = self.store['muons']
         muons = [self.store['muon1'],self.store['muon2']]
         mu = muons[self.mu_index]
-        #if not self.sampletype == "datadriven": continue
-        #if self.sampletype == "mc": continue
         pt_mu = mu.tlv.Pt()/GeV  
         
         for ibin_mu in xrange(1,self.g_ff.GetN()):
