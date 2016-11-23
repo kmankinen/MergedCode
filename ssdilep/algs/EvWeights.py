@@ -24,8 +24,6 @@ import pyframe
 # pyutils
 import rootutils
 
-import mcutils
-
 GeV = 1000.0
 
 

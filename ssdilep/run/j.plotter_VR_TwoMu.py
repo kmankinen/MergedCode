@@ -89,12 +89,6 @@ def analyze(config):
    
     ## initialize and/or decorate objects
     ## ---------------------------------------
-    loop += ssdilep.algs.vars.PairsBuilder(
-        obj_keys=['muons'],
-        pair_key='mu_pairs',
-        met_key='met_clus', 
-        )
-    
     loop += ssdilep.algs.algs.VarsAlg(key_muons='muons',key_jets='jets')   
 
     ## start preselection cutflow 

@@ -26,8 +26,6 @@ from copy import copy
 ## pyframe
 import pyframe
 
-import mcutils
-
 GeV = 1000.0
 
 #------------------------------------------------------------------------------
