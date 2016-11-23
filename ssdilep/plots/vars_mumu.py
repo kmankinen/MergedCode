@@ -370,88 +370,6 @@ met_trk_sumet = Var(name = 'met_trk_sumet',
               )
 
 
-## Di-muon variables
-## ---------------------------------------
-mumu_mulead_pt = Var(name = 'mumu_mulead_pt',
-              path   = 'pairs',
-              xmin   = 0.,
-              xmax   = 500.,
-              rebin  = 20,
-              log    = False,
-              )
-
-mumu_musublead_pt = Var(name = 'mumu_musublead_pt',
-              path   = 'pairs',
-              xmin   = 0.,
-              xmax   = 500.,
-              rebin  = 20,
-              log    = False,
-              )
-
-mumu_mulead_eta = Var(name = 'mumu_mulead_eta',
-              path    = 'pairs',
-              xmin    = -2.5,
-              xmax    = 2.5,
-              rebin  = 5,
-              log     = False,
-              )
-
-mumu_musublead_eta = Var(name = 'mumu_musublead_eta',
-              path    = 'pairs',
-              xmin    = -2.5,
-              xmax    = 2.5,
-              rebin  = 5,
-              log     = False,
-              )
-
-mumu_mulead_phi = Var(name = 'mumu_mulead_phi',
-              path    = 'pairs',
-              xmin    = -3.2,
-              xmax    = 3.2,
-              rebin  = 5,
-              log     = False,
-              )
-
-mumu_musublead_phi = Var(name = 'mumu_musublead_phi',
-              path    = 'pairs',
-              xmin    = -3.2,
-              xmax    = 3.2,
-              rebin  = 5,
-              log     = False,
-              )
-
-mumu_sumcosdphi = Var(name = 'mumu_sumcosdphi',
-              path    = 'pairs',
-              xmin    = -2.,
-              xmax    = 2.,
-              rebin   = 5,
-              log     = False,
-              )
-
-mumu_mVis = Var(name = 'mumu_mVis',
-              path    = 'pairs',
-              xmin    = 0.,
-              xmax    = 200.,
-              rebin   = 5,
-              log     = False,
-              )
-
-mumu_mTtot = Var(name = 'mumu_mTtot',
-              path    = 'pairs',
-              xmin    = 0.,
-              xmax    = 200.,
-              rebin   = 5,
-              log     = False,
-              )
-
-mumu_angle = Var(name = 'mumu_angle',
-              path    = 'pairs',
-              xmin    = 0.,
-              xmax    = 3.2,
-              rebin   = 20,
-              log     = False,
-              )
-
 
 vars_list = []
 vars_list.append(averageIntPerXing)
@@ -503,18 +421,6 @@ vars_list.append(met_clus_sumet)
 #vars_list.append(met_trk_et)
 #vars_list.append(met_trk_phi)
 #vars_list.append(met_trk_sumet)
-"""
-vars_list.append(mumu_mulead_pt)
-vars_list.append(mumu_musublead_pt)
-vars_list.append(mumu_mulead_eta)
-vars_list.append(mumu_musublead_eta)
-vars_list.append(mumu_mulead_phi)
-vars_list.append(mumu_musublead_phi)
-vars_list.append(mumu_mVis)
-vars_list.append(mumu_mTtot)
-vars_list.append(mumu_sumcosdphi)
-vars_list.append(mumu_angle)
-"""
 
 #vars_list.append(cutflow_presel)
 #vars_list.append(cutflow_weighted_presel)
