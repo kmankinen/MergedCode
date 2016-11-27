@@ -21,6 +21,48 @@ log = logging.getLogger(__name__)
 def fatal(message):
     sys.exit("Fatal error in %s: %s" % (__file__, message))
 
+#------------------------------------------------------------------------------
+class BuildTrigConfig(pyframe.core.Algorithm):
+    """
+    Algorithm to configure the trigger chain
+    """
+    #__________________________________________________________________________
+    def __init__(self, 
+          cutflow           = None,
+          required_triggers = None,
+          key               = None):
+        pyframe.core.Algorithm.__init__(self, name="TrigConfig", isfilter=True)
+        self.cutflow           = cutflow
+        self.required_triggers = required_triggers
+        self.key               = key
+    
+    #__________________________________________________________________________
+    def initialize(self):
+        log.info('initialize trigger config for %s...' % self.key)
+
+    #__________________________________________________________________________
+    def execute(self, weight):
+        
+      assert len(self.chain.passedTriggers) == len(self.chain.triggerPrescales), "ERROR: # passed triggers != # trigger prescales !!!"
+      
+      if not "reqTrig" in self.store.keys():
+        self.store["reqTrig"] = self.required_triggers
+      
+      if not "passTrig" in self.store.keys():
+        self.store["passTrig"] = {}
+        for trig,presc in zip(self.chain.passedTriggers,self.chain.triggerPrescales):
+          self.store["passTrig"][trig] = presc
+
+      if self.key == "muons":
+        self.store["singleMuTrigList"]  = {}
+        
+        # the muon_listTrigChains is filled 
+        # in the ntuple if # muons>0
+        for i,trig in enumerate(self.chain.muon_listTrigChains):
+          self.store["singleMuTrigList"][trig] = i
+
+
+      return True
 
 #-------------------------------------------------------------------------------
 class Particle(pyframe.core.ParticleProxy):

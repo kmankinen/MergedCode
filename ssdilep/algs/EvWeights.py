@@ -26,44 +26,39 @@ import rootutils
 
 GeV = 1000.0
 
-
 #------------------------------------------------------------------------------
 class TrigPresc(pyframe.core.Algorithm):
     """
     Algorithm to unprescale data
+    Applies the prescale according to a specific list of triggers
     """
     #__________________________________________________________________________
-    def __init__(self, cutflow=None,key=None):
+    def __init__(self, 
+          cutflow     = None,
+          key         = None):
         pyframe.core.Algorithm.__init__(self, name="TrigPresc", isfilter=True)
-        self.cutflow = cutflow
-        self.key = key
+        self.cutflow     = cutflow
+        self.key         = key
     #__________________________________________________________________________
     def execute(self, weight):
-        if "data" in self.sampletype: 
-            #trigpresc = self.chain.triggerPrescales.at(0)
-            print self.chain.triggerPrescales
-            #if self.key: self.store[self.key] = trigpresc
-            #self.set_weight(trigpresc*weight)
+        trigpresc = 1.0
+        
+        if "data" in self.sampletype:
+          ineff_list = []
+          for trig in self.store["reqTrig"]: 
+            if trig in self.store["passTrig"].keys():
+              ineff_list.append(1. - 1. / self.store["passTrig"][trig])
+       
+          if ineff_list:
+            tot_ineff = 1.0
+            for ineff in ineff_list: tot_ineff *= ineff
+            trigpresc -= tot_ineff
+        
+        trigpresc = 1. / trigpresc
+       
+        if self.key: self.store[self.key] = trigpresc
+        self.set_weight(trigpresc*weight)
         return True
-
-#------------------------------------------------------------------------------
-class DataUnPresc(pyframe.core.Algorithm):
-    """
-    Algorithm to unprescale data
-    """
-    #__________________________________________________________________________
-    def __init__(self, cutflow=None,key=None):
-        pyframe.core.Algorithm.__init__(self, name="TrigPresc", isfilter=True)
-        self.cutflow = cutflow
-        self.key = key
-    #__________________________________________________________________________
-    def execute(self, weight):
-        if "data" in self.sampletype: 
-            trigpresc = self.chain.prescale_DataWeight
-            if self.key: self.store[self.key] = trigpresc
-            self.set_weight(trigpresc*weight)
-        return True
-
 
 #------------------------------------------------------------------------------
 class Pileup(pyframe.core.Algorithm):
@@ -130,36 +125,36 @@ class LPXKfactor(pyframe.core.Algorithm):
 #------------------------------------------------------------------------------
 class MuTrigSF(pyframe.core.Algorithm):
     """
-    Muon trigger scale factor
+    Muon trigger scale factor (OR of signle muon triggers)
     """
     #__________________________________________________________________________
     def __init__(self, name="MuTrigSF",
-            is_single_mu   = None,
-            is_di_mu       = None,
-            mu_iso         = None,
-            mu_reco        = None,
-            mu_trig_chain  = None,
-            match_to_trig  = None,
-            key            = None,
-            scale          = None,
+            trig_list   = None,
+            match_all   = False,
+            mu_iso      = None,
+            mu_reco     = None,
+            key         = None,
+            scale       = None,
             ):
         pyframe.core.Algorithm.__init__(self, name=name)
-        self.is_single_mu      = is_single_mu
-        self.is_di_mu          = is_di_mu
-        self.mu_iso            = mu_iso
-        self.mu_reco           = mu_reco
-        self.mu_trig_chain     = mu_trig_chain
-        self.match_to_trig     = match_to_trig
-        self.key               = key
-        self.scale             = scale
+        self.trig_list   = trig_list # if for some reason a different list is needed
+        self.match_all   = match_all
+        self.mu_iso      = mu_iso
+        self.mu_reco     = mu_reco
+        self.key         = key
+        self.scale       = scale
 
         assert key, "Must provide key for storing mu reco sf"
     #_________________________________________________________________________
     def initialize(self):
-      if not self.mu_reco: self.mu_reco = "Loose"
-      if not self.mu_iso:  self.mu_iso = "FixedCutTightTrackOnly"
-      if "Not" in self.mu_iso: self.mu_iso = "Loose"
+      
+      if not self.mu_reco:      self.mu_reco = "Loose"
+      if not self.mu_iso:       self.mu_iso  = "FixedCutTightTrackOnly"
+      
+      if "Not" in self.mu_iso:  self.mu_iso  = "Loose"
       if "Not" in self.mu_reco: self.mu_reco = "Loose"
+
+      if not self.trig_list: self.trig_list = self.store["reqTrig"]
 
     #_________________________________________________________________________
     def execute(self, weight):
@@ -167,25 +162,40 @@ class MuTrigSF(pyframe.core.Algorithm):
         if "mc" in self.sampletype: 
           muons = self.store['muons']
           
-          num = 1.0 
-          den = 1.0
+          eff_data_chain = 1.0 
+          eff_mc_chain   = 1.0
           
-          if self.is_single_mu:
-            for i,m in enumerate(muons):
-              if m.isTruthMatchedToMuon: 
-                sf  = getattr(m,"_".join(["TrigEff","SF",self.mu_reco,self.mu_iso])).at(0)
-                eff = getattr(m,"_".join(["TrigMCEff",self.mu_reco,self.mu_iso])).at(0)
-                num *= 1 - sf * eff
-                den *= 1 - eff
+          for i,m in enumerate(muons):
           
-          else: pass  
-          
-          num = ( 1 - num )
-          den = ( 1 - den )
-          
-          if den > 0:
-            trig_sf = num / den
+            eff_data_muon = 1.0 
+            eff_mc_muon   = 1.0
 
+            if m.isTruthMatchedToMuon: 
+              for trig in self.trig_list:
+                
+                sf_muon  = getattr(m,"_".join(["TrigEff","SF",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
+                eff_muon = getattr(m,"_".join(["TrigMCEff",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
+                
+                eff_data_muon *= 1 - sf_muon * eff_muon
+                eff_mc_muon   *= 1 - eff_muon
+              
+              eff_data_muon = ( 1 - eff_data_muon )
+              eff_mc_muon   = ( 1 - eff_mc_muon )
+              
+              if self.match_all:
+                eff_data_chain *= eff_data_muon
+                eff_mc_chain   *= eff_mc_muon
+              else:
+                eff_data_chain *= 1. - eff_data_muon
+                eff_mc_chain   *= 1. - eff_mc_muon
+          
+          if not self.match_all: 
+            eff_data_chain = ( 1 - eff_data_chain )
+            eff_mc_chain   = ( 1 - eff_mc_chain )
+          
+          if eff_mc_chain > 0:
+            trig_sf = eff_data_chain / eff_mc_chain
+          
           #if self.scale: pass
        
         if self.key: 
