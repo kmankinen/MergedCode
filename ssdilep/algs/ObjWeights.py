@@ -58,14 +58,20 @@ class MuAllSF(pyframe.core.Algorithm):
         sf=1.0
         if "mc" in self.sampletype: 
           muons = self.store['muons']
-          #muons = [self.store['muon1'],self.store['muon2']]
           muon = muons[self.mu_index]
           
           if muon.isTruthMatchedToMuon:
             if not ("Not" in self.mu_iso):
-              sf *= getattr(muon,"_".join(["IsoEff","SF","Iso"+self.mu_iso])).at(0)
+              # HIGG3D3 
+              #sf *= getattr(muon,"_".join(["IsoEff","SF","Iso"+self.mu_iso])).at(0)
+              # EXOT12 v1 ntuples 
+              sf *= getattr(muon,"_".join(["IsoEff","SF",self.mu_iso])).at(0)
             if not ("Not" in self.mu_reco):
-              sf *= getattr(muon,"_".join(["RecoEff","SF","Reco"+self.mu_reco])).at(0)
+              # HIGG3D3 
+              #sf *= getattr(muon,"_".join(["RecoEff","SF","Reco"+self.mu_reco])).at(0)
+              # EXOT12 v1 ntuples 
+              sf *= getattr(muon,"_".join(["RecoEff","SF",self.mu_reco])).at(0)
+            
             sf *= getattr(muon,"_".join(["TTVAEff","SF"])).at(0)
 
             if self.scale: pass
@@ -103,9 +109,10 @@ class MuFakeFactorGraph(pyframe.core.Algorithm):
         f.Close()
     #_________________________________________________________________________
     def execute(self, weight):
-        #muons = self.store['muons']
-        muons = [self.store['muon1'],self.store['muon2']]
+        
+        muons = self.store['muons']
         mu = muons[self.mu_index]
+        
         pt_mu = mu.tlv.Pt()/GeV  
         
         for ibin_mu in xrange(1,self.g_ff.GetN()):
