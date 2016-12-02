@@ -1,7 +1,5 @@
 #!bin/bash
 
-
-python ../batch/SubmitGet.py --samp="302872"
-
+python ../batch/SubmitGet.py --samp="299243"
 
 

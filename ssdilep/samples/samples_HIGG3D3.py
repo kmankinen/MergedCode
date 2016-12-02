@@ -3,7 +3,7 @@
 samples.py
 
 description:
-
+ samples for HIGG3D3 derivations
 '''
 
 #------------------------------------------------------------------------------

@@ -57,11 +57,12 @@ class BuildTrigConfig(pyframe.core.Algorithm):
         self.store["singleMuTrigList"]  = {}
         
         # the muon_listTrigChains is filled 
-        # in the ntuple if # muons>0
+        # in the ntuple if # muons>0. If more 
+        # than one muon exists skip repetitions
         for i,trig in enumerate(self.chain.muon_listTrigChains):
-          self.store["singleMuTrigList"][trig] = i
-
-
+          if trig in self.store["singleMuTrigList"].keys(): continue
+          self.store["singleMuTrigList"][trig] = i 
+        
       return True
 
 #-------------------------------------------------------------------------------

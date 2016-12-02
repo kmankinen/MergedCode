@@ -41,7 +41,8 @@ parser.add_option('-t', '--tag', dest='tag',
 #-----------------
 # Configuration
 #-----------------
-lumi =  18232.8
+#lumi =  18232.8
+lumi =  33257.2 + 3212.96
 
 # Control regions
 plotsfile = []
@@ -68,9 +69,10 @@ hm = histmgr.HistMgr(basedir=options.indir,target_lumi=lumi)
 data = samples.data
 ## backgrounds 
 
+"""
 mc_backgrounds = [
     #samples.diboson_sherpa,
-    samples.diboson_incl_sherpa,
+    #samples.diboson_incl_sherpa,
     ##samples.diboson_powheg,
     samples.WenuSherpa22,
     samples.WmunuSherpa22,
@@ -78,25 +80,24 @@ mc_backgrounds = [
     samples.ZeeSherpa22,
     samples.ZmumuSherpa22,
     samples.ZtautauSherpa22,
-    samples.ttX,
+    #samples.ttX,
     samples.singletop,
     samples.ttbar,
    ]
 """
 mc_backgrounds = [
-    samples.diboson_sherpa,
-    ##samples.diboson_powheg,
-    #samples.Wenu,
-    #samples.Wmunu,
-    #samples.Wtaunu,
-    #samples.Zee,
-    samples.Zmumu,
-    samples.Ztautau,
+    ##samples.diboson_sherpa,
+    #samples.diboson_incl_sherpa,
+    samples.WenuSherpa22,
+    samples.WmunuSherpa22,
+    samples.WtaunuSherpa22,
+    samples.ZeeSherpa22,
+    samples.ZmumuSherpa22,
+    samples.ZtautauSherpa22,
     #samples.ttX,
-    #samples.singletop,
+    samples.singletop,
     samples.ttbar,
    ]
-"""
 """
 mc_backgrounds = [
     ##samples.diboson_sherpa,
@@ -128,7 +129,17 @@ mumu_signals = []
 #--------------
 for s in mc_backgrounds + mumu_signals + [data]: 
     histmgr.load_base_estimator(hm,s)
-
+"""
+if "_SIG" in options.region:
+  prefix = options.region.split("_")[:1][0]
+  for s in mc_backgrounds + mumu_signals + [data]: 
+    s.estimator = histmgr.AddEstimator(
+      sample=s,
+      hm=hm,
+      #regions = [prefix+"_TT",prefix+"_TTT",prefix+"_TTTT"],
+      regions = [prefix+"_TT"],
+      )
+"""
 if options.fakest == "FakeFactor":
   fakes_mumu.estimator = histmgr.FakeEstimator(
       hm=hm, 
@@ -161,7 +172,7 @@ mc_sys = [
 #for s in mc_backgrounds + mumu_signals:
 #    s.estimator.add_systematics(mc_sys)
 
-#fakes_mumu.estimator.add_systematics(FF)
+fakes_mumu.estimator.add_systematics(FF)
 
 mumu_vdict  = vars_mumu.vars_dict
 
@@ -170,9 +181,10 @@ mumu_vdict  = vars_mumu.vars_dict
 #-----------------
 
 ## order backgrounds for plots
+"""
 mumu_backgrounds = [
     ##samples.diboson_sherpa,
-    samples.diboson_incl_sherpa,
+    #samples.diboson_incl_sherpa,
     ##samples.diboson_powheg,
     samples.WenuSherpa22,
     samples.WmunuSherpa22,
@@ -180,27 +192,26 @@ mumu_backgrounds = [
     samples.ZeeSherpa22,
     samples.ZmumuSherpa22,
     samples.ZtautauSherpa22,
-    samples.ttX,
+    #samples.ttX,
     samples.singletop,
     samples.ttbar,
     fakes_mumu,
     ]
 """
 mumu_backgrounds = [
-    samples.diboson_sherpa,
-    ##samples.diboson_powheg,
-    #samples.Wenu,
-    #samples.Wmunu,
-    #samples.Wtaunu,
-    #samples.Zee,
-    samples.Zmumu,
-    samples.Ztautau,
+    #samples.diboson_sherpa,
+    #samples.diboson_incl_sherpa,
+    samples.WenuSherpa22,
+    samples.WmunuSherpa22,
+    samples.WtaunuSherpa22,
+    samples.ZeeSherpa22,
+    samples.ZmumuSherpa22,
+    samples.ZtautauSherpa22,
     #samples.ttX,
-    #samples.singletop,
+    samples.singletop,
     samples.ttbar,
     #fakes_mumu,
     ]
-"""
 """
 mumu_backgrounds = [
     ##samples.diboson_sherpa,
@@ -233,7 +244,7 @@ if options.makeplot == "True":
     icut          = int(options.icut),
     #sys_dict      = sys_dict,
     sys_dict      = None,
-    do_ratio_plot = True,
+    do_ratio_plot = False,
     save_eps      = True,
     plotsfile     = plotsfile,
     )

@@ -217,19 +217,18 @@ def analyze(config):
             region    = 'FAKES_NUM_F0',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ],
             )
+    
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKES_DEN_F0',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ],
             )
@@ -240,9 +239,8 @@ def analyze(config):
             region    = 'FAKES_NUM_F1',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -254,9 +252,8 @@ def analyze(config):
             region    = 'FAKES_DEN_F1',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -271,9 +268,8 @@ def analyze(config):
             region    = 'FAKES_NUM_F2',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -285,9 +281,8 @@ def analyze(config):
             region    = 'FAKES_DEN_F2',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -302,9 +297,8 @@ def analyze(config):
             region    = 'FAKES_NUM_F3',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -316,9 +310,8 @@ def analyze(config):
             region    = 'FAKES_DEN_F3',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -333,9 +326,8 @@ def analyze(config):
             region    = 'FAKES_NUM_F4',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi28',None],
               ['AllJetPt35',None],
@@ -347,9 +339,8 @@ def analyze(config):
             region    = 'FAKES_DEN_F4',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi28',None],
               ['AllJetPt35',None],
@@ -364,9 +355,8 @@ def analyze(config):
             region    = 'FAKES_NUM_F5',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi26',None],
               ['AllJetPt35',None],
@@ -378,9 +368,8 @@ def analyze(config):
             region    = 'FAKES_DEN_F5',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi26',None],
               ['AllJetPt35',None],
@@ -395,9 +384,8 @@ def analyze(config):
             region    = 'FAKES_NUM_F6',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -409,9 +397,8 @@ def analyze(config):
             region    = 'FAKES_DEN_F6',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -426,9 +413,8 @@ def analyze(config):
             region    = 'FAKES_NUM_F7',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -440,9 +426,8 @@ def analyze(config):
             region    = 'FAKES_DEN_F7',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -458,9 +443,8 @@ def analyze(config):
             region    = 'FAKES_NUM_F8',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt40',None],
@@ -472,9 +456,8 @@ def analyze(config):
             region    = 'FAKES_DEN_F8',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN1']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN1']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt40',None],
@@ -487,17 +470,15 @@ def analyze(config):
     
     
     
-    
-    
+    """ 
     ## before any selection
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
             region    = 'FAKES_NUM_G0',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ],
             )
@@ -505,9 +486,8 @@ def analyze(config):
             region    = 'FAKES_DEN_G0',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ],
             )
@@ -518,9 +498,8 @@ def analyze(config):
             region    = 'FAKES_NUM_G1',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -532,9 +511,8 @@ def analyze(config):
             region    = 'FAKES_DEN_G1',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -549,9 +527,8 @@ def analyze(config):
             region    = 'FAKES_NUM_G2',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -563,9 +540,8 @@ def analyze(config):
             region    = 'FAKES_DEN_G2',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -580,9 +556,8 @@ def analyze(config):
             region    = 'FAKES_NUM_G3',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -594,9 +569,8 @@ def analyze(config):
             region    = 'FAKES_DEN_G3',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -611,9 +585,8 @@ def analyze(config):
             region    = 'FAKES_NUM_G4',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi28',None],
               ['AllJetPt35',None],
@@ -625,9 +598,8 @@ def analyze(config):
             region    = 'FAKES_DEN_G4',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi28',None],
               ['AllJetPt35',None],
@@ -642,9 +614,8 @@ def analyze(config):
             region    = 'FAKES_NUM_G5',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi26',None],
               ['AllJetPt35',None],
@@ -656,9 +627,8 @@ def analyze(config):
             region    = 'FAKES_DEN_G5',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi26',None],
               ['AllJetPt35',None],
@@ -673,9 +643,8 @@ def analyze(config):
             region    = 'FAKES_NUM_G6',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -687,9 +656,8 @@ def analyze(config):
             region    = 'FAKES_DEN_G6',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -704,9 +672,8 @@ def analyze(config):
             region    = 'FAKES_NUM_G7',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -718,9 +685,8 @@ def analyze(config):
             region    = 'FAKES_DEN_G7',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -736,9 +702,8 @@ def analyze(config):
             region    = 'FAKES_NUM_G8',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFNUM2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFNUM2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt40',None],
@@ -750,9 +715,8 @@ def analyze(config):
             region    = 'FAKES_DEN_G8',
             plot_all  = False,
             cut_flow  = [
-              ['PassStandardChain',['DataUnPresc']],
-              ['MatchStandardChain',['MuTrigSFDEN2']],
-              ['LeadMuTruthFilter',None],
+              ['PassAndMatch',['DataUnPresc','MuTrigSFDEN2']],
+              #['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt40',None],
@@ -760,8 +724,7 @@ def analyze(config):
               ['METlow40',None],
               ],
             )
-    
-    
+    """ 
     loop += pyframe.algs.HistCopyAlg()
 
     ##-------------------------------------------------------------------------

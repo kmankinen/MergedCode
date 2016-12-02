@@ -16,7 +16,8 @@ USER   = os.getenv('USER')
 
 ## global config
 # inputs
-NTUP='/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_common_v1Ntuples/merged' # input NTUP path
+#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_common_v1Ntuples/merged' # input NTUP path
+NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v6/merged' # input NTUP path
 
 JOBDIR = "/coepp/cephfs/mel/%s/jobdir" % USER # Alright this is twisted...
 INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%m_y%Y_H%H_M%M_S%S")) )
@@ -24,7 +25,13 @@ INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-RUN = "HistMVeto"
+#RUN = "HistRejectZ"
+#RUN = "HistNewAcceptZ"
+#RUN = "HistMCOnlyZ"
+RUN = "HistPassAndMatch"
+
+#RUN = "HistSysVR"
+#RUN = "HistSysExtVR"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 OUTFILE="ntuple.root"         # file output by pyframe job 
@@ -33,9 +40,9 @@ OUTFILE="ntuple.root"         # file output by pyframe job
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
 
 # pick your script!!!
-#SCRIPT="./ssdilep/run/j.plotter_FF.py"  
+SCRIPT="./ssdilep/run/j.plotter_FF.py"  
 #SCRIPT="./ssdilep/run/j.plotter_STUDY.py"  
-SCRIPT="./ssdilep/run/j.plotter_VR_TwoMu.py"  
+#SCRIPT="./ssdilep/run/j.plotter_VR_TwoMu.py"  
 #SCRIPT="./ssdilep/run/j.plotter_TAndP.py"  
 
 
