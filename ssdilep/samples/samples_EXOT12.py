@@ -3,7 +3,7 @@
 samples.py
 
 description:
-
+ samples for EXOT12 derivations
 '''
 
 #------------------------------------------------------------------------------

@@ -55,26 +55,30 @@ class MuAllSF(pyframe.core.Algorithm):
     
     #_________________________________________________________________________
     def execute(self, weight):
+        
         sf=1.0
-        if "mc" in self.sampletype: 
-          muons = self.store['muons']
-          muon = muons[self.mu_index]
-          
-          if muon.isTruthMatchedToMuon:
-            if not ("Not" in self.mu_iso):
-              # HIGG3D3 
-              #sf *= getattr(muon,"_".join(["IsoEff","SF","Iso"+self.mu_iso])).at(0)
-              # EXOT12 v1 ntuples 
-              sf *= getattr(muon,"_".join(["IsoEff","SF",self.mu_iso])).at(0)
-            if not ("Not" in self.mu_reco):
-              # HIGG3D3 
-              #sf *= getattr(muon,"_".join(["RecoEff","SF","Reco"+self.mu_reco])).at(0)
-              # EXOT12 v1 ntuples 
-              sf *= getattr(muon,"_".join(["RecoEff","SF",self.mu_reco])).at(0)
+        muons = self.store['muons']
+        
+        if self.mu_index < len(muons): 
+        
+          if "mc" in self.sampletype: 
+            muon = muons[self.mu_index]
             
-            sf *= getattr(muon,"_".join(["TTVAEff","SF"])).at(0)
-
-            if self.scale: pass
+            if muon.isTruthMatchedToMuon:
+              if not ("Not" in self.mu_iso):
+                # HIGG3D3 
+                sf *= getattr(muon,"_".join(["IsoEff","SF","Iso"+self.mu_iso])).at(0)
+                # EXOT12 v1 ntuples 
+                #sf *= getattr(muon,"_".join(["IsoEff","SF",self.mu_iso])).at(0)
+              if not ("Not" in self.mu_reco):
+                # HIGG3D3 
+                sf *= getattr(muon,"_".join(["RecoEff","SF","Reco"+self.mu_reco])).at(0)
+                # EXOT12 v1 ntuples 
+                #sf *= getattr(muon,"_".join(["RecoEff","SF",self.mu_reco])).at(0)
+              
+              sf *= getattr(muon,"_".join(["TTVAEff","SF"])).at(0)
+          
+              if self.scale: pass
 
         if self.key: 
           self.store[self.key] = sf
@@ -94,7 +98,6 @@ class MuFakeFactorGraph(pyframe.core.Algorithm):
         self.key            = key
         self.scale          = scale
         
-        assert mu_index in [0,1], "ERROR: mu_index must be in [0,1]"
         assert config_file, "Must provide config file!"
         assert key, "Must provide key for storing fakefactor"
     #_________________________________________________________________________
@@ -110,23 +113,26 @@ class MuFakeFactorGraph(pyframe.core.Algorithm):
     #_________________________________________________________________________
     def execute(self, weight):
         
+        ff_mu = 1.0 
         muons = self.store['muons']
-        mu = muons[self.mu_index]
+         
+        if self.mu_index < len(muons): 
         
-        pt_mu = mu.tlv.Pt()/GeV  
-        
-        for ibin_mu in xrange(1,self.g_ff.GetN()):
-          edlow = self.g_ff.GetX()[ibin_mu] - self.g_ff.GetEXlow()[ibin_mu]
-          edhi  = self.g_ff.GetX()[ibin_mu] + self.g_ff.GetEXhigh()[ibin_mu]
-          if pt_mu>=edlow and pt_mu<edhi: break
-
-        # error bars are asymmetric
-        ff_mu = self.g_ff.GetY()[ibin_mu]
-        eff_up_mu = self.g_ff.GetEYhigh()[ibin_mu]
-        eff_dn_mu = self.g_ff.GetEYlow()[ibin_mu]
-        
-        if self.scale == 'up': ff_mu +=eff_up_mu
-        if self.scale == 'dn': ff_mu -=eff_dn_mu
+          mu = muons[self.mu_index]
+          pt_mu = mu.tlv.Pt()/GeV  
+          
+          for ibin_mu in xrange(1,self.g_ff.GetN()):
+            edlow = self.g_ff.GetX()[ibin_mu] - self.g_ff.GetEXlow()[ibin_mu]
+            edhi  = self.g_ff.GetX()[ibin_mu] + self.g_ff.GetEXhigh()[ibin_mu]
+            if pt_mu>=edlow and pt_mu<edhi: break
+          
+          # error bars are asymmetric
+          ff_mu = self.g_ff.GetY()[ibin_mu]
+          eff_up_mu = self.g_ff.GetEYhigh()[ibin_mu]
+          eff_dn_mu = self.g_ff.GetEYlow()[ibin_mu]
+          
+          if self.scale == 'up': ff_mu +=eff_up_mu
+          if self.scale == 'dn': ff_mu -=eff_dn_mu
        
         if self.key: 
           self.store[self.key] = ff_mu

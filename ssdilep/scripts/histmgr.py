@@ -96,7 +96,7 @@ class HistMgr():
         path_to_hist = os.path.join(path_to_hist,histname)
         
         h = f.Get(path_to_hist)
-
+        
         if not h:
             f.Close()
             print 'failed retrieveing hist: %s:%s'%(path_to_file,path_to_hist)
@@ -125,7 +125,7 @@ class HistMgr():
         nevents = None 
         path_to_file = self.get_file_path(samplename,sys,mode)
         f = ROOT.TFile.Open(path_to_file)
-        if f: 
+        if f:
             h = f.Get(self.cutflow_histname)
             if h: nevents = h.GetBinContent(3)
             f.Close()
@@ -173,13 +173,14 @@ class BaseEstimator(object):
                      sys=sys,
                      mode=mode,
                      )
+
           h = None
           if not all(v is None for v in h_dict.values()):
             h = histutils.add_hists(h_dict.values())
           if h: 
             self.sample.plotopts.configure(h)
             log.debug('%s: %s'%(self.sample.name,h.Integral()))
-
+          
           self.hist_store[htag] = h
         return self.hist_store[htag]
     
@@ -312,84 +313,247 @@ class FakeEstimator(BaseEstimator):
         self.mc_samples = mc_samples
     #____________________________________________________________
     def __hist__(self,histname=None,region=None,icut=None,sys=None,mode=None):
+    
+        suffix = region.split("_")[-1:][0]
         
         # ---------
         # LL REGION
         # ---------
-        region_ll_den = region.replace("_NUM","_LLDEN")
+        region_ll = region.replace("_"+suffix,"_LL")
       
-        h_ll_den = self.data_sample.hist(histname=histname,
-                                region=region_ll_den,
+        h_ll = self.data_sample.hist(histname=histname,
+                                region=region_ll,
                                 icut=icut,
                                 sys=sys,
                                 mode=mode,
                                 ).Clone()
         for s in self.mc_samples:
-          hmc_ll = s.hist(histname=histname,region=region_ll_den,icut=icut,sys=sys,mode=mode)
+          hmc_ll = s.hist(histname=histname,region=region_ll,icut=icut,sys=sys,mode=mode)
           if not hmc_ll: 
             print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
             continue
-          h_ll_den.Add(hmc_ll,-1)
-        if "LLDEN" in region: return h_ll_den
-        
+          h_ll.Add(hmc_ll,-1)
+        if suffix == "LL": return h_ll
         
         # ---------
         # TL REGION 
         # ---------
-        region_tl_den = region.replace("_NUM","_TLDEN")
+        region_tl = region.replace("_"+suffix,"_TL")
 
-        h_tl_den = self.data_sample.hist(histname=histname,
-                                  region=region_tl_den,
+        h_tl = self.data_sample.hist(histname=histname,
+                                  region=region_tl,
                                   icut=icut,
                                   sys=sys,
                                   mode=mode,
                                   ).Clone()
         for s in self.mc_samples:
-          hmc_tl = s.hist(histname=histname,region=region_tl_den,icut=icut,sys=sys,mode=mode)
+          hmc_tl = s.hist(histname=histname,region=region_tl,icut=icut,sys=sys,mode=mode)
           if not hmc_tl: 
             print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
             continue
-          h_tl_den.Add(hmc_tl,-1)
-        if "TLDEN" in region: return h_tl_den
-        
+          h_tl.Add(hmc_tl,-1)
+        if suffix == "TL": return h_tl
         
         # ---------
         # LT REGION 
         # ---------        
-        region_lt_den = region.replace("_NUM","_LTDEN")
+        region_lt = region.replace("_"+suffix,"_LT")
 
-        h_lt_den = self.data_sample.hist(histname=histname,
-                                  region=region_lt_den,
+        h_lt = self.data_sample.hist(histname=histname,
+                                  region=region_lt,
                                   icut=icut,
                                   sys=sys,
                                   mode=mode,
                                   ).Clone()
         for s in self.mc_samples:
-          hmc_lt = s.hist(histname=histname,region=region_lt_den,icut=icut,sys=sys,mode=mode)
+          hmc_lt = s.hist(histname=histname,region=region_lt,icut=icut,sys=sys,mode=mode)
           if not hmc_lt: 
             print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
             continue
-          h_lt_den.Add(hmc_lt,-1)
-        if "LTDEN" in region: return h_lt_den
+          h_lt.Add(hmc_lt,-1)
+        if suffix == "LT": return h_lt
         
+        # ---------
+        # TT REGION 
+        # ---------        
+        h_tt = None  
         
-        h = h_tl_den.Clone("fakes_hist")
-        h.Add(h_lt_den)
-        h.Add(h_ll_den,-1)
+        h_tt = h_tl.Clone("fakes_hist_tt")
+        h_tt.Add(h_lt)
+        h_tt.Add(h_ll,-1)
         
-        """ 
-        region_den = region.replace("_NUM","_DEN")
+        if suffix == "TT": return h_tt
 
-        h = self.data_sample.hist(histname=histname,
-                                  region=region_den,
-                                  icut=icut,
-                                  sys=sys,
-                                  mode=mode,
-                                  ).Clone()
+        
+        
+        # ----------
+        # TTL REGION
+        # ----------
+        region_ttl = region.replace("_"+suffix,"_TTL")
+      
+        h_ttl = self.data_sample.hist(histname=histname,
+                                region=region_ttl,
+                                icut=icut,
+                                sys=sys,
+                                mode=mode,
+                                ).Clone()
         for s in self.mc_samples:
-          hmc = s.hist(histname=histname,region=region_den,icut=icut,sys=sys,mode=mode)
-          h.Add(hmc,-1)
-        """
+          hmc_ttl = s.hist(histname=histname,region=region_ttl,icut=icut,sys=sys,mode=mode)
+          if not hmc_ttl: 
+            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
+            continue
+          h_ttl.Add(hmc_ttl,-1)
+        if suffix == "TTL": return h_ttl
+        
+        
+        # ----------
+        # TLT REGION
+        # ----------
+        region_tlt = region.replace("_"+suffix,"_TLT")
+      
+        h_tlt = self.data_sample.hist(histname=histname,
+                                region=region_tlt,
+                                icut=icut,
+                                sys=sys,
+                                mode=mode,
+                                ).Clone()
+        for s in self.mc_samples:
+          hmc_tlt = s.hist(histname=histname,region=region_tlt,icut=icut,sys=sys,mode=mode)
+          if not hmc_tlt: 
+            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
+            continue
+          h_tlt.Add(hmc_tlt,-1)
+        if suffix == "TLT": return h_tlt
+        
+        # ----------
+        # LTT REGION
+        # ----------
+        region_ltt = region.replace("_"+suffix,"_LTT")
+      
+        h_ltt = self.data_sample.hist(histname=histname,
+                                region=region_ltt,
+                                icut=icut,
+                                sys=sys,
+                                mode=mode,
+                                ).Clone()
+        for s in self.mc_samples:
+          hmc_ltt = s.hist(histname=histname,region=region_ltt,icut=icut,sys=sys,mode=mode)
+          if not hmc_ltt: 
+            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
+            continue
+          h_ltt.Add(hmc_ltt,-1)
+        if suffix == "LTT": return h_ltt
+        
+        # ----------
+        # TTT REGION 
+        # ----------        
+        h_ttt = None  
+        
+        h_ttt = h_ttl.Clone("fakes_hist_ttt")
+        h_ttt.Add(h_tlt)
+        h_ttt.Add(h_ltt)
+        
+        if suffix == "TTT": return h_ttt
+        
+        
+        # -----------
+        # TTTL REGION
+        # -----------
+        region_tttl = region.replace("_"+suffix,"_TTTL")
+      
+        h_tttl = self.data_sample.hist(histname=histname,
+                                region=region_tttl,
+                                icut=icut,
+                                sys=sys,
+                                mode=mode,
+                                ).Clone()
+        for s in self.mc_samples:
+          hmc_tttl = s.hist(histname=histname,region=region_tttl,icut=icut,sys=sys,mode=mode)
+          if not hmc_tttl: 
+            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
+            continue
+          h_tttl.Add(hmc_tttl,-1)
+        if suffix == "TTTL": return h_tttl
+        
+        # -----------
+        # TTLT REGION
+        # -----------
+        region_ttlt = region.replace("_"+suffix,"_TTLT")
+      
+        h_ttlt = self.data_sample.hist(histname=histname,
+                                region=region_ttlt,
+                                icut=icut,
+                                sys=sys,
+                                mode=mode,
+                                ).Clone()
+        for s in self.mc_samples:
+          hmc_ttlt = s.hist(histname=histname,region=region_ttlt,icut=icut,sys=sys,mode=mode)
+          if not hmc_ttlt: 
+            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
+            continue
+          h_ttlt.Add(hmc_ttlt,-1)
+        if suffix == "TTLT": return h_ttlt
+        
+        # -----------
+        # TLTT REGION
+        # -----------
+        region_tltt = region.replace("_"+suffix,"_TLTT")
+      
+        h_tltt = self.data_sample.hist(histname=histname,
+                                region=region_tltt,
+                                icut=icut,
+                                sys=sys,
+                                mode=mode,
+                                ).Clone()
+        for s in self.mc_samples:
+          hmc_tltt = s.hist(histname=histname,region=region_tltt,icut=icut,sys=sys,mode=mode)
+          if not hmc_tltt: 
+            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
+            continue
+          h_tltt.Add(hmc_tltt,-1)
+        if suffix == "TLTT": return h_tltt
+        
+        # -----------
+        # LTTT REGION
+        # -----------
+        region_lttt = region.replace("_"+suffix,"_LTTT")
+      
+        h_lttt = self.data_sample.hist(histname=histname,
+                                region=region_lttt,
+                                icut=icut,
+                                sys=sys,
+                                mode=mode,
+                                ).Clone()
+        for s in self.mc_samples:
+          hmc_lttt = s.hist(histname=histname,region=region_lttt,icut=icut,sys=sys,mode=mode)
+          if not hmc_lttt: 
+            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
+            continue
+          h_lttt.Add(hmc_lttt,-1)
+        if suffix == "LTTT": return h_lttt
+        
+        # -----------
+        # TTTT REGION 
+        # -----------        
+        h_tttt = None  
+        
+        h_tttt = h_tttl.Clone("fakes_hist_tttt")
+        h_tttt.Add(h_ttlt)
+        h_tttt.Add(h_tltt)
+        h_tttt.Add(h_lttt)
+        
+        if suffix == "TTTT": return h_tttt
+        
+        
+        # -----------------------
+        # INCLUSIVE SIGNAL REGION 
+        # -----------------------        
+        h = None 
+        if suffix == "SIG": 
+          h = h_tt.Clone("fakes_hist")
+          h.Add(h_ttt) 
+          h.Add(h_tttt) 
+        
         return h
 
     #__________________________________________________________________________
@@ -417,6 +581,43 @@ class FakeEstimator(BaseEstimator):
         self.data_sample.estimator.flush_hists()
         for s in self.mc_samples:
           s.estimator.flush_hists()
+
+"""
+#------------------------------------------------------------
+class AddEstimator(BaseEstimator):
+    '''
+    Add Estimator class for adding hists in different regions
+    '''
+    #____________________________________________________________
+    def __init__(self,regions,**kw):
+        BaseEstimator.__init__(self,**kw)
+        self.regions = regions
+    #____________________________________________________________
+    def __hist__(self,region=None,icut=None,histname=None,sys=None,mode=None):
+        hists = []
+        for r in self.regions: 
+            h = self.sample.hist(region=r,icut=icut,histname=histname,sys=sys,mode=mode)
+            if h: hists.append(h)
+        h = histutils.add_hists(hists)
+        return h
+
+    #__________________________________________________________________________
+    #def add_systematics(self, sys):
+    #    if not isinstance(sys,list): sys = [sys]
+    #    self.allowed_systematics += sys
+    #    self.sample.estimator.add_systematics(sys)
+
+    #__________________________________________________________________________
+    def is_affected_by_systematic(self, sys):
+        if sys in self.allowed_systematics: return True
+        #if self.sample.estimator.is_affected_by_systematic(sys): return True
+        return False
+
+    #__________________________________________________________________________
+    def flush_hists(self):
+        BaseEstimator.flush_hists(self)
+        self.sample.estimator.flush_hists()
+"""
 
 
 #------------------------------------------------------------

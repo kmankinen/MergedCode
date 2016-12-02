@@ -106,6 +106,7 @@ def analyze(config):
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt24') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastOneMuPt28') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='M15') 
 
     
     ## weights configuration
@@ -144,7 +145,6 @@ def analyze(config):
             region    = 'Z_OS',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
               ['TwoOSMuons',None],
               ['MZwindow',None],
               ['MatchSingleMuIsoChain',None],
@@ -159,7 +159,6 @@ def analyze(config):
             region    = 'Z_SS',
             plot_all  = False,
             cut_flow  = [
-              ['M15',None],
               ['TwoSSMuons',None],
               ['MZwindow',None],
               ['MatchSingleMuIsoChain',None],

@@ -20,7 +20,7 @@ parser.add_option('-s', '--samp', dest='sample',
 user  = "fscutti"
 #user  = "gucchiel"
 samp  = options.sample
-jtag  =  "HIGG3D3_v5"
+jtag  =  "HIGG3D3_v6"
 
 jtagsamp  = "%s.*%s*" % (jtag,samp)
 
@@ -32,8 +32,8 @@ if not sys: sys = "nominal"
 
 # --------------
 SCRIPT     = os.path.join("/coepp/cephfs/mel/fscutti/Analysis/batch","Get.sh")
-#OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/%s" % (jtag)
-OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/testV1"
+OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/%s" % (jtag)
+#OUTDIR     = "/coepp/cephfs/mel/fscutti/ssdilep/testV1"
 
 OUTMERGED  = os.path.join(OUTDIR,"merged",sys)
 OUTTREE    = os.path.join(OUTDIR,"tree",sys)

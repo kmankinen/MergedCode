@@ -15,8 +15,14 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-indir    = 'HistMVeto'
-outdir   = 'PlotsMVeto'
+#indir    = 'HistSysVR'
+#outdir   = 'PlotsSysVR'
+
+indir    = 'HistNewAcceptZ'
+outdir   = 'PlotsNewAcceptZ'
+
+#indir    = 'HistRejectZ'
+#outdir   = 'PlotsRejectZ'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -55,6 +61,11 @@ regions = {}
 # use it as such:
 #regions["FOLDERNAME"]     = [icut, "plot label"]
 
+
+#regions["Z_OS"]   = [6,  "OS", "incl"]
+#regions["Z_SS"]   = [6,  "SS", "incl"]
+
+"""
 regions["FAKESVR1_NUM"]     = [4,  "VR", "incl"]
 regions["FAKESVR1_LLDEN"]   = [4,  "VR", "incl"]
 regions["FAKESVR1_TLDEN"]   = [4,  "VR", "incl"]
@@ -85,34 +96,69 @@ regions["FAKESVR6_LLDEN"]   = [5,  "VR", "incl"]
 regions["FAKESVR6_TLDEN"]   = [5,  "VR", "incl"]
 regions["FAKESVR6_LTDEN"]   = [5,  "VR", "incl"]
 
-
-
+regions["FAKESVR7_NUM"]     = [5,  "VR", "incl"]
+regions["FAKESVR7_LLDEN"]   = [5,  "VR", "incl"]
+regions["FAKESVR7_TLDEN"]   = [5,  "VR", "incl"]
+regions["FAKESVR7_LTDEN"]   = [5,  "VR", "incl"]
 
 """
-regions["FAKESFR1_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
-regions["FAKESFR1_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
-
-regions["FAKESFR2_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
-regions["FAKESFR2_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
 
 
-regions["FAKESFR3_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
-regions["FAKESFR3_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
+regions["FAKES_NUM_F0"]   = [2,  "numerator", "acc"]
+regions["FAKES_DEN_F0"]   = [2,  "denominator", "acc"]
 
-regions["FAKESFR4_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
-regions["FAKESFR4_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
+regions["FAKES_NUM_F1"]   = [6,  "numerator", "acc"]
+regions["FAKES_DEN_F1"]   = [6,  "denominator", "acc"]
 
-regions["FAKESFR5_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
-regions["FAKESFR5_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
+"""
+regions["FAKES_NUM_F2"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_F2"]   = [7,  "di-jet numerator", "acc"]
 
-regions["FAKESFR6_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
-regions["FAKESFR6_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
+regions["FAKES_NUM_F3"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_F3"]   = [7,  "di-jet numerator", "acc"]
 
-regions["FAKESFR7_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
-regions["FAKESFR7_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
+regions["FAKES_NUM_F4"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_F4"]   = [7,  "di-jet numerator", "acc"]
 
-regions["FAKESFR8_NUM"]   = [9,  "di-jet numerator", "Sherpa"]
-regions["FAKESFR8_DEN"]   = [9,  "di-jet denominator", "Sherpa"]
+regions["FAKES_NUM_F5"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_F5"]   = [7,  "di-jet numerator", "acc"]
+
+regions["FAKES_NUM_F6"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_F6"]   = [7,  "di-jet numerator", "acc"]
+
+regions["FAKES_NUM_F7"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_F7"]   = [7,  "di-jet numerator", "acc"]
+
+regions["FAKES_NUM_F8"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_F8"]   = [7,  "di-jet numerator", "acc"]
+
+
+regions["FAKES_NUM_G0"]   = [3,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_G0"]   = [3,  "di-jet numerator", "acc"]
+
+regions["FAKES_NUM_G1"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_G1"]   = [7,  "di-jet numerator", "acc"]
+
+regions["FAKES_NUM_G2"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_G2"]   = [7,  "di-jet numerator", "acc"]
+
+regions["FAKES_NUM_G3"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_G3"]   = [7,  "di-jet numerator", "acc"]
+
+regions["FAKES_NUM_G4"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_G4"]   = [7,  "di-jet numerator", "acc"]
+
+regions["FAKES_NUM_G5"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_G5"]   = [7,  "di-jet numerator", "acc"]
+
+regions["FAKES_NUM_G6"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_G6"]   = [7,  "di-jet numerator", "acc"]
+
+regions["FAKES_NUM_G7"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_G7"]   = [7,  "di-jet numerator", "acc"]
+
+regions["FAKES_NUM_G8"]   = [7,  "di-jet numerator", "acc"]
+regions["FAKES_DEN_G8"]   = [7,  "di-jet numerator", "acc"]
 """
 
 

@@ -8,14 +8,15 @@ ROOT.gStyle.SetOptStat(0000)
 # -------------------------------------------------------------------------------------
 # config
 # -------------------------------------------------------------------------------------
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesSTUDY"
-tag     = "Sherpa"
-name    = "STUDY"
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesAllDataset"
+#tag     = "reject"
+tag     = "accept"
+name    = "alldata"
 
 # pt
 var     = "mulead_pt"
 axislab = "p_{T}(#mu_{lead}) [GeV]"
-new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,45.,60.,200.])
+new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,45.,200.])
 
 '''
 # eta
@@ -34,31 +35,31 @@ inf     = ROOT.TFile.Open(os.path.join(indir,infile),"READ")
 
 hdict = {}
 
-#hdict["NOM"] = inf.Get("h_ff_TR1").Clone()
-hdict["NOM"] = inf.Get("h_ff_TR1").Clone()
+#hdict["NOM"] = inf.Get("h_ff_F1").Clone()
+hdict["NOM"] = inf.Get("h_ff_F1").Clone()
 n_bins = hdict["NOM"].GetNbinsX()
 #for i in [2,3,4,5,6,7,8,9,10,11,12,13,14,15]:
-##for i in [2,3,4,5,6,7,8]:
-for i in [2,3,4,5,6,7,]:
-  hdict["SYS%s"%str(i)] = inf.Get("h_ff_TR%s"%str(i)).Clone()
+for i in [2,3,4,5,6,7,8]:
+##for i in [2,3,4,5,6,7,]:
+  hdict["SYS%s"%str(i)] = inf.Get("h_ff_F%s"%str(i)).Clone()
 
 slabel = {}
-#slabel["NOM"]  = "nominal"
-#slabel["SYS2"] = "E^{miss}_{T} < 30 GeV"
-#slabel["SYS3"] = "E^{miss}_{T} < 50 GeV"
-#slabel["SYS4"] = "p_{T}(jet) > 40 GeV"
-#slabel["SYS5"] = "d_{0}/#sigma(d_{0}) < 2"
-#slabel["SYS6"] = "d_{0}/#sigma(d_{0}) < 4"
-#slabel["SYS7"] = "#Delta#phi(#mu,jet) < 2.8"
-#slabel["SYS8"] = "#Delta#phi(#mu,jet) < 2.6"
+slabel["NOM"]  = "nominal"
+slabel["SYS2"] = "E^{miss}_{T} < 50 GeV"
+slabel["SYS3"] = "E^{miss}_{T} < 30 GeV"
+slabel["SYS4"] = "#Delta#phi(#mu,jet) < 2.8"
+slabel["SYS5"] = "#Delta#phi(#mu,jet) < 2.6"
+slabel["SYS6"] = "d_{0}/#sigma(d_{0}) < 2"
+slabel["SYS7"] = "d_{0}/#sigma(d_{0}) < 4"
+slabel["SYS8"] = "p_{T}(jet) > 40 GeV"
 
-slabel["NOM"]  = "one jet"
-slabel["SYS2"] = "one jet, den fails iso or d0"
-slabel["SYS3"] = "al one jet"
-slabel["SYS4"] = "al one jet, gradient"
-slabel["SYS5"] = "al one jet, gradient, nom med"
-slabel["SYS6"] = "al one jet, gradient, nom med, den d015"
-slabel["SYS7"] = "al one jet, fixedcut, den fails iso or d0"
+#slabel["NOM"]  = "one jet"
+#slabel["SYS2"] = "one jet, den fails iso or d0"
+#slabel["SYS3"] = "al one jet"
+#slabel["SYS4"] = "al one jet, gradient"
+#slabel["SYS5"] = "al one jet, gradient, nom med"
+#slabel["SYS6"] = "al one jet, gradient, nom med, den d015"
+#slabel["SYS7"] = "al one jet, fixedcut, den fails iso or d0"
 
 g_sys_ff = ROOT.TGraphAsymmErrors(n_bins)
 g_nom_ff = ROOT.TGraphAsymmErrors(n_bins)
