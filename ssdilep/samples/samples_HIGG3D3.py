@@ -142,7 +142,7 @@ Sherpa_NNPDF30NNLO_Wenu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPD
 
 
 WenuSherpa22 = Sample( name =   'WenuSherpa22',
-                  tlatex = 'W #rightarrow e#nu+jets (Sherpa 2.2)',
+                  tlatex = 'W #rightarrow e#nu+jets',
                   fill_color = ROOT.kRed+1,
                   line_color =  ROOT.kRed+2,
                   marker_color =  ROOT.kRed+2,
@@ -207,7 +207,7 @@ Sherpa_NNPDF30NNLO_Wmunu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNP
 Sherpa_NNPDF30NNLO_Wmunu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt2000_E_CMS_BFilter",      xsec = 2.7767e-05, feff = 9.0 * 0.19726  , kfactor = 0.9702 )
 
 WmunuSherpa22 = Sample( name =   'WmunuSherpa22',
-                  tlatex = 'W #rightarrow #mu#nu+jets (Sherpa 2.2)',
+                  tlatex = 'W #rightarrow #mu#nu+jets',
                   fill_color = ROOT.kGreen+1,
                   line_color =  ROOT.kGreen+2,
                   marker_color =  ROOT.kGreen+2,
@@ -270,7 +270,7 @@ Sherpa_NNPDF30NNLO_Wtaunu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NN
 Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_BFilter",      xsec = 3.0985e-05 , feff = 9.0 * 0.28965  , kfactor = 0.9702 )
 
 WtaunuSherpa22 = Sample( name =   'WtaunuSherpa22',
-                  tlatex = 'W #rightarrow #tau#nu+jets (Sherpa 2.2)',
+                  tlatex = 'W #rightarrow #tau#nu+jets',
                   fill_color = ROOT.kBlue+1,
                   line_color =  ROOT.kBlue+2,
                   marker_color =  ROOT.kBlue+2,
@@ -343,7 +343,7 @@ Sherpa_NNPDF30NNLO_Zee_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF
 Sherpa_NNPDF30NNLO_Zee_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt2000_E_CMS_BFilter",             xsec = 4.6041e-06 , feff = 9.0 * 0.15562 , kfactor = 0.9751 )
 
 ZeeSherpa22 = Sample( name =   'ZeeSherpa22',
-                  tlatex = 'Z #rightarrow ee+jets (Sherpa 2.2)',
+                  tlatex = 'Z #rightarrow ee+jets',
                   fill_color = ROOT.kOrange+1,
                   line_color =  ROOT.kOrange+2,
                   marker_color =  ROOT.kOrange+2,
@@ -408,7 +408,7 @@ Sherpa_NNPDF30NNLO_Zmumu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNP
 Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_BFilter",           xsec = 4.7171e-06 , feff = 9.0 * 0.14554 , kfactor = 0.9751 )
 
 ZmumuSherpa22 = Sample( name =   'ZmumuSherpa22',
-                  tlatex = 'Z #rightarrow #mu#mu+jets (Sherpa 2.2)',
+                  tlatex = 'Z #rightarrow #mu#mu+jets',
                   fill_color = ROOT.kSpring+1,
                   line_color =  ROOT.kSpring+2,
                   marker_color =  ROOT.kSpring+2,
@@ -473,7 +473,7 @@ Sherpa_NNPDF30NNLO_Ztautau_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_N
 
 
 ZtautauSherpa22 = Sample( name =   'ZtautauSherpa22',
-                  tlatex = 'Z #rightarrow #tau#tau+jets (Sherpa 2.2)',
+                  tlatex = 'Z #rightarrow #tau#tau+jets',
                   fill_color = ROOT.kAzure-4,
                   line_color =  ROOT.kAzure-5,
                   marker_color =  ROOT.kAzure-5,
@@ -844,6 +844,49 @@ singletop = Sample( name =   'singletop',
                 ) 
 
 
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# di-jet
+# Notes:
+#       * cross sections: https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/XsecSummaryMultijet
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W    = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W",      xsec = 78420000000.0,  feff = 9.0 * 0.98132,  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W    = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W",      xsec = 78420000000.0,  feff = 9.0 * 0.000672, )  
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W    = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W",      xsec = 2433200000.0,   feff = 9.0 * 0.000333, )  
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W    = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W",      xsec = 26454000.0,     feff = 9.0 * 0.00032,  ) 
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W    = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W",      xsec = 254630.0,       feff = 9.0 * 0.00053,  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W    = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W",      xsec = 4553.5,         feff = 9.0 * 0.000922, ) 
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W    = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W",      xsec = 257.53,         feff = 9.0 * 0.00094,  )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W    = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W",      xsec = 16.215,         feff = 9.0 * 0.000392, ) 
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W    = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W",      xsec = 0.62504,        feff = 9.0 * 0.010167, )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W    = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W",      xsec = 0.01964,        feff = 9.0 * 0.012058, )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W   = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W",     xsec = 0.0011962,      feff = 9.0 * 0.005897, )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W   = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W",     xsec = 4.2258e-05,     feff = 9.0 * 0.002701, )
+Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W   = Sample( name = "Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W",     xsec = 1.0367e-06,     feff = 9.0 * 0.000425, ) 
+
+
+dijet = Sample( name =   'dijet',
+                tlatex = 'di-jets',
+                fill_color = ROOT.kBlue+3,
+                line_color =  ROOT.kBlue+4,
+                marker_color =  ROOT.kBlue+4,
+                daughters = [
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ0W, 
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ1W, 
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ2W, 
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ3W, 
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ4W, 
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ5W, 
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ6W, 
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ7W, 
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ8W, 
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ9W, 
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ10W,
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ11W,
+                             Pythia8EvtGen_A14NNPDF23LO_jetjet_JZ12W,
+                            ],
+                ) 
+
 #-------------------------------------------------------------------------------
 # Collections 
 #-------------------------------------------------------------------------------
@@ -870,5 +913,7 @@ all_mc += WtaunuSherpa22.daughters
 all_mc += ZeeSherpa22.daughters
 all_mc += ZmumuSherpa22.daughters
 all_mc += ZtautauSherpa22.daughters
+
+all_mc += dijet.daughters
 
 ## EOF
