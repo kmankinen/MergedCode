@@ -24,6 +24,7 @@ green = ROOT.kGreen+1
 
 
 
+
 #-------------------------------------------------------------------------------
 # data
 #-------------------------------------------------------------------------------
@@ -490,7 +491,7 @@ Sherpa_NNPDF30NNLO_Wenu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPD
 
 
 WenuSherpa22 = Sample( name =   'WenuSherpa22',
-                  tlatex = 'W #rightarrow e#nu+jets (Sherpa 2.2)',
+                  tlatex = 'W #rightarrow e#nu+jets',
                   fill_color = ROOT.kRed+1,
                   line_color =  ROOT.kRed+2,
                   marker_color =  ROOT.kRed+2,
@@ -555,7 +556,7 @@ Sherpa_NNPDF30NNLO_Wmunu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNP
 Sherpa_NNPDF30NNLO_Wmunu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Wmunu_Pt2000_E_CMS_BFilter",      xsec = 2.7767e-05, feff = 0.19726  , kfactor = 0.9702 )
 
 WmunuSherpa22 = Sample( name =   'WmunuSherpa22',
-                  tlatex = 'W #rightarrow #mu#nu+jets (Sherpa 2.2)',
+                  tlatex = 'W #rightarrow #mu#nu+jets',
                   fill_color = ROOT.kGreen+1,
                   line_color =  ROOT.kGreen+2,
                   marker_color =  ROOT.kGreen+2,
@@ -618,7 +619,7 @@ Sherpa_NNPDF30NNLO_Wtaunu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NN
 Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_BFilter",      xsec = 3.0985e-05 , feff = 0.28965  , kfactor = 0.9702 )
 
 WtaunuSherpa22 = Sample( name =   'WtaunuSherpa22',
-                  tlatex = 'W #rightarrow #tau#nu+jets (Sherpa 2.2)',
+                  tlatex = 'W #rightarrow #tau#nu+jets',
                   fill_color = ROOT.kBlue+1,
                   line_color =  ROOT.kBlue+2,
                   marker_color =  ROOT.kBlue+2,
@@ -691,7 +692,7 @@ Sherpa_NNPDF30NNLO_Zee_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNPDF
 Sherpa_NNPDF30NNLO_Zee_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Zee_Pt2000_E_CMS_BFilter",             xsec = 4.6041e-06 , feff = 0.15562 , kfactor = 0.9751 )
 
 ZeeSherpa22 = Sample( name =   'ZeeSherpa22',
-                  tlatex = 'Z #rightarrow ee+jets (Sherpa 2.2)',
+                  tlatex = 'Z #rightarrow ee+jets',
                   fill_color = ROOT.kOrange+1,
                   line_color =  ROOT.kOrange+2,
                   marker_color =  ROOT.kOrange+2,
@@ -756,7 +757,7 @@ Sherpa_NNPDF30NNLO_Zmumu_Pt1000_2000_BFilter       = Sample( name =  "Sherpa_NNP
 Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_BFilter",           xsec = 4.7171e-06 , feff = 0.14554 , kfactor = 0.9751 )
 
 ZmumuSherpa22 = Sample( name =   'ZmumuSherpa22',
-                  tlatex = 'Z #rightarrow #mu#mu+jets (Sherpa 2.2)',
+                  tlatex = 'Z #rightarrow #mu#mu+jets',
                   fill_color = ROOT.kSpring+1,
                   line_color =  ROOT.kSpring+2,
                   marker_color =  ROOT.kSpring+2,
@@ -821,7 +822,7 @@ Sherpa_NNPDF30NNLO_Ztautau_Pt2000_E_CMS_BFilter      = Sample( name =  "Sherpa_N
 
 
 ZtautauSherpa22 = Sample( name =   'ZtautauSherpa22',
-                  tlatex = 'Z #rightarrow #tau#tau+jets (Sherpa 2.2)',
+                  tlatex = 'Z #rightarrow #tau#tau+jets',
                   fill_color = ROOT.kAzure-4,
                   line_color =  ROOT.kAzure-5,
                   marker_color =  ROOT.kAzure-5,
@@ -1280,6 +1281,54 @@ all_DCH = Sample( name =  'all_DCH',
 
 single_DCH = [DCH500]
 
+
+
+#-------------------------------------------------------------------------------
+# samples for background estimation 
+#-------------------------------------------------------------------------------
+all_samples = []
+all_samples.append(data)
+all_samples.append(fakes)
+
+all_samples.append(diboson_sherpa)
+all_samples.append(diboson_incl_sherpa)
+all_samples.append(ttX)
+all_samples.append(ttbar)
+all_samples.append(singletop)
+all_samples.append(Wenu)
+all_samples.append(Wmunu)
+all_samples.append(Wtaunu)
+all_samples.append(Zee)
+all_samples.append(Zmumu)
+all_samples.append(Ztautau)
+all_samples.append(WenuSherpa22)
+all_samples.append(WmunuSherpa22)
+all_samples.append(WtaunuSherpa22)
+all_samples.append(ZeeSherpa22)
+all_samples.append(ZmumuSherpa22)
+all_samples.append(ZtautauSherpa22)
+
+
+for s in all_samples:
+  fill_style = None
+  line_style = None
+  if s.name == "data":
+    fill_style = 0
+    line_style = 1
+
+  globals()["addon_"+s.name] = Sample( name         = "addon_"+s.name,
+                                       tlatex       = s.tlatex,
+                                       line_color   = s.line_color,
+                                       marker_color = s.marker_color,
+                                       fill_color   = s.fill_color,
+                                       #line_width   = s.line_width,
+                                       line_style   = line_style,
+                                       fill_style   = fill_style,
+                                     ) 
+
+
+print globals()
+
 #-------------------------------------------------------------------------------
 # Collections 
 #-------------------------------------------------------------------------------
@@ -1309,6 +1358,11 @@ all_mc += WtaunuSherpa22.daughters
 all_mc += ZeeSherpa22.daughters
 all_mc += ZmumuSherpa22.daughters
 all_mc += ZtautauSherpa22.daughters
+
+
+
+
+
 
 #all_mc += all_DCH.daughters
 
