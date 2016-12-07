@@ -1310,24 +1310,19 @@ all_samples.append(ZtautauSherpa22)
 
 
 for s in all_samples:
-  fill_style = None
-  line_style = None
-  if s.name == "data":
-    fill_style = 0
-    line_style = 1
 
-  globals()["addon_"+s.name] = Sample( name         = "addon_"+s.name,
-                                       tlatex       = s.tlatex,
-                                       line_color   = s.line_color,
-                                       marker_color = s.marker_color,
-                                       fill_color   = s.fill_color,
-                                       #line_width   = s.line_width,
-                                       line_style   = line_style,
-                                       fill_style   = fill_style,
+  globals()["addon_"+s.name] = Sample(name         = "addon_"+s.name,
+                                      tlatex       = s.tlatex,
                                      ) 
 
+  if 'marker_style' in s.__dict__: globals()["addon_"+s.name].marker_style = s.marker_style
+  if 'marker_color' in s.__dict__: globals()["addon_"+s.name].marker_color = s.marker_color
+  if 'fill_style' in s.__dict__:   globals()["addon_"+s.name].fill_style   = s.fill_style  
+  if 'fill_color' in s.__dict__:   globals()["addon_"+s.name].fill_color   = s.fill_color  
+  if 'line_style' in s.__dict__:   globals()["addon_"+s.name].line_style   = s.line_style  
+  if 'line_color' in s.__dict__:   globals()["addon_"+s.name].line_color   = s.line_color  
+  if 'line_width' in s.__dict__:   globals()["addon_"+s.name].line_width   = s.line_width  
 
-print globals()
 
 #-------------------------------------------------------------------------------
 # Collections 
@@ -1358,10 +1353,6 @@ all_mc += WtaunuSherpa22.daughters
 all_mc += ZeeSherpa22.daughters
 all_mc += ZmumuSherpa22.daughters
 all_mc += ZtautauSherpa22.daughters
-
-
-
-
 
 
 #all_mc += all_DCH.daughters
