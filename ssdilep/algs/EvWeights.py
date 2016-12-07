@@ -35,11 +35,11 @@ class TrigPresc(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def __init__(self, 
           cutflow     = None,
-          skip_zero   = None,
+          use_avg     = None,
           key         = None):
         pyframe.core.Algorithm.__init__(self, name="TrigPresc", isfilter=True)
         self.cutflow     = cutflow
-        self.skip_zero   = skip_zero
+        self.use_avg     = use_avg
         self.key         = key
     #__________________________________________________________________________
     def execute(self, weight):
@@ -52,10 +52,13 @@ class TrigPresc(pyframe.core.Algorithm):
           ineff_list = []
           for trig in self.store["reqTrig"]: 
             if trig in self.store["passTrig"].keys():
-              if self.store["passTrig"][trig] != 0:
-                ineff_list.append(1. - 1. / self.store["passTrig"][trig])
+              if not use_avg:
+                 if self.store["passTrig"][trig] != 0:
+                   ineff_list.append(1. - 1. / self.store["passTrig"][trig])
+                 else:
+                   ineff_list.append(1. - 1. / presc_dict[trig])
               else:
-                ineff_list.append(1. - 1. / presc_dict[trig])
+                 ineff_list.append(1. - 1. / presc_dict[trig])
 
           if ineff_list:
             tot_ineff = 1.0
