@@ -71,50 +71,14 @@ class Particle(pyframe.core.ParticleProxy):
     Variables added to the particle
     """
     #__________________________________________________________________________
-    def __init__(self, particle, wdict={"InitWeight":1.0}, cdict={"InitCut":True} , **kwargs):
+    def __init__(self, particle, **kwargs):
         pyframe.core.ParticleProxy.__init__(self, 
              tree_proxy = particle.tree_proxy,
              index      = particle.index,
              prefix     = particle.prefix)   
         self.particle = particle
-        self.wdict    = wdict
-        self.cdict    = cdict
         self.__dict__ = particle.__dict__.copy() 
     
-    #__________________________________________________________________________
-    def ResetCuts(self):
-      self.cdict = {"InitCut":True}
-      return 
-    #__________________________________________________________________________
-    def ResetWeights(self):
-      self.wdict = {"InitWeight":1.0}
-      return 
-    #__________________________________________________________________________
-    def HasPassedCut(self,c):
-      return self.cdict[c]
-    #__________________________________________________________________________
-    def GetWeight(self,w):
-      return self.wdict[w]
-    #__________________________________________________________________________
-    def HasPassedAllCuts(self):
-      passed = True
-      for c in self.cdict.values():
-        passed = passed and c
-      return passed
-    #__________________________________________________________________________
-    def GetTotalWeight(self):
-      tot_weight = 1.0
-      for w in self.wdict.values():
-        tot_weight *= w
-      return tot_weight 
-    #__________________________________________________________________________
-    def StoreWeight(self,w,v):
-        self.wdict[w] = v
-        return 
-    #__________________________________________________________________________
-    def StoreCut(self,c,v):
-        self.cdict[c] = v
-        return 
     #__________________________________________________________________________
     def isMatchedToTrigChain(self):
       return self.isTrigMatched
