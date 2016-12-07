@@ -45,16 +45,17 @@ class TrigPresc(pyframe.core.Algorithm):
     def execute(self, weight):
         trigpresc = 1.0
         
+        # luminosity weighted prescales
+        presc_dict = {"HLT_mu20_L1MU15":354.153, "HLT_mu24":47.64, "HLT_mu50":1.0}
+
         if "data" in self.sampletype:
           ineff_list = []
           for trig in self.store["reqTrig"]: 
             if trig in self.store["passTrig"].keys():
               if self.store["passTrig"][trig] != 0:
                 ineff_list.append(1. - 1. / self.store["passTrig"][trig])
-              elif self.skip_zero:
-                continue
               else:
-                ineff_list.append(0.)
+                ineff_list.append(1. - 1. / presc_dict[trig])
 
           if ineff_list:
             tot_ineff = 1.0
