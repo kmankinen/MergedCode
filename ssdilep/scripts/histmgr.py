@@ -258,6 +258,10 @@ class Estimator(BaseEstimator):
         return self.mc_lumi_frac[sys]
 
 
+
+
+
+
 #------------------------------------------------------------
 class DataBkgSubEstimator(BaseEstimator):
     '''
@@ -265,305 +269,23 @@ class DataBkgSubEstimator(BaseEstimator):
     subtracts bkgs from data for estimate
     '''
     #____________________________________________________________
-    def __init__(self,data_sample,background_samples,**kw):
+    def __init__(self,data_sample,mc_samples,mc_samples_rescales,**kw):
         BaseEstimator.__init__(self,**kw)
-        self.data_sample = data_sample
-        self.background_samples = background_samples
+        self.data_sample         = data_sample
+        self.mc_samples          = mc_samples
+        self.mc_samples_rescales = mc_samples_rescales
     #____________________________________________________________
     def __hist__(self,histname=None,region=None,icut=None,sys=None,mode=None):
         h = self.data_sample.hist(histname=histname,region=region,icut=icut,sys=sys,mode=mode).Clone()
-        if self.background_samples: 
-            for b in self.background_samples: 
-                hbkg = b.hist(histname=histname,region=region,icut=icut,sys=sys,mode=mode)
-                if not hbkg: 
-                  print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (b.name, histname, region, sys, mode)
-                  continue
-                h.Add(hbkg,-1)
+        if self.mc_samples: 
+            for s in self.mc_samples: 
+                hs = s.hist(histname=histname,region=region,icut=icut,sys=sys,mode=mode)
+                mc_rescale = -1.0
+                if self.mc_samples_rescales: 
+                  if s in self.mc_samples_rescales.keys():
+                    mc_rescale *= self.mc_samples_rescales[s]
+                if hs: h.Add(hs, mc_rescale)
         return h
-    
-    #__________________________________________________________________________
-    def is_affected_by_systematic(self, sys):
-        """
-        Override BaseEstimator implemenation.
-        Check all daughter systematics
-        """
-        if sys in self.allowed_systematics: return True
-        for s in self.background_samples + [self.data_sample]: 
-            if s.estimator.is_affected_by_systematic(sys): return True
-        return False
-
-
-    #__________________________________________________________________________
-    def flush_hists(self):
-        BaseEstimator.flush_hists(self)
-        self.data_sample.estimator.flush_hists()
-        for s in self.background_samples: 
-            s.estimator.flush_hists()
-    
-    
-#------------------------------------------------------------
-class FakeEstimator(BaseEstimator):
-    '''
-    Estimator for merging different regions
-    '''
-    #____________________________________________________________
-    def __init__(self,data_sample,mc_samples,**kw):
-        BaseEstimator.__init__(self,**kw)
-        self.data_sample = data_sample
-        self.mc_samples = mc_samples
-    #____________________________________________________________
-    def __hist__(self,histname=None,region=None,icut=None,sys=None,mode=None):
-    
-        suffix = region.split("_")[-1:][0]
-        
-        # ---------
-        # LL REGION
-        # ---------
-        region_ll = region.replace("_"+suffix,"_LL")
-      
-        h_ll = self.data_sample.hist(histname=histname,
-                                region=region_ll,
-                                icut=icut,
-                                sys=sys,
-                                mode=mode,
-                                ).Clone()
-        for s in self.mc_samples:
-          hmc_ll = s.hist(histname=histname,region=region_ll,icut=icut,sys=sys,mode=mode)
-          if not hmc_ll: 
-            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
-            continue
-          h_ll.Add(hmc_ll,-1)
-        if suffix == "LL": return h_ll
-        
-        # ---------
-        # TL REGION 
-        # ---------
-        region_tl = region.replace("_"+suffix,"_TL")
-
-        h_tl = self.data_sample.hist(histname=histname,
-                                  region=region_tl,
-                                  icut=icut,
-                                  sys=sys,
-                                  mode=mode,
-                                  ).Clone()
-        for s in self.mc_samples:
-          hmc_tl = s.hist(histname=histname,region=region_tl,icut=icut,sys=sys,mode=mode)
-          if not hmc_tl: 
-            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
-            continue
-          h_tl.Add(hmc_tl,-1)
-        if suffix == "TL": return h_tl
-        
-        # ---------
-        # LT REGION 
-        # ---------        
-        region_lt = region.replace("_"+suffix,"_LT")
-
-        h_lt = self.data_sample.hist(histname=histname,
-                                  region=region_lt,
-                                  icut=icut,
-                                  sys=sys,
-                                  mode=mode,
-                                  ).Clone()
-        for s in self.mc_samples:
-          hmc_lt = s.hist(histname=histname,region=region_lt,icut=icut,sys=sys,mode=mode)
-          if not hmc_lt: 
-            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
-            continue
-          h_lt.Add(hmc_lt,-1)
-        if suffix == "LT": return h_lt
-        
-        # ---------
-        # TT REGION 
-        # ---------        
-        h_tt = None  
-        
-        h_tt = h_tl.Clone("fakes_hist_tt")
-        h_tt.Add(h_lt)
-        h_tt.Add(h_ll,-1)
-        
-        if suffix == "TT": return h_tt
-
-        
-        
-        # ----------
-        # TTL REGION
-        # ----------
-        region_ttl = region.replace("_"+suffix,"_TTL")
-      
-        h_ttl = self.data_sample.hist(histname=histname,
-                                region=region_ttl,
-                                icut=icut,
-                                sys=sys,
-                                mode=mode,
-                                ).Clone()
-        for s in self.mc_samples:
-          hmc_ttl = s.hist(histname=histname,region=region_ttl,icut=icut,sys=sys,mode=mode)
-          if not hmc_ttl: 
-            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
-            continue
-          h_ttl.Add(hmc_ttl,-1)
-        if suffix == "TTL": return h_ttl
-        
-        
-        # ----------
-        # TLT REGION
-        # ----------
-        region_tlt = region.replace("_"+suffix,"_TLT")
-      
-        h_tlt = self.data_sample.hist(histname=histname,
-                                region=region_tlt,
-                                icut=icut,
-                                sys=sys,
-                                mode=mode,
-                                ).Clone()
-        for s in self.mc_samples:
-          hmc_tlt = s.hist(histname=histname,region=region_tlt,icut=icut,sys=sys,mode=mode)
-          if not hmc_tlt: 
-            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
-            continue
-          h_tlt.Add(hmc_tlt,-1)
-        if suffix == "TLT": return h_tlt
-        
-        # ----------
-        # LTT REGION
-        # ----------
-        region_ltt = region.replace("_"+suffix,"_LTT")
-      
-        h_ltt = self.data_sample.hist(histname=histname,
-                                region=region_ltt,
-                                icut=icut,
-                                sys=sys,
-                                mode=mode,
-                                ).Clone()
-        for s in self.mc_samples:
-          hmc_ltt = s.hist(histname=histname,region=region_ltt,icut=icut,sys=sys,mode=mode)
-          if not hmc_ltt: 
-            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
-            continue
-          h_ltt.Add(hmc_ltt,-1)
-        if suffix == "LTT": return h_ltt
-        
-        # ----------
-        # TTT REGION 
-        # ----------        
-        h_ttt = None  
-        
-        h_ttt = h_ttl.Clone("fakes_hist_ttt")
-        h_ttt.Add(h_tlt)
-        h_ttt.Add(h_ltt)
-        
-        if suffix == "TTT": return h_ttt
-        
-        
-        # -----------
-        # TTTL REGION
-        # -----------
-        region_tttl = region.replace("_"+suffix,"_TTTL")
-      
-        h_tttl = self.data_sample.hist(histname=histname,
-                                region=region_tttl,
-                                icut=icut,
-                                sys=sys,
-                                mode=mode,
-                                ).Clone()
-        for s in self.mc_samples:
-          hmc_tttl = s.hist(histname=histname,region=region_tttl,icut=icut,sys=sys,mode=mode)
-          if not hmc_tttl: 
-            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
-            continue
-          h_tttl.Add(hmc_tttl,-1)
-        if suffix == "TTTL": return h_tttl
-        
-        # -----------
-        # TTLT REGION
-        # -----------
-        region_ttlt = region.replace("_"+suffix,"_TTLT")
-      
-        h_ttlt = self.data_sample.hist(histname=histname,
-                                region=region_ttlt,
-                                icut=icut,
-                                sys=sys,
-                                mode=mode,
-                                ).Clone()
-        for s in self.mc_samples:
-          hmc_ttlt = s.hist(histname=histname,region=region_ttlt,icut=icut,sys=sys,mode=mode)
-          if not hmc_ttlt: 
-            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
-            continue
-          h_ttlt.Add(hmc_ttlt,-1)
-        if suffix == "TTLT": return h_ttlt
-        
-        # -----------
-        # TLTT REGION
-        # -----------
-        region_tltt = region.replace("_"+suffix,"_TLTT")
-      
-        h_tltt = self.data_sample.hist(histname=histname,
-                                region=region_tltt,
-                                icut=icut,
-                                sys=sys,
-                                mode=mode,
-                                ).Clone()
-        for s in self.mc_samples:
-          hmc_tltt = s.hist(histname=histname,region=region_tltt,icut=icut,sys=sys,mode=mode)
-          if not hmc_tltt: 
-            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
-            continue
-          h_tltt.Add(hmc_tltt,-1)
-        if suffix == "TLTT": return h_tltt
-        
-        # -----------
-        # LTTT REGION
-        # -----------
-        region_lttt = region.replace("_"+suffix,"_LTTT")
-      
-        h_lttt = self.data_sample.hist(histname=histname,
-                                region=region_lttt,
-                                icut=icut,
-                                sys=sys,
-                                mode=mode,
-                                ).Clone()
-        for s in self.mc_samples:
-          hmc_lttt = s.hist(histname=histname,region=region_lttt,icut=icut,sys=sys,mode=mode)
-          if not hmc_lttt: 
-            print "WARNING: For sample %s, no %s in %s for %s %s found ..." % (s.name, histname, region, sys, mode)
-            continue
-          h_lttt.Add(hmc_lttt,-1)
-        if suffix == "LTTT": return h_lttt
-        
-        # -----------
-        # TTTT REGION 
-        # -----------        
-        h_tttt = None  
-        
-        h_tttt = h_tttl.Clone("fakes_hist_tttt")
-        h_tttt.Add(h_ttlt)
-        h_tttt.Add(h_tltt)
-        h_tttt.Add(h_lttt)
-        
-        if suffix == "TTTT": return h_tttt
-        
-        
-        # -----------------------
-        # INCLUSIVE SIGNAL REGION 
-        # -----------------------        
-        h = None 
-        if suffix == "SIG": 
-          h = h_tt.Clone("fakes_hist")
-          h.Add(h_ttt) 
-          h.Add(h_tttt) 
-        
-        return h
-
-    #__________________________________________________________________________
-    def add_systematics(self, sys):
-        if not isinstance(sys,list): sys = [sys]
-        self.allowed_systematics += sys
-        self.data_sample.estimator.add_systematics(sys)
-        for s in self.mc_samples:
-          s.estimator.add_systematics(sys)
-
     #__________________________________________________________________________
     def is_affected_by_systematic(self, sys):
         """
@@ -574,50 +296,109 @@ class FakeEstimator(BaseEstimator):
         for s in self.mc_samples + [self.data_sample]: 
             if s.estimator.is_affected_by_systematic(sys): return True
         return False
+    #__________________________________________________________________________
+    def flush_hists(self):
+        BaseEstimator.flush_hists(self)
+        self.data_sample.estimator.flush_hists()
+        for s in self.mc_samples: 
+            s.estimator.flush_hists() 
 
+
+
+#------------------------------------------------------------
+class AddRegEstimator(BaseEstimator):
+    '''
+    AddOnEstimator Estimator class. It estimates histograms by 
+    adding and subtracting contributions from a given set of regions. 
+    For fakes this scheme has a preconfigured structure.
+    '''
+    #____________________________________________________________
+    def __init__(self,
+            data_sample,
+            mc_samples,
+            addition_regions = [],
+            subtraction_regions = [],
+            **kw
+            ):
+
+        BaseEstimator.__init__(self,**kw)
+        self.data_sample         = data_sample
+        self.mc_samples          = mc_samples
+        self.data_minus_mc       = DataBkgSubEstimator(self.data_sample,self.mc_samples,None,**kw)
+        self.addition_regions    = addition_regions 
+        self.subtraction_regions = subtraction_regions 
+        
+        assert self.addition_regions, "ERROR: must provide addition regions"
+
+    #____________________________________________________________
+    def __hist__(self,region=None,histname=None,icut=None,sys=None,mode=None):
+        
+        # ----------------
+        # addition regions
+        # ----------------
+        h_addition = []
+
+        for reg in self.addition_regions:
+          if "fakes" in self.sample.name:
+            h_data_minus_mc = self.data_minus_mc.hist(region=reg,histname=histname,icut=icut,sys=sys,mode=mode)
+            if h_data_minus_mc: h_addition.append(h_data_minus_mc.Clone())
+          
+          elif "data" in self.sample.name:
+            h_data = self.data_sample.hist(region=reg,histname=histname,icut=icut,sys=sys,mode=mode)
+            if h_data: h_addition.append(h_data.Clone())
+          
+          elif self.sample.type == "mc":
+            for mcs in self.mc_samples:
+              if mcs.name in self.sample.name:
+                h_mcs = mcs.hist(region=reg,histname=histname,icut=icut,sys=sys,mode=mode)
+                if h_mcs: h_addition.append(h_mcs.Clone())
+
+        # -------------------
+        # subtraction regions
+        # -------------------
+        h_subtraction = []
+
+        for reg in self.subtraction_regions:
+          if "fakes" in self.sample.name:
+            h_data_minus_mc = self.data_minus_mc.hist(region=reg,histname=histname,icut=icut,sys=sys,mode=mode)
+            if h_data_minus_mc: h_subtraction.append(h_data_minus_mc.Clone())
+          
+          elif "data" in self.sample.name:
+            h_data = self.data_sample.hist(region=reg,histname=histname,icut=icut,sys=sys,mode=mode)
+            if h_data: h_subtraction.append(h_data.Clone())
+          
+          elif self.sample.type == "mc":
+            for mcs in self.mc_samples:
+              if mcs.name in self.sample.name:
+                h_mcs = mcs.hist(region=reg,histname=histname,icut=icut,sys=sys,mode=mode)
+                if h_mcs: h_subtraction.append(h_mcs.Clone())
+       
+        h = histutils.add_hists(h_addition)
+        if h_subtraction:
+         h.Add(histutils.add_hists(h_subtraction), -1.0)
+       
+        return h
+    
+    #__________________________________________________________________________
+    def add_systematics(self, sys):
+        if not isinstance(sys,list): sys = [sys]
+        self.allowed_systematics += sys
+        self.data_sample.estimator.add_systematics(sys)
+        for s in self.mc_samples:
+          s.estimator.add_systematics(sys) 
+    
+    #__________________________________________________________________________
+    def is_affected_by_systematic(self, sys):
+        if sys in self.allowed_systematics: return True
+        for s in self.mc_samples + [self.data_sample]: 
+            if s.estimator.is_affected_by_systematic(sys): return True
+        return False
     #__________________________________________________________________________
     def flush_hists(self):
         BaseEstimator.flush_hists(self)
         self.data_sample.estimator.flush_hists()
         for s in self.mc_samples:
           s.estimator.flush_hists()
-
-"""
-#------------------------------------------------------------
-class AddEstimator(BaseEstimator):
-    '''
-    Add Estimator class for adding hists in different regions
-    '''
-    #____________________________________________________________
-    def __init__(self,regions,**kw):
-        BaseEstimator.__init__(self,**kw)
-        self.regions = regions
-    #____________________________________________________________
-    def __hist__(self,region=None,icut=None,histname=None,sys=None,mode=None):
-        hists = []
-        for r in self.regions: 
-            h = self.sample.hist(region=r,icut=icut,histname=histname,sys=sys,mode=mode)
-            if h: hists.append(h)
-        h = histutils.add_hists(hists)
-        return h
-
-    #__________________________________________________________________________
-    #def add_systematics(self, sys):
-    #    if not isinstance(sys,list): sys = [sys]
-    #    self.allowed_systematics += sys
-    #    self.sample.estimator.add_systematics(sys)
-
-    #__________________________________________________________________________
-    def is_affected_by_systematic(self, sys):
-        if sys in self.allowed_systematics: return True
-        #if self.sample.estimator.is_affected_by_systematic(sys): return True
-        return False
-
-    #__________________________________________________________________________
-    def flush_hists(self):
-        BaseEstimator.flush_hists(self)
-        self.sample.estimator.flush_hists()
-"""
 
 
 #------------------------------------------------------------
