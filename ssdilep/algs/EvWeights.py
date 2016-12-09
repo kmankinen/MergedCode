@@ -52,7 +52,7 @@ class TrigPresc(pyframe.core.Algorithm):
           ineff_list = []
           for trig in self.store["reqTrig"]: 
             if trig in self.store["passTrig"].keys():
-              if not use_avg:
+              if not self.use_avg:
                  if self.store["passTrig"][trig] != 0:
                    ineff_list.append(1. - 1. / self.store["passTrig"][trig])
                  else:
@@ -185,12 +185,12 @@ class MuTrigSF(pyframe.core.Algorithm):
               for trig in self.trig_list:
                 
                 # HIGG3D3
-                #sf_muon  = getattr(m,"_".join(["TrigEff","SF",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
-                #eff_muon = getattr(m,"_".join(["TrigMCEff",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
+                sf_muon  = getattr(m,"_".join(["TrigEff","SF",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
+                eff_muon = getattr(m,"_".join(["TrigMCEff",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
                 
                 # EXOT12 for v1 ntuples
-                sf_muon  = getattr(m,"_".join(["TrigEff","SF",self.mu_reco,self.mu_iso])).at(0)
-                eff_muon = getattr(m,"_".join(["TrigMCEff",self.mu_reco,self.mu_iso])).at(0)
+                #sf_muon  = getattr(m,"_".join(["TrigEff","SF",self.mu_reco,self.mu_iso])).at(0)
+                #eff_muon = getattr(m,"_".join(["TrigMCEff",self.mu_reco,self.mu_iso])).at(0)
                 
                 eff_data_muon *= 1 - sf_muon * eff_muon
                 eff_mc_muon   *= 1 - eff_muon
