@@ -215,7 +215,9 @@ def analyze(config):
     
     ## configure histograms
     ## ---------------------------------------
-    hist_list =  ssdilep.algs.OneMu_hists.hists_list
+    hist_list = []
+    #hist_list += ssdilep.hists.FF_hists.hist_list
+    hist_list += ssdilep.hists.PtOnly_hists.hist_list
     
     
     ##-------------------------------------------------------------------------
@@ -247,6 +249,7 @@ def analyze(config):
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ],
             )
+    """
     ## F1
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -512,7 +515,7 @@ def analyze(config):
               ],
             )
     
-    
+    """ 
     
     
     """ 

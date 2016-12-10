@@ -243,7 +243,8 @@ def analyze(config):
     
     ## configure histograms
     ## ---------------------------------------
-    hist_list =  ssdilep.algs.TwoMu_hists.hists_list
+    hist_list = []
+    hist_list += ssdilep.hists.Main_hists.hist_list
     
     
     ##-------------------------------------------------------------------------

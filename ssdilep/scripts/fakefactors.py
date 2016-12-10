@@ -6,14 +6,15 @@ from array import array
 # -------------------------------------------------------------------------------------
 # config
 # -------------------------------------------------------------------------------------
-indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesAllDataset"
-tag       = "accept"
+indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesPassAndMatch"
+tag       = "corr"
 #tag       = "reject"
-name      = "alldata"
+name      = "bigbin"
 
 # pt 
 var       = "mulead_pt"
-new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,45.,200.])
+#new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,45.,60.,80.,300.])
+new_bins = array('d', [0.,22.,40.,60.,90.,300.])
 
 '''
 # eta
@@ -98,7 +99,7 @@ for i in xrange(1,9):
   h_ff.SetLineColor(rcol[i-1])
   h_ff.SetMarkerColor(rcol[i-1])
   h_ff.SetMarkerSize(0.01)
-  h_ff.SetMaximum(1.0)
+  h_ff.SetMaximum(2.0)
   h_ff.SetMinimum(0)
   
   #c_all.cd()

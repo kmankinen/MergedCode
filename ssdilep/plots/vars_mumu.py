@@ -324,7 +324,7 @@ jetlead_pt = Var(name = 'jetlead_pt',
               path    = 'jets',
               xmin    = 0.,
               xmax    = 200.,
-              rebin   = 5,
+              rebin   = 1,
               log     = True,
               )
 
@@ -422,16 +422,16 @@ vars_list.append(met_clus_sumet)
 # ---------------------
 # just for fake-factors
 # ---------------------
-#"""
+"""
 vars_list.append(mujet_dphi)
 vars_list.append(scdphi)
+"""
 vars_list.append(jetlead_pt)
-#"""
 
 # ---------------------
 # for validation
 # ---------------------
-"""
+#"""
 vars_list.append(musublead_pt)
 vars_list.append(musublead_eta)
 vars_list.append(musublead_phi)
@@ -440,12 +440,12 @@ vars_list.append(musublead_trkd0sig)
 vars_list.append(musublead_trkz0)
 vars_list.append(musublead_trkz0sintheta)
 
-vars_list(muons_mTtot)
-vars_list(muons_mVis)
-vars_list(muons_dphi)
-vars_list(muons_deta)
-vars_list(muons_chargeprod)
-"""
+vars_list.append(muons_mTtot)
+vars_list.append(muons_mVis)
+vars_list.append(muons_dphi)
+vars_list.append(muons_deta)
+vars_list.append(muons_chargeprod)
+#"""
 
 
 # ---------------------

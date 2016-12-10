@@ -840,6 +840,12 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
     
     #_________________________________________________________________________
     def initialize(self):
+        
+        # remove eventual repetitions from list of histograms
+        h_dict = {}
+        for h in self.hist_list: h_dict[h.hname] = h
+        self.hist_list = h_dict.values()
+
         pyframe.algs.CutFlowAlg.initialize(self)
     #_________________________________________________________________________
     def execute(self, weight):
@@ -877,7 +883,7 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
 
     #__________________________________________________________________________
     def plot(self, region, passed, list_cuts, cut, list_weights=None, weight=1.0):
-        
+
         # -----------------
         # Create histograms
         # -----------------
