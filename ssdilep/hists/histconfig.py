@@ -1,4 +1,4 @@
-from hists import Hist1D
+from hists import *
 
 
 """
@@ -395,5 +395,25 @@ h_met_trk_sumet  = Hist1D( hname  = "h_met_trk_sumet",
                               dir    = "met",
                               vexpr  = "self.store['met_trk'].sumet/GeV",
                           )
-        
+
+
+# --------
+# 2D hists
+# --------
+
+h_mulead_ptiso_jetlead_pt  = Hist2D( hname      = "h_mulead_ptiso_jetlead_pt",
+                              xtitle  = "p_{T}(#mu_{lead}) + ptvarcone30 [GeV]",
+                              ytitle  = "p_{T}(jet_{lead}) [GeV]", 
+                              nbinsx  = 2000,
+                              xmin    = 0.,
+                              xmax    = 2000.,
+                              nbinsy  = 2000,
+                              ymin    = 0.,
+                              ymax    = 2000.,
+                              dir     = "event",
+                              vexpr   = "( self.store['muons'][0].tlv.Pt() + self.store['muons'][0].ptvarcone30 ) / GeV , self.store['jets'][0].tlv.Pt() / GeV",
+                          )
+
+
+
 # EOF

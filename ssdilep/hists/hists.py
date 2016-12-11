@@ -42,6 +42,10 @@ class Hist1D(object):
            setattr(self, k, w)
     
     #________________________________________________________
+    def get_name(self):
+      return self.__class__.__name__
+    
+    #________________________________________________________
     def fill(self,var,weight):
       if self.instance:
         self.instance.Fill(var,weight)
@@ -59,7 +63,6 @@ class Hist1D(object):
           return "bool(hasattr(self.chain, '%s'))" % var 
 
 
-"""
 #------------------------------------------------------------
 class Hist2D(object):
     '''
@@ -78,23 +81,51 @@ class Hist2D(object):
             ymax     = None,
             dir      = None,
             instance = None,
-            ):
+            vexpr    = None,
+            **kw):
        
-       self.hname    = hname,
-       self.xtitle   = xtitle,
-       self.ytitle   = ytitle,
-       self.nbinsx   = nbinsx,
-       self.nbinsy   = nbinsy,
-       self.xmin     = xmin,
-       self.xmax     = xmax,
-       self.ymin     = ymin,
-       self.ymax     = ymax,
-       self.dir      = dir,
-       self.instance = instance,
+       self.hname    = hname
+       self.xtitle   = xtitle
+       self.ytitle   = ytitle
+       self.nbinsx   = nbinsx
+       self.nbinsy   = nbinsy
+       self.xmin     = xmin
+       self.xmax     = xmax
+       self.ymin     = ymin
+       self.ymax     = ymax
+       self.dir      = dir
+       self.instance = instance
+       self.vexpr    = vexpr
+
+       ## set additional key-word args
+       # -------------------------------------------------------
+       for k,w in kw.iteritems():
+           setattr(self, k, w)
+
+    #________________________________________________________
+    def get_name(self):
+      return self.__class__.__name__
+    
+    #________________________________________________________
+    def set_axis_titles(self):
+      if self.instance:
+        self.instance.GetXaxis().SetTitle(self.xtitle)
+        self.instance.GetYaxis().SetTitle(self.ytitle)
+      return
+    
+    #________________________________________________________
+    def fill(self,varx,vary,weight):
+      if self.instance:
+        self.instance.Fill(varx,vary,weight)
+      return
+
+    #________________________________________________________
+    def varcheck(self):
+      return "True"
+
 
 ## EOF
 
 
-"""
 
 
