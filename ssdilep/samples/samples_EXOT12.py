@@ -1311,17 +1311,8 @@ all_samples.append(ZtautauSherpa22)
 
 for s in all_samples:
 
-  globals()["addon_"+s.name] = Sample(name         = "addon_"+s.name,
-                                      tlatex       = s.tlatex,
-                                     ) 
-
-  if 'marker_style' in s.__dict__: globals()["addon_"+s.name].marker_style = s.marker_style
-  if 'marker_color' in s.__dict__: globals()["addon_"+s.name].marker_color = s.marker_color
-  if 'fill_style' in s.__dict__:   globals()["addon_"+s.name].fill_style   = s.fill_style  
-  if 'fill_color' in s.__dict__:   globals()["addon_"+s.name].fill_color   = s.fill_color  
-  if 'line_style' in s.__dict__:   globals()["addon_"+s.name].line_style   = s.line_style  
-  if 'line_color' in s.__dict__:   globals()["addon_"+s.name].line_color   = s.line_color  
-  if 'line_width' in s.__dict__:   globals()["addon_"+s.name].line_width   = s.line_width  
+  globals()["addon_"+s.name] = s.copy()
+  globals()["addon_"+s.name].name = "addon_"+s.name
 
 
 #-------------------------------------------------------------------------------
@@ -1357,14 +1348,6 @@ all_mc += ZtautauSherpa22.daughters
 
 #all_mc += all_DCH.daughters
 
-# -------------------------------
-#all_mc += diboson_powheg.daughters
-#all_mc += WenuPowheg.daughters
-#all_mc += WmunuPowheg.daughters
-#all_mc += WtaunuPowheg.daughters
-#all_mc += ZeePowheg.daughters
-#all_mc += ZmumuPowheg.daughters
-#all_mc += ZtautauPowheg.daughters
 
 #####all_mc += single_DCH
 

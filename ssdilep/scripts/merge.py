@@ -41,8 +41,8 @@ parser.add_option('-t', '--tag', dest='tag',
 #-----------------
 # Configuration
 #-----------------
-lumi =  18232.8
-#lumi =  33257.2 + 3212.96
+#lumi =  18232.8
+lumi =  33257.2 + 3212.96
 
 # Control regions
 plotsfile = []
@@ -64,21 +64,20 @@ hm = histmgr.HistMgr(basedir=options.indir,target_lumi=lumi)
 #-----------------
 # Samples        
 #-----------------
-
 ## data
 data = samples.data
 
 ## backgrounds 
 mc_backgrounds = [
     #samples.diboson_sherpa,
-    samples.diboson_incl_sherpa,
+    #samples.diboson_incl_sherpa,
     samples.WenuSherpa22,
     samples.WmunuSherpa22,
     samples.WtaunuSherpa22,
     samples.ZeeSherpa22,
     samples.ZmumuSherpa22,
     samples.ZtautauSherpa22,
-    samples.ttX,
+    #samples.ttX,
     samples.singletop,
     samples.ttbar,
    ]
@@ -94,14 +93,14 @@ mumu_signals = []
 # needed for the AddRegEstimator
 addon_samples = [
     #samples.addon_diboson_sherpa,
-    samples.addon_diboson_incl_sherpa,
+    #samples.addon_diboson_incl_sherpa,
     samples.addon_WenuSherpa22,
     samples.addon_WmunuSherpa22,
     samples.addon_WtaunuSherpa22,
     samples.addon_ZeeSherpa22,
     samples.addon_ZmumuSherpa22,
     samples.addon_ZtautauSherpa22,
-    samples.addon_ttX,
+    #samples.addon_ttX,
     samples.addon_singletop,
     samples.addon_ttbar,
    ]
@@ -120,23 +119,27 @@ reg_prefix, reg_suffix = funcs.get_pref_and_suff(options.region)
 
 if reg_suffix == "MAINREG":
   fake_subtraction_regions = ["LL"]
+  
   if options.fakest == "FullRegions":
     main_addition_regions = ["TT","TTT","TTTT"]
     fake_addition_regions = ["TL","LT","TTL","TLT","LTT","TTTL","TTLT","TLTT","LTTT"]
+  
   if options.fakest == "ReducedRegions":
     main_addition_regions = ["TT"]
     fake_addition_regions = ["TL","LT"]
-elif reg_suffix:
-  main_addition_regions    =  fake_addition_regions = [reg_suffix]
-
+else:
+  
+  if options.fakest == "Subtraction":
+    main_addition_regions =  fake_addition_regions = [""]
+    reg_prefix            =  options.region
 
 fakes_mumu.estimator = histmgr.AddRegEstimator(
       hm                  = hm, 
       sample              = fakes_mumu,
       data_sample         = data,
       mc_samples          = mc_backgrounds, 
-      addition_regions    = ["_".join([reg_prefix]+[suffix]) for suffix in fake_addition_regions],
-      subtraction_regions = ["_".join([reg_prefix]+[suffix]) for suffix in fake_subtraction_regions]
+      addition_regions    = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in fake_addition_regions],
+      subtraction_regions = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in fake_subtraction_regions]
       )
 
 for s in addon_samples + [addon_data]:
@@ -145,7 +148,7 @@ for s in addon_samples + [addon_data]:
       sample           = s,
       data_sample      = data,
       mc_samples       = mc_backgrounds, 
-      addition_regions = ["_".join([reg_prefix]+[suffix]) for suffix in main_addition_regions]
+      addition_regions = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in main_addition_regions]
       )
 
 #-----------------
@@ -172,15 +175,15 @@ mumu_vdict  = vars_mumu.vars_dict
 ## order backgrounds for plots
 mumu_backgrounds = [
     fakes_mumu,
-    #samples.addon_diboson_sherpa,
-    samples.addon_diboson_incl_sherpa,
+    ##samples.addon_diboson_sherpa,
+    #samples.addon_diboson_incl_sherpa,
     samples.addon_WenuSherpa22,
     samples.addon_WmunuSherpa22,
     samples.addon_WtaunuSherpa22,
     samples.addon_ZeeSherpa22,
     samples.addon_ZmumuSherpa22,
     samples.addon_ZtautauSherpa22,
-    samples.addon_ttX,
+    #samples.addon_ttX,
     samples.addon_singletop,
     samples.addon_ttbar,
     ]
@@ -226,7 +229,7 @@ else:
  funcs.write_hist(
          backgrounds = mumu_backgrounds,
          signal      = mumu_signals, # This can be a list
-         data        = data,
+         data        = addon_data,
          region      = options.region,
          icut        = int(options.icut),
          histname    = os.path.join(mumu_vdict[options.vname]['path'],mumu_vdict[options.vname]['hname']),

@@ -8,15 +8,16 @@ ROOT.gStyle.SetOptStat(0000)
 # -------------------------------------------------------------------------------------
 # config
 # -------------------------------------------------------------------------------------
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesAllDataset"
-#tag     = "reject"
-tag     = "accept"
-name    = "alldata"
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesAvgPresc"
+tag     = "corr"
+name    = "avgpresc"
 
 # pt
 var     = "mulead_pt"
 axislab = "p_{T}(#mu_{lead}) [GeV]"
-new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,45.,200.])
+#new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,45.,60.,80.,300.])
+new_bins = array('d', [0.,25.,28.,32.,36.,40.,45.,60.,80.,300.])
+#new_bins = array('d', [0.,22.,40.,60.,90.,300.])
 
 '''
 # eta
@@ -123,7 +124,7 @@ g_sys_ff.SetLineColor(ROOT.kYellow)
 g_sys_ff.SetMarkerColor(ROOT.kBlack)
 g_sys_ff.SetFillColor(ROOT.kYellow)
 g_sys_ff.SetMarkerSize(1.3)
-g_sys_ff.SetMaximum(1.0)
+g_sys_ff.SetMaximum(2.0)
 g_sys_ff.SetMinimum(0)
 
 g_nom_ff.GetYaxis().SetTitle("Fake-factor")
@@ -140,7 +141,7 @@ g_nom_ff.SetLineWidth(2)
 g_nom_ff.SetMarkerColor(ROOT.kBlack)
 g_nom_ff.SetMarkerStyle(20)
 g_nom_ff.SetMarkerSize(0.9)
-g_nom_ff.SetMaximum(1.0)
+g_nom_ff.SetMaximum(2.0)
 g_nom_ff.SetMinimum(0)
 
 c.cd() 

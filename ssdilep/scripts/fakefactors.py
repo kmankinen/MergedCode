@@ -6,14 +6,14 @@ from array import array
 # -------------------------------------------------------------------------------------
 # config
 # -------------------------------------------------------------------------------------
-indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesAllDataset"
-tag       = "accept"
-#tag       = "reject"
-name      = "alldata"
+indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesAvgPresc"
+tag       = "corr"
+name      = "avgpresc"
 
 # pt 
 var       = "mulead_pt"
-new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,45.,200.])
+new_bins = array('d', [0.,25.,28.,32.,36.,40.,45.,60.,80.,300.])
+#new_bins = array('d', [0.,25.,40.,60.,90.,300.])
 
 '''
 # eta
@@ -72,9 +72,9 @@ for i in xrange(1,9):
   num_file = ROOT.TFile.Open(os.path.join(indir,infile%("NUM",i)),"READ")
   den_file = ROOT.TFile.Open(os.path.join(indir,infile%("DEN",i)),"READ")
 
-  h_num = num_file.Get("h_FAKES_NUM_F%s_nominal_fakes"%i).Clone()
+  h_num = num_file.Get("h_FAKES_NUM_F%s_nominal_addon_fakes"%i).Clone()
   h_num.SetNameTitle("h_num","h_num")
-  h_den = den_file.Get("h_FAKES_DEN_F%s_nominal_fakes"%i).Clone()
+  h_den = den_file.Get("h_FAKES_DEN_F%s_nominal_addon_fakes"%i).Clone()
   h_den.SetNameTitle("h_den","h_den")
 
  
@@ -98,7 +98,7 @@ for i in xrange(1,9):
   h_ff.SetLineColor(rcol[i-1])
   h_ff.SetMarkerColor(rcol[i-1])
   h_ff.SetMarkerSize(0.01)
-  h_ff.SetMaximum(1.0)
+  h_ff.SetMaximum(2.0)
   h_ff.SetMinimum(0)
   
   #c_all.cd()

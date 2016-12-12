@@ -15,14 +15,14 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-#indir    = 'HistSysVR'
-#outdir   = 'PlotsSysVR'
+#indir    = 'HistPassAndMatch'
+#outdir   = 'PlotsPassAndMatch'
 
-indir    = 'HistNewAcceptZ'
-outdir   = 'PlotsNewAcceptZ'
+indir    = 'HistLeadMu30VR'
+outdir   = 'PlotsLeadMu30VR'
 
-#indir    = 'HistRejectZ'
-#outdir   = 'PlotsRejectZ'
+#indir    = 'HistFinMu28VR'
+#outdir   = 'PlotsFinMu28VR'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -65,100 +65,18 @@ regions = {}
 #regions["Z_OS"]   = [6,  "OS", "incl"]
 #regions["Z_SS"]   = [6,  "SS", "incl"]
 
-"""
-regions["FAKESVR1_NUM"]     = [4,  "VR", "incl"]
-regions["FAKESVR1_LLDEN"]   = [4,  "VR", "incl"]
-regions["FAKESVR1_TLDEN"]   = [4,  "VR", "incl"]
-regions["FAKESVR1_LTDEN"]   = [4,  "VR", "incl"]
-
-regions["FAKESVR2_NUM"]     = [4,  "VR", "incl"]
-regions["FAKESVR2_LLDEN"]   = [4,  "VR", "incl"]
-regions["FAKESVR2_TLDEN"]   = [4,  "VR", "incl"]
-regions["FAKESVR2_LTDEN"]   = [4,  "VR", "incl"]
-
-regions["FAKESVR3_NUM"]     = [4,  "VR", "incl"]
-regions["FAKESVR3_LLDEN"]   = [4,  "VR", "incl"]
-regions["FAKESVR3_TLDEN"]   = [4,  "VR", "incl"]
-regions["FAKESVR3_LTDEN"]   = [4,  "VR", "incl"]
-
-regions["FAKESVR4_NUM"]     = [4,  "VR", "incl"]
-regions["FAKESVR4_LLDEN"]   = [4,  "VR", "incl"]
-regions["FAKESVR4_TLDEN"]   = [4,  "VR", "incl"]
-regions["FAKESVR4_LTDEN"]   = [4,  "VR", "incl"]
-
-regions["FAKESVR5_NUM"]     = [5,  "VR", "incl"]
-regions["FAKESVR5_LLDEN"]   = [5,  "VR", "incl"]
-regions["FAKESVR5_TLDEN"]   = [5,  "VR", "incl"]
-regions["FAKESVR5_LTDEN"]   = [5,  "VR", "incl"]
-
-regions["FAKESVR6_NUM"]     = [5,  "VR", "incl"]
-regions["FAKESVR6_LLDEN"]   = [5,  "VR", "incl"]
-regions["FAKESVR6_TLDEN"]   = [5,  "VR", "incl"]
-regions["FAKESVR6_LTDEN"]   = [5,  "VR", "incl"]
-
-regions["FAKESVR7_NUM"]     = [5,  "VR", "incl"]
-regions["FAKESVR7_LLDEN"]   = [5,  "VR", "incl"]
-regions["FAKESVR7_TLDEN"]   = [5,  "VR", "incl"]
-regions["FAKESVR7_LTDEN"]   = [5,  "VR", "incl"]
+regions["FAKESVR6_TT"]  = [4,  "tight+tight", "incl"]
+regions["FAKESVR6_LL"]   = [4,  "loose+loose", "incl"]
+regions["FAKESVR6_TL"]   = [4,  "tight+loose", "incl"]
+regions["FAKESVR6_LT"]   = [4,  "loose+tight", "incl"]
 
 """
+regions["FAKES_NUM_F0"]   = [1,  "numerator", "acc"]
+regions["FAKES_DEN_F0"]   = [1,  "denominator", "acc"]
 
+regions["FAKES_NUM_F1"]   = [5,  "numerator", "acc"]
+regions["FAKES_DEN_F1"]   = [5,  "denominator", "acc"]
 
-regions["FAKES_NUM_F0"]   = [2,  "numerator", "acc"]
-regions["FAKES_DEN_F0"]   = [2,  "denominator", "acc"]
-
-regions["FAKES_NUM_F1"]   = [6,  "numerator", "acc"]
-regions["FAKES_DEN_F1"]   = [6,  "denominator", "acc"]
-
-"""
-regions["FAKES_NUM_F2"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_F2"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_F3"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_F3"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_F4"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_F4"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_F5"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_F5"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_F6"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_F6"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_F7"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_F7"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_F8"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_F8"]   = [7,  "di-jet numerator", "acc"]
-
-
-regions["FAKES_NUM_G0"]   = [3,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_G0"]   = [3,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_G1"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_G1"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_G2"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_G2"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_G3"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_G3"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_G4"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_G4"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_G5"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_G5"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_G6"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_G6"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_G7"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_G7"]   = [7,  "di-jet numerator", "acc"]
-
-regions["FAKES_NUM_G8"]   = [7,  "di-jet numerator", "acc"]
-regions["FAKES_DEN_G8"]   = [7,  "di-jet numerator", "acc"]
 """
 
 

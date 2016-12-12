@@ -20,6 +20,23 @@ from decimal import Decimal
 
 
 # - - - - - - - - - - function defs - - - - - - - - - - - - #
+
+
+#____________________________________________________________
+def get_pref_and_suff(region):
+    reg_prefix = region.split("_")[:1]
+    reg_suffix = region.split("_")[-1:]
+    
+    for p,s in zip(reg_prefix,reg_suffix): 
+      if p in reg_suffix: reg_suffix.remove(p)
+    
+    reg_prefix = reg_prefix[0]
+
+    if reg_suffix: reg_suffix = reg_suffix[0]
+    else:          reg_suffix = ""
+
+    return reg_prefix,reg_suffix
+
 #____________________________________________________________
 def apply_blind(h,blind_min):
     for i in range(1,h.GetNbinsX()+1):
