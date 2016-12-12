@@ -17,7 +17,7 @@ USER   = os.getenv('USER')
 ## global config
 # inputs
 #NTUP='/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_common_v1Ntuples/merged' # input NTUP path
-NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v6/merged' # input NTUP path
+NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v7/merged' # input NTUP path
 
 JOBDIR = "/coepp/cephfs/mel/%s/jobdir" % USER # Alright this is twisted...
 INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%m_y%Y_H%H_M%M_S%S")) )
@@ -25,13 +25,7 @@ INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-#RUN = "HistRejectZ"
-#RUN = "HistNewAcceptZ"
-#RUN = "HistMCOnlyZ"
-RUN = "HistPassAndMatch"
-
-#RUN = "HistSysVR"
-#RUN = "HistSysExtVR"
+RUN = "HistAvgPresc"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 OUTFILE="ntuple.root"         # file output by pyframe job 

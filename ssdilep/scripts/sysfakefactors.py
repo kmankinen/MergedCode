@@ -8,16 +8,16 @@ ROOT.gStyle.SetOptStat(0000)
 # -------------------------------------------------------------------------------------
 # config
 # -------------------------------------------------------------------------------------
-indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesPassAndMatch"
-#tag     = "reject"
+indir   = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesAvgPresc"
 tag     = "corr"
-name    = "bigbin"
+name    = "avgpresc"
 
 # pt
 var     = "mulead_pt"
 axislab = "p_{T}(#mu_{lead}) [GeV]"
 #new_bins = array('d', [0.,22.,23.,25.,28.,32.,36.,40.,45.,60.,80.,300.])
-new_bins = array('d', [0.,22.,40.,60.,90.,300.])
+new_bins = array('d', [0.,25.,28.,32.,36.,40.,45.,60.,80.,300.])
+#new_bins = array('d', [0.,22.,40.,60.,90.,300.])
 
 '''
 # eta

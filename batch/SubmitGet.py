@@ -20,7 +20,7 @@ parser.add_option('-s', '--samp', dest='sample',
 user  = "fscutti"
 #user  = "gucchiel"
 samp  = options.sample
-jtag  =  "HIGG3D3_v6"
+jtag  =  "HIGG3D3_v7"
 
 jtagsamp  = "%s.*%s*" % (jtag,samp)
 

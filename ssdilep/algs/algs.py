@@ -151,11 +151,11 @@ class CutAlg(pyframe.core.Algorithm):
       return passed
     
     #__________________________________________________________________________
-    def cut_AllMuPt24(self):
+    def cut_AllMuPt25(self):
       muons = self.store['muons']
       passed = True
       for m in muons:
-        passed = passed and m.tlv.Pt()>=24.0*GeV
+        passed = passed and m.tlv.Pt()>=25.0*GeV
       return passed
     
     #__________________________________________________________________________
@@ -888,19 +888,30 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         # Create histograms
         # -----------------
         for h in self.hist_list:
-          h.instance = self.hist(h.hname, "ROOT.TH1F('$', ';%s;%s', %d, %lf, %lf)" % (h.xtitle,h.ytitle,h.nbins,h.xmin,h.xmax), dir=os.path.join(region, '%s'%h.dir))
-        
+            if h.get_name() == "Hist1D":
+              h.instance = self.hist(h.hname, "ROOT.TH1F('$', ';%s;%s', %d, %lf, %lf)" % (h.xtitle,h.ytitle,h.nbins,h.xmin,h.xmax), dir=os.path.join(region, '%s'%h.dir))
+            elif h.get_name() == "Hist2D": 
+              h.instance = self.hist(h.hname, "ROOT.TH2F('$', ';%s;%s', %d, %lf, %lf, %d, %lf, %lf)" % (h.hname,h.hname,h.nbinsx,h.xmin,h.xmax,h.nbinsy,h.ymin,h.ymax), dir=os.path.join(region, '%s'%h.dir))
+              h.set_axis_titles()
+
         # ---------------
         # Fill histograms
         # ---------------
         if passed:
           for h in self.hist_list:
+            
             if self.do_var_check:
               exec ( "present = %s"%h.varcheck() )
               if not present: 
                 sys.exit( "ERROR: variable %s  not found for hist %s"%(h.vexpr,h.hname) )
-            exec( "var = %s" % h.vexpr ) # so dirty !!!
-            if h.instance and var: h.fill(var, weight)
+            
+            if h.get_name() == "Hist1D":
+              exec( "var = %s" % h.vexpr ) # so dirty !!!
+              if h.instance and var: h.fill(var, weight)
+            
+            elif h.get_name() == "Hist2D":
+              exec( "varx,vary = %s" % h.vexpr ) # so dirty !!!
+              if h.instance and varx and vary: h.fill(varx,vary, weight)
           
     #__________________________________________________________________________
     def check_region(self,cutnames):

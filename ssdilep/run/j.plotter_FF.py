@@ -67,7 +67,8 @@ def analyze(config):
     ## trig list to the store for later cutflow
     ## ---------------------------------------
     loop += ssdilep.algs.vars.BuildTrigConfig(
-        required_triggers = ["HLT_mu20_L1MU15", "HLT_mu24", "HLT_mu50"],
+        #required_triggers = ["HLT_mu20_L1MU15", "HLT_mu24", "HLT_mu50"],
+        required_triggers = ["HLT_mu24", "HLT_mu50"],
         key               = 'muons',
         )
     
@@ -216,8 +217,9 @@ def analyze(config):
     ## configure histograms
     ## ---------------------------------------
     hist_list = []
-    #hist_list += ssdilep.hists.FF_hists.hist_list
-    hist_list += ssdilep.hists.PtOnly_hists.hist_list
+    hist_list += ssdilep.hists.FF_hists.hist_list
+    #hist_list += ssdilep.hists.PtOnly_hists.hist_list
+    hist_list += ssdilep.hists.H2D_hists.hist_list
     
     
     ##-------------------------------------------------------------------------
@@ -233,7 +235,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ],
             )
@@ -245,11 +247,10 @@ def analyze(config):
             do_var_check = True,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ],
             )
-    """
     ## F1
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -259,7 +260,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -274,7 +275,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -292,7 +293,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -307,7 +308,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -325,7 +326,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -340,7 +341,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -358,7 +359,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi28',None],
               ['AllJetPt35',None],
@@ -373,7 +374,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi28',None],
               ['AllJetPt35',None],
@@ -391,7 +392,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi26',None],
               ['AllJetPt35',None],
@@ -406,7 +407,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi26',None],
               ['AllJetPt35',None],
@@ -424,7 +425,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -439,7 +440,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -457,7 +458,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -472,7 +473,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -491,7 +492,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoFixedCutTightTrackOnly',['MuSFFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt40',None],
@@ -506,7 +507,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow     = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN1']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt40',None],
@@ -515,7 +516,6 @@ def analyze(config):
               ],
             )
     
-    """ 
     
     
     """ 
@@ -526,7 +526,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ],
             )
@@ -535,7 +535,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ],
             )
@@ -547,7 +547,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -560,7 +560,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -576,7 +576,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -589,7 +589,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -605,7 +605,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -618,7 +618,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -634,7 +634,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi28',None],
               ['AllJetPt35',None],
@@ -647,7 +647,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi28',None],
               ['AllJetPt35',None],
@@ -663,7 +663,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi26',None],
               ['AllJetPt35',None],
@@ -676,7 +676,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi26',None],
               ['AllJetPt35',None],
@@ -692,7 +692,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -705,7 +705,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -721,7 +721,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -734,7 +734,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt35',None],
@@ -751,7 +751,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFNUM2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoGradient',['MuSFGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt40',None],
@@ -764,7 +764,7 @@ def analyze(config):
             plot_all  = False,
             cut_flow  = [
               ['PassAndMatchPresc',['DataUnPrescAvg','MuTrigSFDEN2']],
-              #['LeadMuTruthFilter',None],
+              ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotGradient',['MuSFNotGradientLoose']],
               ['MuJetDphi27',None],
               ['AllJetPt40',None],

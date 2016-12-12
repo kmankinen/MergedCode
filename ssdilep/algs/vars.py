@@ -113,10 +113,10 @@ class VarsAlg(pyframe.core.Algorithm):
     """
     #__________________________________________________________________________
     def __init__(self, 
-                 name ='VarsAlg',
+                 name      = 'VarsAlg',
                  key_muons = 'muons',
-                 key_jets = 'jets',
-                 key_met = 'met_clus',
+                 key_jets  = 'jets',
+                 key_met   = 'met_clus',
                  ):
         pyframe.core.Algorithm.__init__(self, name)
         self.key_muons = key_muons
@@ -221,11 +221,5 @@ class VarsAlg(pyframe.core.Algorithm):
         
         return True
 # EOF 
-
-
-
-
-
-
 
 
