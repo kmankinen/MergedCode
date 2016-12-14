@@ -62,27 +62,21 @@ class CutAlg(pyframe.core.Algorithm):
         return result
     
     #__________________________________________________________________________
-    def cut_EleVeto(self):
-        return self.chain.nel == 0
-    
-    #__________________________________________________________________________
-    def cut_NPV12(self):
-        return self.chain.NPV < 12
-    
-    #__________________________________________________________________________
-    def cut_AtLeastOneMuon(self):
-        return self.chain.nmuon > 0
-    
-    #__________________________________________________________________________
     def cut_AtLeastTwoMuons(self):
       return self.chain.nmuon > 1
-    
     #__________________________________________________________________________
     def cut_AtLeastTwoSSMuons(self):
       muons = self.store['muons']
       if self.chain.nmuon >= 2:
         for p in combinations(muons,2):
           if p[0].trkcharge * p[1].trkcharge > 0.0: return True
+      return False
+    #__________________________________________________________________________
+    def cut_AtLeastTwoSSMuonPairs(self):
+      muons = self.store['muons']
+      if self.chain.nmuon >= 4:
+        for p in combinations(muons,4):
+          if p[0].trkcharge * p[1].trkcharge * p[2].trkcharge * p[3].trkcharge > 0.0: return True
       return False
     
     #__________________________________________________________________________
@@ -91,7 +85,6 @@ class CutAlg(pyframe.core.Algorithm):
         for m in muons:
           if m.tlv.Pt()>28*GeV: return True
         return False
-    
     #__________________________________________________________________________
     def cut_LeadMuPt30(self):
         muons = self.store['muons']
@@ -131,47 +124,11 @@ class CutAlg(pyframe.core.Algorithm):
         return self.chain.njets == 1
     
     #__________________________________________________________________________
-    def cut_AtLeastOneJet(self):
-        return self.chain.njets > 0
-    
-    #__________________________________________________________________________
-    def cut_AtLeastTwoJets(self):
-        return self.chain.njets > 1
-    
-    #__________________________________________________________________________
-    def cut_AtLeastThreeJets(self):
-        return self.chain.njets > 2
-    
-    #__________________________________________________________________________
-    def cut_AllMuPt22(self):
-      muons = self.store['muons']
-      passed = True
-      for m in muons:
-        passed = passed and m.tlv.Pt()>=22.0*GeV
-      return passed
-    
-    #__________________________________________________________________________
     def cut_AllMuPt25(self):
       muons = self.store['muons']
       passed = True
       for m in muons:
         passed = passed and m.tlv.Pt()>=25.0*GeV
-      return passed
-    
-    #__________________________________________________________________________
-    def cut_AllMuPt28(self):
-      muons = self.store['muons']
-      passed = True
-      for m in muons:
-        passed = passed and m.tlv.Pt()>=28.0*GeV
-      return passed
-    
-    #__________________________________________________________________________
-    def cut_AllMuPt30(self):
-      muons = self.store['muons']
-      passed = True
-      for m in muons:
-        passed = passed and m.tlv.Pt()>=30.0*GeV
       return passed
     
     #__________________________________________________________________________
@@ -181,10 +138,6 @@ class CutAlg(pyframe.core.Algorithm):
       for m in muons:
         passed = passed and abs(m.tlv.Eta())<2.47
       return passed
-    
-    
-    
-    
     
     #__________________________________________________________________________
     def cut_MuTT(self):
@@ -392,8 +345,6 @@ class CutAlg(pyframe.core.Algorithm):
     
     
     
-    
-    
     #__________________________________________________________________________
     def cut_AllMuLoose(self):
       muons = self.store['muons']
@@ -424,12 +375,6 @@ class CutAlg(pyframe.core.Algorithm):
       return is_tight
     
     #__________________________________________________________________________
-    def cut_LeadMuFailsIsoOrD0(self):
-      muons = self.store['muons']
-      lead_mu = muons[0]
-      return (not lead_mu.isIsolated_FixedCutTightTrackOnly) or lead_mu.trkd0sig>3.
-    
-    #__________________________________________________________________________
     def cut_LeadMuIsoFixedCutTightTrackOnly(self):
       muons = self.store['muons']
       lead_mu = muons[0]
@@ -449,28 +394,6 @@ class CutAlg(pyframe.core.Algorithm):
       muons = self.store['muons']
       lead_mu = muons[0]
       return not lead_mu.isIsolated_Gradient
-    
-    #__________________________________________________________________________
-    def cut_SubLeadMuIsoFixedCutTightTrackOnly(self):
-      muons = self.store['muons']
-      sublead_mu = muons[1]
-      return sublead_mu.isIsolated_FixedCutTightTrackOnly
-    #__________________________________________________________________________
-    def cut_SubLeadMuIsoNotFixedCutTightTrackOnly(self):
-      muons = self.store['muons']
-      sublead_mu = muons[1]
-      return not sublead_mu.isIsolated_FixedCutTightTrackOnly
-    #__________________________________________________________________________
-    def cut_SubLeadMuIsoGradient(self):
-      muons = self.store['muons']
-      sublead_mu = muons[1]
-      return sublead_mu.isIsolated_Gradient
-    #__________________________________________________________________________
-    def cut_SubLeadMuIsoNotGradient(self):
-      muons = self.store['muons']
-      sublead_mu = muons[1]
-      return not sublead_mu.isIsolated_Gradient
-    
     
     
     #__________________________________________________________________________
@@ -510,15 +433,6 @@ class CutAlg(pyframe.core.Algorithm):
       m_vis = (mu_lead.tlv + mu_sublead.tlv).M()
 
       return abs(m_vis)>15*GeV
-    
-    #__________________________________________________________________________
-    def cut_Mlow150(self):
-      muons = self.store['muons']
-      mu_lead = muons[0] 
-      mu_sublead = muons[1] 
-      m_vis = (mu_lead.tlv + mu_sublead.tlv).M()
-
-      return abs(m_vis)<150*GeV
     
     #__________________________________________________________________________
     def cut_Mlow200(self):
@@ -562,27 +476,63 @@ class CutAlg(pyframe.core.Algorithm):
               return True
       return False
     
+    
+    #__________________________________________________________________________
+    def cut_PassAndMatchPrescRed(self):
+      required_triggers = self.store["reqTrig"]
+      passed_triggers   = self.store["passTrig"].keys()
+
+      dGeV = GeV / 1.03
+
+      muons = self.store['muons']
+      for m in muons:
+        for trig in required_triggers:
+          if trig in self.store["singleMuTrigList"].keys():
+            muon_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
+            event_is_triggered = bool( trig in passed_triggers )
+            if muon_is_matched and event_is_triggered: 
+              if m.tlv.Pt()>50*dGeV and trig != "HLT_mu50": continue 
+              if m.tlv.Pt()>24*dGeV and m.tlv.Pt()<50*dGeV and trig != "HLT_mu24": continue 
+              if m.tlv.Pt()>20*dGeV and m.tlv.Pt()<24*dGeV and trig != "HLT_mu20_L1MU15": continue
+              return True
+      return False
+    
+    
+    #__________________________________________________________________________
+    def cut_PassAndMatchHLTmu50(self):
+      required_triggers = ['HLT_mu50']
+      passed_triggers   = self.store["passTrig"].keys()
+      
+      muons = self.store['muons']
+      for m in muons:
+        for trig in required_triggers:
+          if trig in self.store["singleMuTrigList"].keys():
+            muon_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
+            event_is_triggered = bool( trig in passed_triggers )
+            if muon_is_matched and event_is_triggered: return True
+      return False
+    
+    #__________________________________________________________________________
+    def cut_PassAndMatchHLTmu24(self):
+      required_triggers = ['HLT_mu24']
+      passed_triggers   = self.store["passTrig"].keys()
+      
+      muons = self.store['muons']
+      for m in muons:
+        for trig in required_triggers:
+          if trig in self.store["singleMuTrigList"].keys():
+            muon_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
+            event_is_triggered = bool( trig in passed_triggers )
+            if muon_is_matched and event_is_triggered: return True
+      return False
+    
+    
     #__________________________________________________________________________
     def cut_LeadMuTruthFilter(self):
       muons = self.store['muons'] 
       if self.sampletype == "mc":
         return muons[0].isTrueIsoMuon()
       return True
-    
-    #__________________________________________________________________________
-    def cut_SubLeadMuTruthFilter(self):
-      muons = self.store['muons'] 
-      if self.sampletype == "mc":
-        return muons[1].isTrueIsoMuon()
-      return True
-    
-    #__________________________________________________________________________
-    def cut_MuTruthFilter(self):
-      muons = self.store['muons'] 
-      if self.sampletype == "mc":
-        for m in muons:
-          if not m.isTrueIsoMuon(): return False
-      return True 
     
    
     #__________________________________________________________________________
@@ -597,156 +547,25 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_LeadMuD0Sig4(self):
       muons = self.store['muons']
       return muons[0].trkd0sig<4. 
-    #__________________________________________________________________________
-    def cut_LeadMuD0Sig5(self):
-      muons = self.store['muons']
-      return muons[0].trkd0sig<5. 
-    #__________________________________________________________________________
-    def cut_LeadMuD0Sig6(self):
-      muons = self.store['muons']
-      return muons[0].trkd0sig<6. 
-    #__________________________________________________________________________
-    def cut_LeadMuD0Sig10(self):
-      muons = self.store['muons']
-      return muons[0].trkd0sig<10. 
-    #__________________________________________________________________________
-    def cut_LeadMuD0Sig15(self):
-      muons = self.store['muons']
-      return muons[0].trkd0sig<15. 
     
-    
-    #__________________________________________________________________________
-    def cut_LeadMuD0SigNot2(self):
-      muons = self.store['muons']
-      return muons[0].trkd0sig>2. 
-    #__________________________________________________________________________
-    def cut_LeadMuD0SigNot3(self):
-      muons = self.store['muons']
-      return muons[0].trkd0sig>3. 
-    #__________________________________________________________________________
-    def cut_LeadMuD0SigNot4(self):
-      muons = self.store['muons']
-      return muons[0].trkd0sig>4. 
-    #__________________________________________________________________________
-    def cut_LeadMuD0SigNot5(self):
-      muons = self.store['muons']
-      return muons[0].trkd0sig>5. 
-    #__________________________________________________________________________
-    def cut_LeadMuD0SigNot6(self):
-      muons = self.store['muons']
-      return muons[0].trkd0sig>6. 
-    #__________________________________________________________________________
-    def cut_LeadMuD0SigNot10(self):
-      muons = self.store['muons']
-      return muons[0].trkd0sig>10. 
-    
-    
-    
-    #__________________________________________________________________________
-    def cut_LeadMuZ0SinTheta1(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)<1.0
     #__________________________________________________________________________
     def cut_LeadMuZ0SinTheta05(self):
       muons = self.store['muons']
       return abs(muons[0].trkz0sintheta)<0.5
-    #__________________________________________________________________________
-    def cut_LeadMuZ0SinTheta02(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)<0.2
-    #__________________________________________________________________________
-    def cut_LeadMuZ0SinTheta005(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)<0.05
-    #__________________________________________________________________________
-    def cut_LeadMuZ0SinTheta01(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)<0.1
-    
-    
-    #__________________________________________________________________________
-    def cut_SubLeadMuZ0SinTheta05(self):
-      muons = self.store['muons']
-      return abs(muons[1].trkz0sintheta)<0.5
-    
-    #__________________________________________________________________________
-    def cut_LeadMuZ0SinThetaNot1(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)>1.0
-    #__________________________________________________________________________
-    def cut_LeadMuZ0SinThetaNot01(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)>0.1
-    #__________________________________________________________________________
-    def cut_LeadMuZ0SinThetaNot005(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)>0.05
-    #__________________________________________________________________________
-    def cut_LeadMuZ0SinThetaNot02(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)>0.2
-    
-    
-    #__________________________________________________________________________
-    def cut_OneZ0SinThetaNot01(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)>0.1 or abs(muons[1].trkz0sintheta)>0.1
-    #__________________________________________________________________________
-    def cut_OneZ0SinThetaNot002(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)>0.02 or abs(muons[1].trkz0sintheta)>0.02
-    #__________________________________________________________________________
-    def cut_OneZ0SinThetaNot005(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)>0.05 or abs(muons[1].trkz0sintheta)>0.05
-    #__________________________________________________________________________
-    def cut_Z0SinThetaNot002(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)>0.02 and abs(muons[1].trkz0sintheta)>0.02
-    #__________________________________________________________________________
-    def cut_Z0SinThetaNot005(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)>0.05 and abs(muons[1].trkz0sintheta)>0.05
-    #__________________________________________________________________________
-    def cut_MuLeadZ0SinThetaNot005(self):
-      muons = self.store['muons']
-      return abs(muons[0].trkz0sintheta)>0.05 
-    #__________________________________________________________________________
-    def cut_MuSubLeadZ0SinThetaNot005(self):
-      muons = self.store['muons']
-      return abs(muons[1].trkz0sintheta)>0.05 
-    
     
     #__________________________________________________________________________
     def cut_METlow40(self):
       met = self.store["met_clus"]
       return met.tlv.Pt() < 40 * GeV
-    
     #__________________________________________________________________________
     def cut_METlow50(self):
       met = self.store["met_clus"]
       return met.tlv.Pt() < 50 * GeV
-    
     #__________________________________________________________________________
     def cut_METlow30(self):
       met = self.store["met_clus"]
       return met.tlv.Pt() < 30 * GeV
     
-    #__________________________________________________________________________
-    def cut_METhigher10(self):
-      met = self.store["met_clus"]
-      return met.tlv.Pt() > 10 * GeV
-    
-    #__________________________________________________________________________
-    def cut_METhigher40(self):
-      met = self.store["met_clus"]
-      return met.tlv.Pt() > 40 * GeV
-    
-    #__________________________________________________________________________
-    def cut_METhigher50(self):
-      met = self.store["met_clus"]
-      return met.tlv.Pt() > 50 * GeV
-   
     #__________________________________________________________________________
     def cut_MuJetDphi27(self):
       lead_mu = self.store["muons"][0]
@@ -756,7 +575,6 @@ class CutAlg(pyframe.core.Algorithm):
       if lead_jet:
         return abs(lead_mu.tlv.DeltaPhi(lead_jet.tlv)) > 2.7
       else: return False
-    
     #__________________________________________________________________________
     def cut_MuJetDphi28(self):
       lead_mu = self.store["muons"][0]
@@ -766,8 +584,6 @@ class CutAlg(pyframe.core.Algorithm):
       if lead_jet:
         return abs(lead_mu.tlv.DeltaPhi(lead_jet.tlv)) > 2.8
       else: return False
-    
-    
     #__________________________________________________________________________
     def cut_MuJetDphi26(self):
       lead_mu = self.store["muons"][0]
@@ -778,26 +594,6 @@ class CutAlg(pyframe.core.Algorithm):
         return abs(lead_mu.tlv.DeltaPhi(lead_jet.tlv)) > 2.6
       else: return False
     
-    
-    #__________________________________________________________________________
-    def cut_MuJetDphi24(self):
-      lead_mu = self.store["muons"][0]
-      lead_jet = None
-      if self.store["jets"]:
-        lead_jet = self.store["jets"][0]
-      if lead_jet:
-        return abs(lead_mu.tlv.DeltaPhi(lead_jet.tlv)) > 2.4
-      else: return False
-    
-    
-    #__________________________________________________________________________
-    def cut_AllJetPt25(self):
-      if self.store["jets"]:
-        jets = self.store["jets"]
-        for j in jets:
-          if j.tlv.Pt() < 25 * GeV: return False
-      return True
-    
     #__________________________________________________________________________
     def cut_AllJetPt35(self):
       if self.store["jets"]:
@@ -805,7 +601,6 @@ class CutAlg(pyframe.core.Algorithm):
         for j in jets:
           if j.tlv.Pt() < 35 * GeV: return False
       return True
-    
     #__________________________________________________________________________
     def cut_AllJetPt40(self):
       if self.store["jets"]:
