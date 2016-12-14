@@ -66,24 +66,24 @@ hm = histmgr.HistMgr(basedir=options.indir,target_lumi=lumi)
 #-----------------
 
 # base samples
-data           = samples.data
-mc_backgrounds = samples.mc_backgrounds
-fakes          = samples.addon_fakes
+data    = samples.data
+mc_bkg  = samples.mc_bkg
+fakes   = samples.fakes
 
 # recombined samples
-addon_data     = samples.addon_data
-addon_samples  = samples.addon_samples
+recom_data     = data.copy()
+recom_mc_bkg  = [ b.copy() for b in mc_bkg ]
 
 ## signals
-mumu_signals = []
-#mumu_signals.append(samples.all_DCH)
-#mumu_signals.append(samples.DCH800)
+signals = []
+#signals.append(samples.all_DCH)
+#signals.append(samples.DCH800)
 
 
 #--------------
 # Estimators
 #--------------
-for s in mc_backgrounds + mumu_signals + [data]: 
+for s in mc_bkg + signals + [data]: 
     histmgr.load_base_estimator(hm,s)
 
 main_addition_regions    = []
@@ -112,17 +112,17 @@ fakes.estimator = histmgr.AddRegEstimator(
       hm                  = hm, 
       sample              = fakes,
       data_sample         = data,
-      mc_samples          = mc_backgrounds, 
+      mc_samples          = mc_bkg, 
       addition_regions    = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in fake_addition_regions],
       subtraction_regions = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in fake_subtraction_regions]
       )
 
-for s in addon_samples + [addon_data]:
+for s in recom_mc_bkg + [recom_data]:
   s.estimator = histmgr.AddRegEstimator(
       hm               = hm, 
       sample           = s,
       data_sample      = data,
-      mc_samples       = mc_backgrounds, 
+      mc_samples       = mc_bkg, 
       addition_regions = ["_".join([reg_prefix]+[suffix]).rstrip("_") for suffix in main_addition_regions]
       )
 
@@ -136,7 +136,7 @@ mc_sys = [
     ]
 
 ## set mc systematics
-#for s in mc_backgrounds + mumu_signals:
+#for s in mc_bkg + signals:
 #    s.estimator.add_systematics(mc_sys)
 
 #fakes.estimator.add_systematics(FF)
@@ -150,14 +150,14 @@ mumu_vdict  = vars_mumu.vars_dict
 ## order backgrounds for plots
 plot_ord_bkg = []
 plot_ord_bkg.append( fakes )
-plot_ord_bkg += addon_samples
+plot_ord_bkg += recom_mc_bkg
 
 
 if options.makeplot == "True":
  funcs.plot_hist(
     backgrounds   = plot_ord_bkg,
-    signal        = mumu_signals, 
-    data          = addon_data,
+    signal        = signals, 
+    data          = recom_data,
     region        = options.region,
     label         = options.label,
     histname      = os.path.join(mumu_vdict[options.vname]['path'],mumu_vdict[options.vname]['hname']),
@@ -176,8 +176,8 @@ if options.makeplot == "True":
 else:
  funcs.write_hist(
          backgrounds = plot_ord_bkg,
-         signal      = mumu_signals, # This can be a list
-         data        = addon_data,
+         signal      = signals, # This can be a list
+         data        = recom_data,
          region      = options.region,
          icut        = int(options.icut),
          histname    = os.path.join(mumu_vdict[options.vname]['path'],mumu_vdict[options.vname]['hname']),
