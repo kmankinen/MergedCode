@@ -1319,6 +1319,10 @@ for s in all_samples:
 # Collections 
 #-------------------------------------------------------------------------------
 
+
+# Samples loaded for SubmitHist.py
+#---------------------------------
+
 all_data = data.daughters
 
 all_mc = []
@@ -1347,8 +1351,44 @@ all_mc += ZtautauSherpa22.daughters
 
 
 #all_mc += all_DCH.daughters
-
-
 #####all_mc += single_DCH
+
+
+# Samples loaded for SubmitPlot.py
+#---------------------------------
+
+mc_backgrounds = []
+
+mc_backgrounds.append( diboson_sherpa )
+#mc_backgrounds.append( diboson_incl_sherpa )
+
+mc_backgrounds.append( WenuSherpa22 )
+mc_backgrounds.append( WmunuSherpa22 )
+mc_backgrounds.append( WtaunuSherpa22 )
+
+mc_backgrounds.append( ZeeSherpa22 ) 
+mc_backgrounds.append( ZmumuSherpa22 )
+mc_backgrounds.append( ZtautauSherpa22 )
+
+mc_backgrounds.append( ttX )
+mc_backgrounds.append( singletop )
+mc_backgrounds.append( ttbar )
+
+addon_samples = []
+
+addon_samples.append( addon_diboson_sherpa )
+#addon_samples.append( addon_diboson_incl_sherpa )
+
+addon_samples.append( addon_WenuSherpa22 )
+addon_samples.append( addon_WmunuSherpa22 )
+addon_samples.append( addon_WtaunuSherpa22 )
+
+addon_samples.append( addon_ZeeSherpa22 ) 
+addon_samples.append( addon_ZmumuSherpa22 )
+addon_samples.append( addon_ZtautauSherpa22 )
+
+addon_samples.append( addon_ttX )
+addon_samples.append( addon_singletop )
+addon_samples.append( addon_ttbar )
 
 ## EOF
