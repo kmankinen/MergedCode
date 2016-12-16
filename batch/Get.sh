@@ -1,24 +1,6 @@
 #!/bin/bash
-
-# This is a sample PBS script. 
-# It will request 1 processor 
-# on 1 node for 1 hours.
-
 #PBS -S /bin/bash
-
-# ------------------------------  
-# Request 1 processors on 1 node 
-# ------------------------------ 
-#PBS -l nodes=1:ppn=1
-
-# --------  
-# Walltime
-# --------
 #PBS -l walltime=24:00:00
-
-# ----------------------------------------
-# Request 1 gigabyte of memory per process
-# ----------------------------------------
 #PBS -l pmem=1gb
 
 
@@ -51,6 +33,7 @@ echo " OUTMETA:       $OUTMETA"
 echo " OUTCUTFLOW:    $OUTCUTFLOW"
 echo " MERGED:        $MERGED"
 echo " OUTMERGED:     $OUTMERGED"
+echo " NCORES:        $NCORES"
 
 echo
 export 
@@ -66,7 +49,18 @@ setupATLAS
 lsetup rucio
 lsetup root
 
+# -----------------------------
+# avoid to fuck the cluster up:
+# -----------------------------
+
+cgcreate -a ${USER} -t ${USER} -g cpuset,cpu,memory:${USER}/${PBS_JOBID}
+cp /cgroup/cpuset/${USER}/cpuset.mems /cgroup/cpuset/${USER}/cpuset.cpus /cgroup/cpuset/${USER}/${PBS_JOBID}
+MEMLIMIT="$((4 * ${NCORES}))"
+echo "${MEMLIMIT}000000000" > /cgroup/cpuset/${USER}/${PBS_JOBID}/memory.limit_in_bytes
+echo $$ > /cgroup/cpuset/${USER}/${PBS_JOBID}/tasks
 echo ""
+
+
 echo "executing job..."
 
 echo "-----> ls ${TMPDIR} -la"

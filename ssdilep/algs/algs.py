@@ -383,7 +383,9 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_LeadMuIsoNotFixedCutTightTrackOnly(self):
       muons = self.store['muons']
       lead_mu = muons[0]
-      return not lead_mu.isIsolated_FixedCutTightTrackOnly
+      is_non_iso = bool( not lead_mu.isIsolated_FixedCutTightTrackOnly )
+      is_bounded = lead_mu.ptvarcone30 / lead_mu.tlv.Pt() < 2.
+      return is_non_iso and is_bounded
     #__________________________________________________________________________
     def cut_LeadMuIsoGradient(self):
       muons = self.store['muons']
@@ -393,7 +395,9 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_LeadMuIsoNotGradient(self):
       muons = self.store['muons']
       lead_mu = muons[0]
-      return not lead_mu.isIsolated_Gradient
+      is_non_iso = bool( not lead_mu.isIsolated_Gradient )
+      is_bounded = lead_mu.ptvarcone30 / lead_mu.tlv.Pt() < 2.
+      return is_non_iso and is_bounded
     
     
     #__________________________________________________________________________

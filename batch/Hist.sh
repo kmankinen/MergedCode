@@ -1,16 +1,6 @@
-# This is a sample PBS script. It will request 1 processor on 1 node
-# for 4 hours.
-#   
-#   Request 1 processors on 1 node 
-#   
-#PBS -l nodes=1:ppn=1
-
-
 #PBS -l walltime=10:00:00
-#
-#   Request 4 gigabyte of memory per process
-#
 #PBS -l pmem=1gb
+
 #!/bin/bash
 STARTTIME=`date +%s`
 date
@@ -36,6 +26,7 @@ echo " OUTFILE:     $OUTFILE"
 echo " OUTPATH:     $OUTPATH"
 echo " CONFIG:      $CONFIG"
 echo " INTARBALL:   $INTARBALL"
+echo " NCORES:      $NCORES"
 
 echo
 export 
@@ -107,13 +98,23 @@ TMPINPUT="`mktemp ntuple.XXXXXXX`.root"
 echo cp ${INPUT} ${TMPINPUT}
 cp ${INPUT} ${TMPINPUT}
 
-
 echo ""
 echo "executing job..."
 echo ${SCRIPT} --input ${TMPINPUT} --sampletype ${SAMPLETYPE} --config "${CFG}"
+
+# -----------------------------
+# avoid to fuck the cluster up:
+# -----------------------------
+
+cgcreate -a ${USER} -t ${USER} -g cpuset,cpu,memory:${USER}/${PBS_JOBID}
+cp /cgroup/cpuset/${USER}/cpuset.mems /cgroup/cpuset/${USER}/cpuset.cpus /cgroup/cpuset/${USER}/${PBS_JOBID}
+MEMLIMIT="$((4 * ${NCORES}))"
+echo "${MEMLIMIT}000000000" > /cgroup/cpuset/${USER}/${PBS_JOBID}/memory.limit_in_bytes
+echo $$ > /cgroup/cpuset/${USER}/${PBS_JOBID}/tasks
+
+
 ${SCRIPT} --input ${TMPINPUT} --sampletype ${SAMPLETYPE} --config "${CFG}"
 
-ls -alh
 
 echo "finished execution"
 
@@ -144,10 +145,5 @@ date
 ENDTIME=`date +%s`
 TOTALTIME=$(($ENDTIME-$STARTTIME))
 echo "Total Time: ${TOTALTIME}s"
-
-
-
-
-
 
 

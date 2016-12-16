@@ -415,5 +415,30 @@ h_mulead_ptiso_jetlead_pt  = Hist2D( hname      = "h_mulead_ptiso_jetlead_pt",
                           )
 
 
+h_mulead_pt_mulead_iso  = Hist2D( hname      = "h_mulead_pt_mulead_iso",
+                              xtitle  = "p_{T}(#mu_{lead}) [GeV]",
+                              ytitle  = "ptvarcone30(#mu_{lead}) [GeV]", 
+                              nbinsx  = 2000,
+                              xmin    = 0.,
+                              xmax    = 2000.,
+                              nbinsy  = 2000,
+                              ymin    = 0.,
+                              ymax    = 2000.,
+                              dir     = "event",
+                              vexpr   = "self.store['muons'][0].tlv.Pt() / GeV , self.store['muons'][0].ptvarcone30 / GeV",
+                          )
+
+h_mulead_pt_jetlead_pt  = Hist2D( hname      = "h_mulead_pt_jetlead_pt",
+                              xtitle  = "p_{T}(#mu_{lead}) [GeV]",
+                              ytitle  = "p_{T}(jet_{lead}) [GeV]", 
+                              nbinsx  = 2000,
+                              xmin    = 0.,
+                              xmax    = 2000.,
+                              nbinsy  = 2000,
+                              ymin    = 0.,
+                              ymax    = 2000.,
+                              dir     = "event",
+                              vexpr   = " self.store['muons'][0].tlv.Pt() / GeV , self.store['jets'][0].tlv.Pt() / GeV",
+                          )
 
 # EOF
