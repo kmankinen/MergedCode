@@ -95,12 +95,6 @@ def analyze(config):
         prefix='metFinalTrk',
         key = 'met_trk',
         )
-    
-    
-   
-    ## initialize and/or decorate objects
-    ## ---------------------------------------
-    loop += ssdilep.algs.vars.VarsAlg(key_muons='muons',key_jets='jets')   
 
     ## start preselection cutflow 
     ## ---------------------------------------
@@ -118,10 +112,15 @@ def analyze(config):
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllPairsM20') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuLoose') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt22') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt25') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PassDiMuChain') 
 
+    
+    ## initialize and/or decorate objects
+    ## ---------------------------------------
+    loop += ssdilep.algs.vars.DiMuVars(key_muons='muons')   
+    
     
     ## weights configuration
     ## ---------------------------------------
@@ -217,25 +216,25 @@ def analyze(config):
     
     
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_corr_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_reducedthr_ff.root'),
             mu_index=0,
             key='Mu0FF',
             scale=sys_ff,
             )
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_corr_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_reducedthr_ff.root'),
             mu_index=1,
             key='Mu1FF',
             scale=sys_ff,
             )
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_corr_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_reducedthr_ff.root'),
             mu_index=2,
             key='Mu2FF',
             scale=sys_ff,
             )
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_corr_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_reducedthr_ff.root'),
             mu_index=3,
             key='Mu3FF',
             scale=sys_ff,

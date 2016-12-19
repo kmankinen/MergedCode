@@ -143,8 +143,8 @@ mulead_pt = Var(name = 'mulead_pt',
               xmax   = 400.,
               #xmax   = 120.,
               #rebin  = 20,
-              rebin  = 1,
-              log    = True,
+              rebin  = 20,
+              log    = False,
               )
 
 musublead_pt = Var(name = 'musublead_pt',
@@ -323,8 +323,8 @@ mulead_ptcone40 = Var(name = 'mulead_ptcone40',
 jetlead_pt = Var(name = 'jetlead_pt',
               path    = 'jets',
               xmin    = 0.,
-              xmax    = 200.,
-              rebin   = 1,
+              xmax    = 300.,
+              rebin   = 5,
               log     = True,
               )
 
@@ -407,12 +407,7 @@ vars_list.append(mulead_trkz0sintheta)
 vars_list.append(mulead_topoetcone20)
 vars_list.append(mulead_topoetcone30)
 vars_list.append(mulead_topoetcone40)
-vars_list.append(mulead_ptvarcone20)
 vars_list.append(mulead_ptvarcone30)
-vars_list.append(mulead_ptvarcone40)
-vars_list.append(mulead_ptcone20)
-vars_list.append(mulead_ptcone30)
-vars_list.append(mulead_ptcone40)
 
 vars_list.append(met_clus_et)
 vars_list.append(met_clus_phi)
@@ -425,8 +420,8 @@ vars_list.append(met_clus_sumet)
 """
 vars_list.append(mujet_dphi)
 vars_list.append(scdphi)
-"""
 vars_list.append(jetlead_pt)
+"""
 
 # ---------------------
 # for validation
@@ -449,7 +444,7 @@ vars_list.append(muons_chargeprod)
 
 
 # ---------------------
-# for validation
+# cutflows
 # ---------------------
 """
 vars_list.append(cutflow_presel)

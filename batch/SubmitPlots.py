@@ -15,14 +15,8 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-#indir    = 'HistPassAndMatch'
-#outdir   = 'PlotsPassAndMatch'
-
-indir    = 'HistLeadMu30VR'
-outdir   = 'PlotsLeadMu30VR'
-
-#indir    = 'HistFinMu28VR'
-#outdir   = 'PlotsFinMu28VR'
+indir    = 'HistNewVR'
+outdir   = 'PlotsNewVR'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -54,7 +48,8 @@ job_vars['OUTDIR']    = OUTDIR
 job_vars['INDIR']     = INDIR
 job_vars['SCRIPT']    = SCRIPT
 
-fake_estimate = "FakeFactor"
+#fake_estimate = "FullRegions"
+fake_estimate = "ReducedRegions"
 #fake_estimate = "Subtraction"
 
 regions = {}
@@ -65,18 +60,26 @@ regions = {}
 #regions["Z_OS"]   = [6,  "OS", "incl"]
 #regions["Z_SS"]   = [6,  "SS", "incl"]
 
-regions["FAKESVR6_TT"]  = [4,  "tight+tight", "incl"]
-regions["FAKESVR6_LL"]   = [4,  "loose+loose", "incl"]
-regions["FAKESVR6_TL"]   = [4,  "tight+loose", "incl"]
-regions["FAKESVR6_LT"]   = [4,  "loose+tight", "incl"]
+regions["FAKESVR6_MAINREG"] = [4, "VR",   "red"]
+#regions["FAKESVR6_TT"]      = [4, "TT",   "full"]
+#regions["FAKESVR6_LL"]      = [4, "LL",   "full"]
+#regions["FAKESVR6_TL"]      = [4, "TL",   "full"]
+#regions["FAKESVR6_LT"]      = [4, "LT",   "full"]
+#regions["FAKESVR6_TTL"]     = [4, "TTL",  "full"]
+#regions["FAKESVR6_TLT"]     = [4, "TLT",  "full"]
+#regions["FAKESVR6_LTT"]     = [4, "LTT",  "full"]
+#regions["FAKESVR6_TTTL"]    = [4, "TTTL", "full"]
+#regions["FAKESVR6_TTLT"]    = [4, "TTLT", "full"]
+#regions["FAKESVR6_TLTT"]    = [4, "TLTT", "full"]
+#regions["FAKESVR6_LTTT"]    = [4, "LTTT", "full"]
+
 
 """
-regions["FAKES_NUM_F0"]   = [1,  "numerator", "acc"]
-regions["FAKES_DEN_F0"]   = [1,  "denominator", "acc"]
+regions["FAKES_NUM_F0"]   = [2,  "numerator", "acc"]
+regions["FAKES_DEN_F0"]   = [2,  "denominator", "acc"]
 
-regions["FAKES_NUM_F1"]   = [5,  "numerator", "acc"]
-regions["FAKES_DEN_F1"]   = [5,  "denominator", "acc"]
-
+regions["FAKES_NUM_F1"]   = [6,  "numerator", "acc"]
+regions["FAKES_DEN_F1"]   = [6,  "denominator", "acc"]
 """
 
 

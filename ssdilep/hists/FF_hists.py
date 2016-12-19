@@ -7,11 +7,11 @@ hist_list = []
 # -------
 # event
 # -------
-hist_list.append(h_averageIntPerXing)
-hist_list.append(h_NPV)
-hist_list.append(h_nmuons)
-hist_list.append(h_nelectrons)
-hist_list.append(h_njets)
+#hist_list.append(h_averageIntPerXing)
+#hist_list.append(h_NPV)
+#hist_list.append(h_nmuons)
+#hist_list.append(h_nelectrons)
+#hist_list.append(h_njets)
 
 
 # -------
@@ -33,11 +33,11 @@ hist_list.append(h_mulead_ptvarcone30)
 # MET
 # -------
 hist_list.append(h_met_clus_et)
-hist_list.append(h_met_clus_phi)
-hist_list.append(h_met_trk_et)
-hist_list.append(h_met_trk_phi)
+#hist_list.append(h_met_clus_phi)
+#hist_list.append(h_met_trk_et)
+#hist_list.append(h_met_trk_phi)
 hist_list.append(h_met_clus_sumet)
-hist_list.append(h_met_trk_sumet)
+#hist_list.append(h_met_trk_sumet)
 
 # -------
 # jets

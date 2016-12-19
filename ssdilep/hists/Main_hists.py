@@ -19,7 +19,6 @@ hist_list.append(h_muons_dphi)
 hist_list.append(h_muons_deta)
 hist_list.append(h_muons_mVis)
 hist_list.append(h_muons_mTtot)
-hist_list.append(h_scdphi)
 
 
 # -------

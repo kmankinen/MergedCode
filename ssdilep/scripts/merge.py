@@ -93,6 +93,7 @@ fake_subtraction_regions = []
 reg_prefix, reg_suffix = funcs.get_pref_and_suff(options.region)
 
 if reg_suffix == "MAINREG":
+  
   fake_subtraction_regions = ["LL"]
   
   if options.fakest == "FullRegions":
@@ -102,6 +103,7 @@ if reg_suffix == "MAINREG":
   if options.fakest == "ReducedRegions":
     main_addition_regions = ["TT"]
     fake_addition_regions = ["TL","LT"]
+
 else:
   
   if options.fakest == "Subtraction":
@@ -139,7 +141,7 @@ mc_sys = [
 #for s in mc_bkg + signals:
 #    s.estimator.add_systematics(mc_sys)
 
-#fakes.estimator.add_systematics(FF)
+fakes.estimator.add_systematics(FF)
 
 mumu_vdict  = vars_mumu.vars_dict
 
