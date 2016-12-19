@@ -25,7 +25,7 @@ INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-RUN = "HistAvgPresc"
+RUN = "HistBound15FF"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 OUTFILE="ntuple.root"         # file output by pyframe job 
@@ -46,6 +46,7 @@ DO_NTUP_SYS = False                  # submit the NTUP systematics jobs
 DO_PLOT_SYS = False                 # submit the plot systematics jobs
 TESTMODE = False                    # submit only 1 sub-job (for testing)
 
+NCORES = 1
 
 def main():
     """
@@ -164,21 +165,23 @@ def submit(tag,job_sys,samps,config={}):
     prepare_path(abslogpath)
 
     vars=[]
-    vars+=["CONFIG=%s" % abscfg]
-    vars+=["INTARBALL=%s" % absintar]
-    vars+=["OUTFILE=%s" % OUTFILE]
-    vars+=["OUTPATH=%s" % absoutpath]
-    vars+=["SCRIPT=%s" % SCRIPT]
-     
+    vars+=["CONFIG=%s"    % abscfg     ]
+    vars+=["INTARBALL=%s" % absintar   ]
+    vars+=["OUTFILE=%s"   % OUTFILE    ]
+    vars+=["OUTPATH=%s"   % absoutpath ]
+    vars+=["SCRIPT=%s"    % SCRIPT     ]
+    vars+=["NCORES=%d"    % NCORES     ]
+
     VARS = ','.join(vars)
 
     cmd = 'qsub'
-    cmd += " -q %s" % QUEUE
-    cmd += ' -v "%s"' % VARS
-    cmd += ' -N j.hist.%s' % (tag)
-    cmd += ' -j oe -o %s/log' % (abslogpath)
-    cmd += ' -t1-%d' % (nsubjobs)
-    cmd += ' %s' % BEXEC
+    cmd += ' -l nodes=1:ppn=%d' % NCORES
+    cmd += ' -q %s'             % QUEUE
+    cmd += ' -v "%s"'           % VARS
+    cmd += ' -N j.hist.%s'      % tag
+    cmd += ' -j oe -o %s/log'   % abslogpath
+    cmd += ' -t1-%d'            % nsubjobs
+    cmd += ' %s'                % BEXEC
     print cmd
     m = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
     print m.communicate()[0]

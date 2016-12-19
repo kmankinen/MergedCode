@@ -1282,42 +1282,13 @@ all_DCH = Sample( name =  'all_DCH',
 single_DCH = [DCH500]
 
 
-
-#-------------------------------------------------------------------------------
-# samples for background estimation 
-#-------------------------------------------------------------------------------
-all_samples = []
-all_samples.append(data)
-all_samples.append(fakes)
-
-all_samples.append(diboson_sherpa)
-all_samples.append(diboson_incl_sherpa)
-all_samples.append(ttX)
-all_samples.append(ttbar)
-all_samples.append(singletop)
-all_samples.append(Wenu)
-all_samples.append(Wmunu)
-all_samples.append(Wtaunu)
-all_samples.append(Zee)
-all_samples.append(Zmumu)
-all_samples.append(Ztautau)
-all_samples.append(WenuSherpa22)
-all_samples.append(WmunuSherpa22)
-all_samples.append(WtaunuSherpa22)
-all_samples.append(ZeeSherpa22)
-all_samples.append(ZmumuSherpa22)
-all_samples.append(ZtautauSherpa22)
-
-
-for s in all_samples:
-
-  globals()["addon_"+s.name] = s.copy()
-  globals()["addon_"+s.name].name = "addon_"+s.name
-
-
 #-------------------------------------------------------------------------------
 # Collections 
 #-------------------------------------------------------------------------------
+
+
+# Samples loaded for SubmitHist.py
+#---------------------------------
 
 all_data = data.daughters
 
@@ -1347,8 +1318,27 @@ all_mc += ZtautauSherpa22.daughters
 
 
 #all_mc += all_DCH.daughters
-
-
 #####all_mc += single_DCH
+
+
+# Samples loaded for SubmitPlot.py
+#---------------------------------
+
+mc_bkg = []
+
+mc_bkg.append( diboson_sherpa )
+#mc_bkg.append( diboson_incl_sherpa )
+
+mc_bkg.append( WenuSherpa22 )
+mc_bkg.append( WmunuSherpa22 )
+mc_bkg.append( WtaunuSherpa22 )
+
+mc_bkg.append( ZeeSherpa22 ) 
+mc_bkg.append( ZmumuSherpa22 )
+mc_bkg.append( ZtautauSherpa22 )
+
+mc_bkg.append( ttX )
+mc_bkg.append( singletop )
+mc_bkg.append( ttbar )
 
 ## EOF

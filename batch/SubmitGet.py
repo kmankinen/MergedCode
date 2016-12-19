@@ -20,7 +20,8 @@ parser.add_option('-s', '--samp', dest='sample',
 user  = "fscutti"
 #user  = "gucchiel"
 samp  = options.sample
-jtag  =  "HIGG3D3_v7"
+#jtag  =  "HIGG3D3_v7"
+jtag  =  "DILEP_OLDTAG"
 
 jtagsamp  = "%s.*%s*" % (jtag,samp)
 
@@ -42,6 +43,7 @@ OUTCUTFLOW = os.path.join(OUTDIR,"cutflow",sys)
 OUTLOGS    = os.path.join(OUTDIR,"log",sys)
 JOB_TAG    = jtagsamp
 QUEUE      = "long"
+NCORES     = 1
 # --------------
 
 JOBDIR    = "/coepp/cephfs/mel/fscutti/jobdir" 
@@ -153,6 +155,7 @@ for k,v in outputs.iteritems():
   merged = recreplace(id, mcstrings)
   
   vars=[]
+  vars+=["NCORES=%d"        % NCORES                 ]
   vars+=["TREEFILE=%s"      % v["tree"]              ]
   vars+=["METAFILE=%s"      % v["metadata"]          ]
   vars+=["CUTFLOWFILE=%s"   % v["cutflow"]           ]
@@ -168,12 +171,13 @@ for k,v in outputs.iteritems():
   VARS = ','.join(vars)
 
   cmd = 'qsub'
-  cmd += ' -q %s'       % QUEUE
-  cmd += ' -v "%s"'     % VARS
-  cmd += ' -N j.get.%s' % job_name
-  cmd += ' -j n -o %s'  % OUTLOGS
-  cmd += ' -e %s'       % OUTLOGS
-  cmd += ' %s'          % SCRIPT
+  cmd += ' -l nodes=1:ppn=%d' % NCORES
+  cmd += ' -q %s'             % QUEUE
+  cmd += ' -v "%s"'           % VARS
+  cmd += ' -N j.get.%s'       % job_name
+  cmd += ' -j n -o %s'        % OUTLOGS
+  cmd += ' -e %s'             % OUTLOGS
+  cmd += ' %s'                % SCRIPT
   
   print cmd
   m = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)

@@ -6,8 +6,8 @@ from array import array
 # -------------------------------------------------------------------------------------
 # config
 # -------------------------------------------------------------------------------------
-indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesAvgPresc"
-tag       = "corr"
+indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesFinalFF"
+tag       = "red"
 name      = "avgpresc"
 
 # pt 
