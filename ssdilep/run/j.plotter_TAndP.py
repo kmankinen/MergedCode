@@ -62,6 +62,15 @@ def analyze(config):
                                   quiet=False,
                                   )
     
+    ## configure the list of triggers 
+    ## with eventual prescales and puts a
+    ## trig list to the store for later cutflow
+    ## ---------------------------------------
+    loop += ssdilep.algs.vars.BuildTrigConfig(
+        required_triggers = ["HLT_mu26_imedium", "HLT_mu50"],
+        key               = 'muons',
+        )
+    
     ## build and pt-sort objects
     ## ---------------------------------------
     loop += pyframe.algs.ListBuilder(
@@ -87,10 +96,6 @@ def analyze(config):
         key = 'met_trk',
         )
    
-    ## initialize and/or decorate objects
-    ## ---------------------------------------
-    loop += ssdilep.algs.algs.VarsAlg(key_muons='muons',key_jets='jets')   
-
     ## start preselection cutflow 
     ## ---------------------------------------
     loop += pyframe.algs.CutFlowAlg(key='presel')
@@ -98,24 +103,38 @@ def analyze(config):
     ## weights
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.EvWeights.MCEventWeight(cutflow='presel',key='weight_mc_event')
+    loop += ssdilep.algs.EvWeights.LPXKfactor(cutflow='presel',key='weight_kfactor')
     loop += ssdilep.algs.EvWeights.Pileup(cutflow='presel',key='weight_pileup')
-   
+    
+    ## initialize and/or decorate objects
+    ## ---------------------------------------
+    loop += ssdilep.algs.vars.TagAndProbeVars(key_muons='muons')   
+    loop += ssdilep.algs.vars.DiMuVars(key_muons='muons')   
+
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TwoMuons') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt24') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastOneMuPt28') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastTwoSSMuons') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TagAndProbeExist') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt25') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuLoose') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='M15') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuZ0SinTheta05') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuIsoBound08') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllPairsM20') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='M15') 
 
     
+    loop += ssdilep.algs.vars.ProbeVars(key_tag='tag',key_probe='probe')   
+
     ## weights configuration
     ## ---------------------------------------
     ## event
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.EvWeights.MuTrigSF(
-            is_single_mu  = True,
+            trig_list     = ["HLT_mu26_imedium_OR_HLT_mu50"],
             mu_reco       = "Loose",
+            mu_iso        = "FixedCutTightTrackOnly",
             key           = "MuTrigSFRecoLoose",
             scale         = None,
             )
@@ -123,54 +142,223 @@ def analyze(config):
     ## objects
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.ObjWeights.MuAllSF(
-            mu_index      = 0,
-            mu_iso        = "FixedCutTightTrackOnly",
+            mu_index      = 'tag',
+            mu_iso        = "NotFixedCutTightTrackOnly",
             mu_reco       = "Loose",
-            key           = "MuLeadAllSF",
+            key           = "TagRecoSF",
             scale         = None,
             )
     loop += ssdilep.algs.ObjWeights.MuAllSF(
-            mu_index      = 1,
+            mu_index      = 'tag',
             mu_iso        = "FixedCutTightTrackOnly",
             mu_reco       = "Loose",
-            key           = "MuSubLeadAllSF",
+            key           = "TagAllSF",
             scale         = None,
             )
+    loop += ssdilep.algs.ObjWeights.MuAllSF(
+            mu_index      = 'probe',
+            mu_iso        = "NotFixedCutTightTrackOnly",
+            mu_reco       = "Loose",
+            key           = "ProbeRecoSF",
+            scale         = None,
+            )
+    loop += ssdilep.algs.ObjWeights.MuAllSF(
+            mu_index      = 'probe',
+            mu_iso        = "FixedCutTightTrackOnly",
+            mu_reco       = "Loose",
+            key           = "ProbeAllSF",
+            scale         = None,
+            )
+    
+    ## configure histograms
+    ## ---------------------------------------
+    hist_list = []
+    hist_list += ssdilep.hists.Main_hists.hist_list
+    hist_list += ssdilep.hists.TAndP_hists.hist_list
+    
     
     ##-------------------------------------------------------------------------
     ## make plots
     ##-------------------------------------------------------------------------
     
+    # F1
+    # -------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'Z_OS',
-            plot_all  = False,
-            cut_flow  = [
-              ['TwoOSMuons',None],
-              ['MZwindow',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['MuTrigSFRecoLoose']],
-              ['LeadMuZ0SinTheta05',None],
-              ['SubLeadMuZ0SinTheta05',None],
-              ['MuTT',['MuLeadAllSF','MuSubLeadAllSF']],
-              ],
-            )
-    
-    loop += ssdilep.algs.algs.PlotAlg(
-            region    = 'Z_SS',
-            plot_all  = False,
+            region       = 'ProbeTight_F1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
             cut_flow  = [
               ['TwoSSMuons',None],
-              ['MZwindow',None],
-              ['MatchSingleMuIsoChain',None],
-              ['PassSingleMuIsoChain',['MuTrigSFRecoLoose']],
-              ['LeadMuZ0SinTheta05',None],
-              ['SubLeadMuZ0SinTheta05',None],
-              ['MuTT',['MuLeadAllSF','MuSubLeadAllSF']],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisTight',None],
+              ['ProbeTruthFilter',None],
               ],
             )
     
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'ProbeLoose_F1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow  = [
+              ['TwoSSMuons',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisLoose',None],
+              ['ProbeTruthFilter',None],
+              ],
+            )
+    # F2
+    # -------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'ProbeTight_F2',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow  = [
+              ['TwoOSMuons',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisTight',None],
+              ['ProbeTruthFilter',None],
+              ],
+            )
     
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'ProbeLoose_F2',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow  = [
+              ['TwoOSMuons',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisLoose',None],
+              ['ProbeTruthFilter',None],
+              ],
+            )
+   
+    # R1
+    # -------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'ProbeTight_R1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow  = [
+              ['TwoSSMuons',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisTight',None],
+              ['ProbeMuFakeFilter',None],
+              ],
+            )
     
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'ProbeLoose_R1',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow  = [
+              ['TwoSSMuons',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisLoose',None],
+              ['ProbeMuFakeFilter',None],
+              ],
+            )
+    
+    # R2
+    # -------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'ProbeTight_R2',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow  = [
+              ['TwoSSMuons',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisTight',None],
+              ['ProbeMuFailTruthFilter',None],
+              ],
+            )
+    
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'ProbeLoose_R2',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow  = [
+              ['TwoSSMuons',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisLoose',None],
+              ['ProbeMuFailTruthFilter',None],
+              ],
+            )
+    
+    # R3
+    # -------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'ProbeTight_R3',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow  = [
+              ['TwoOSMuons',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisTight',None],
+              ['ProbeMuFakeFilter',None],
+              ],
+            )
+    
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'ProbeLoose_R3',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow  = [
+              ['TwoOSMuons',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisLoose',None],
+              ['ProbeMuFakeFilter',None],
+              ],
+            )
+    
+    # R4
+    # -------------------------------
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'ProbeTight_R4',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow  = [
+              ['TwoOSMuons',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisTight',None],
+              ['ProbeMuFailTruthFilter',None],
+              ],
+            )
+    
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'ProbeLoose_R4',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow  = [
+              ['TwoOSMuons',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagisTight',['TagAllSF']],
+              ['ProbeisLoose',None],
+              ['ProbeMuFailTruthFilter',None],
+              ],
+            )
     loop += pyframe.algs.HistCopyAlg()
 
     ##-------------------------------------------------------------------------
