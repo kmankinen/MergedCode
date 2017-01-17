@@ -36,17 +36,26 @@ class TrigPresc(pyframe.core.Algorithm):
     def __init__(self, 
           cutflow     = None,
           use_avg     = None,
+          SKIP        = None,
           key         = None):
         pyframe.core.Algorithm.__init__(self, name="TrigPresc", isfilter=True)
         self.cutflow     = cutflow
         self.use_avg     = use_avg
+        self.SKIP        = SKIP
         self.key         = key
     #__________________________________________________________________________
     def execute(self, weight):
         trigpresc = 1.0
         
         # luminosity weighted prescales
-        presc_dict = {"HLT_mu20_L1MU15":354.153, "HLT_mu24":47.64, "HLT_mu50":1.0}
+        presc_dict = {
+            "HLT_mu20_L1MU15"     : 354.153, 
+            "HLT_mu24"            : 47.64, 
+            "HLT_mu50"            : 1.0,
+            "HLT_mu26_imedium"    : 1.949,
+            #"HLT_mu26_ivarmedium" : 1.097,
+            "HLT_mu26_ivarmedium" : 1.000,
+            }
 
         if "data" in self.sampletype:
           ineff_list = []
@@ -66,7 +75,9 @@ class TrigPresc(pyframe.core.Algorithm):
             trigpresc -= tot_ineff
         
         trigpresc = 1. / trigpresc
-       
+        
+        if self.SKIP:  trigpresc = 1.0
+        
         if self.key: self.store[self.key] = trigpresc
         self.set_weight(trigpresc*weight)
         return True
@@ -184,7 +195,6 @@ class MuTrigSF(pyframe.core.Algorithm):
             if m.isTruthMatchedToMuon: 
               for trig in self.trig_list:
                 
-                # HIGG3D3
                 sf_muon  = getattr(m,"_".join(["TrigEff","SF",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
                 eff_muon = getattr(m,"_".join(["TrigMCEff",trig,"Reco"+self.mu_reco,"Iso"+self.mu_iso])).at(0)
                 
