@@ -2,7 +2,7 @@
 
 echo ""
 echo "++++++++++++++++"
-echo "setup grig proxy"
+echo "setup grid proxy"
 echo "++++++++++++++++"
 echo ""
 

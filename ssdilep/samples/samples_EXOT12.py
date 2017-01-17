@@ -42,7 +42,7 @@ GRL += [
         "283608","283780","284006","284154","284213","284285","284420","284427",
         "284484",
 
-        #2016
+        #2016 first batch
         "297730","298595","298609","298633","298687","298690","298771","298773",
         "298862","298967","299055","299144","299147","299184","299243","299584",
         "300279","300345","300415","300418","300487","300540","300571","300600",
@@ -53,7 +53,20 @@ GRL += [
         "303304","303338","303421","303499","303560","303638","303832","303846",
         "303892","303943","304006","304008","304128","304178","304198","304211",
         "304243","304308","304337","304409","304431","304494",
+        
+        #2016 second batch
+        #"305380","305543",
+        #"305571","305618","305671","305674","305723","305727","305735","305777",
+        #"305811","305920","306269","306278","306310","306384","306419","306442",
+        #"306448","306451","307126","307195","307259","307306","307354","307358",
+        #"307394","307454","307514","307539","307569","307601","307619","307656",
+        #"307710","307716","307732","307861","307935","308047","308084","309375",
+        #"309390","309440","309516","309640","309674","309759","310015","310247",
+        #"310249","310341","310370","310405","310468","310473","310634","310691",
+        #"310738","310809","310863","310872","310969","311071","311170","311244",
+        #"311287","311321","311365","311402","311473","311481",
         ]
+
 
 ds_name = 'physics_Main_00%s'
 
@@ -785,7 +798,7 @@ ZmumuSherpa22 = Sample( name =   'ZmumuSherpa22',
                                Sherpa_NNPDF30NNLO_Zmumu_Pt500_700_BFilter,        
                                Sherpa_NNPDF30NNLO_Zmumu_Pt700_1000_BFilter,       
                                Sherpa_NNPDF30NNLO_Zmumu_Pt1000_2000_BFilter,      
-                               #Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_BFilter,     
+                               Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_BFilter,     
                               ],
                 ) 
 
@@ -832,7 +845,7 @@ ZtautauSherpa22 = Sample( name =   'ZtautauSherpa22',
                                Sherpa_NNPDF30NNLO_Ztautau_Pt140_280_CVetoBVeto,     
                                Sherpa_NNPDF30NNLO_Ztautau_Pt280_500_CVetoBVeto,     
                                Sherpa_NNPDF30NNLO_Ztautau_Pt500_700_CVetoBVeto,     
-                               #Sherpa_NNPDF30NNLO_Ztautau_Pt700_1000_CVetoBVeto,    
+                               Sherpa_NNPDF30NNLO_Ztautau_Pt700_1000_CVetoBVeto,    
                                Sherpa_NNPDF30NNLO_Ztautau_Pt1000_2000_CVetoBVeto,   
                                Sherpa_NNPDF30NNLO_Ztautau_Pt2000_E_CMS_CVetoBVeto,  
                                Sherpa_NNPDF30NNLO_Ztautau_Pt0_70_CFilterBVeto,      
@@ -842,7 +855,7 @@ ZtautauSherpa22 = Sample( name =   'ZtautauSherpa22',
                                Sherpa_NNPDF30NNLO_Ztautau_Pt500_700_CFilterBVeto,   
                                Sherpa_NNPDF30NNLO_Ztautau_Pt700_1000_CFilterBVeto,  
                                Sherpa_NNPDF30NNLO_Ztautau_Pt1000_2000_CFilterBVeto, 
-                               #Sherpa_NNPDF30NNLO_Ztautau_Pt2000_E_CMS_CFilterBVeto,
+                               Sherpa_NNPDF30NNLO_Ztautau_Pt2000_E_CMS_CFilterBVeto,
                                Sherpa_NNPDF30NNLO_Ztautau_Pt0_70_BFilter,           
                                Sherpa_NNPDF30NNLO_Ztautau_Pt70_140_BFilter,         
                                Sherpa_NNPDF30NNLO_Ztautau_Pt140_280_BFilter,        
@@ -1168,7 +1181,7 @@ ttX = Sample( name =   'ttX',
                   marker_color =  ROOT.kViolet+2,
                   daughters = [
                                aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_dilep,
-                               #aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttW,            
+                               aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttW,            
                                aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZnunu,         
                                aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZqq,           
                               ],
@@ -1316,9 +1329,7 @@ all_mc += ZeeSherpa22.daughters
 all_mc += ZmumuSherpa22.daughters
 all_mc += ZtautauSherpa22.daughters
 
-
-#all_mc += all_DCH.daughters
-#####all_mc += single_DCH
+all_mc += all_DCH.daughters
 
 
 # Samples loaded for SubmitPlot.py

@@ -17,11 +17,12 @@ parser.add_option('-s', '--samp', dest='sample',
 
 
 # --------------
-user  = "fscutti"
+#user  = "fscutti"
 #user  = "gucchiel"
+user  = "mmuskinj"
 samp  = options.sample
 #jtag  =  "HIGG3D3_v7"
-jtag  =  "DILEP_OLDTAG"
+jtag  =  "v2_EXOT12_data_2"
 
 jtagsamp  = "%s.*%s*" % (jtag,samp)
 

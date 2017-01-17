@@ -43,6 +43,7 @@ parser.add_option('-t', '--tag', dest='tag',
 #-----------------
 lumi =  18232.8
 #lumi =  33257.2 + 3212.96
+#lumi =  33257.2 #+ 3212.96
 
 # Control regions
 plotsfile = []
@@ -168,9 +169,9 @@ if options.makeplot == "True":
     rebin         = mumu_vdict[options.vname]['rebin'],
     log           = mumu_vdict[options.vname]['log'],
     icut          = int(options.icut),
-    sys_dict      = sys_dict,
-    #sys_dict      = None,
-    do_ratio_plot = True,
+    #sys_dict      = sys_dict,
+    sys_dict      = None,
+    #do_ratio_plot = True,
     save_eps      = True,
     plotsfile     = plotsfile,
     )
@@ -179,7 +180,7 @@ else:
  funcs.write_hist(
          backgrounds = plot_ord_bkg,
          signal      = signals, # This can be a list
-         data        = recom_data,
+         #data        = recom_data,
          region      = options.region,
          icut        = int(options.icut),
          histname    = os.path.join(mumu_vdict[options.vname]['path'],mumu_vdict[options.vname]['hname']),

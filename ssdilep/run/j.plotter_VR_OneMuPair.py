@@ -67,7 +67,9 @@ def analyze(config):
     ## trig list to the store for later cutflow
     ## ---------------------------------------
     loop += ssdilep.algs.vars.BuildTrigConfig(
-        required_triggers = ["HLT_mu26_imedium", "HLT_mu50"],
+        #required_triggers = ["HLT_mu26_imedium","HLT_mu26_ivarmedium", "HLT_mu50"],
+        required_triggers = ["HLT_mu26_imedium","HLT_mu50"],
+        #required_triggers = ["HLT_mu26_ivarmedium", "HLT_mu50"],
         key               = 'muons',
         )
     
@@ -108,12 +110,15 @@ def analyze(config):
    
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastTwoSSMuons') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastTwoSSMuons') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='ExactlyTwoSSMuons') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllPairsM20') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuLoose') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt25') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuZ0SinTheta05') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuIsoBound08') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PASS') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PassDiMuChain') 
 
     
@@ -126,9 +131,15 @@ def analyze(config):
     ## ---------------------------------------
     ## event
     ## +++++++++++++++++++++++++++++++++++++++
+    #loop += ssdilep.algs.EvWeights.TrigPresc(
+    #        use_avg   = True,
+    #        SKIP      = True,
+    #        key       = "DataUnPrescAvg",
+    #        )
     loop += ssdilep.algs.EvWeights.MuTrigSF(
             trig_list     = ["HLT_mu26_imedium_OR_HLT_mu50"],
             mu_reco       = "Loose",
+            mu_iso        = "FixedCutTightTrackOnly",
             key           = "MuTrigSFRecoLoose",
             scale         = None,
             )
@@ -244,188 +255,318 @@ def analyze(config):
     ## ---------------------------------------
     hist_list = []
     hist_list += ssdilep.hists.Main_hists.hist_list
+    #hist_list += ssdilep.hists.PtOnly_hists.hist_list
     
     
     ##-------------------------------------------------------------------------
     ## make plots
     ##-------------------------------------------------------------------------
     
-    ## VR6
+    ## VR1
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_TT',
+            region       = 'FAKESVR1_TT',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['TwoMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuTT',['Mu0AllSF','Mu1AllSF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_LT',
+            region       = 'FAKESVR1_LT',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['TwoMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuLT',['Mu0RecoSF','Mu1AllSF','Mu0FF','EffCorrLT']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_TL',
+            region       = 'FAKESVR1_TL',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['TwoMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuTL',['Mu0AllSF','Mu1RecoSF','Mu1FF','EffCorrTL']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_LL',
+            region       = 'FAKESVR1_LL',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['TwoMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuLL',['Mu0RecoSF','Mu1RecoSF','Mu0FF','Mu1FF','EffCorrLL']],
               ],
             )
     
+    ## VR2
+    ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_TTT',
+            region       = 'FAKESVR2_TT',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
+              ['TwoMuons',None],
+              ['Mlow200',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['LeadMuPt28',None],
+              ['MuNoFilterTT',['Mu0AllSF','Mu1AllSF']],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKESVR2_LT',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['AllMuPt25',None],
+              ['TwoMuons',None],
+              ['Mlow200',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['LeadMuPt28',None],
+              ['MuNoFilterLT',['Mu0RecoSF','Mu1AllSF','Mu0FF','EffCorrLT']],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKESVR2_TL',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['AllMuPt25',None],
+              ['TwoMuons',None],
+              ['Mlow200',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['LeadMuPt28',None],
+              ['MuNoFilterTL',['Mu0AllSF','Mu1RecoSF','Mu1FF','EffCorrTL']],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKESVR2_LL',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['AllMuPt25',None],
+              ['TwoMuons',None],
+              ['Mlow200',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['LeadMuPt28',None],
+              ['MuNoFilterLL',['Mu0RecoSF','Mu1RecoSF','Mu0FF','Mu1FF','EffCorrLL']],
+              ],
+            )
+    
+    """    
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKESVR1_TTT',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['AllMuPt25',None],
               ['ThreeMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuTTT',['Mu0AllSF','Mu1AllSF','Mu2AllSF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_TTL',
+            region       = 'FAKESVR1_TTL',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['ThreeMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuTTL',['Mu0AllSF','Mu1AllSF','Mu2RecoSF','Mu2FF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_TLT',
+            region       = 'FAKESVR1_TLT',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['ThreeMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuTLT',['Mu0AllSF','Mu2AllSF','Mu1RecoSF','Mu1FF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_LTT',
+            region       = 'FAKESVR1_LTT',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['ThreeMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuLTT',['Mu1AllSF','Mu2AllSF','Mu0RecoSF','Mu0FF']],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKESVR1_LLT',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['AllMuPt25',None],
+              ['ThreeMuons',None],
+              ['Mlow200',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['LeadMuPt28',None],
+              ['MuLLT',['Mu2AllSF','Mu0RecoSF','Mu1RecoSF','Mu0FF','Mu1FF']],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKESVR1_LTL',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['AllMuPt25',None],
+              ['ThreeMuons',None],
+              ['Mlow200',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['LeadMuPt28',None],
+              ['MuLTL',['Mu1AllSF','Mu0RecoSF','Mu2RecoSF','Mu0FF','Mu2FF']],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKESVR1_TLL',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['AllMuPt25',None],
+              ['ThreeMuons',None],
+              ['Mlow200',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['LeadMuPt28',None],
+              ['MuTLL',['Mu0AllSF','Mu1RecoSF','Mu2RecoSF','Mu1FF','Mu2FF']],
+              ],
+            )
+    loop += ssdilep.algs.algs.PlotAlg(
+            region       = 'FAKESVR1_LLL',
+            plot_all     = False,
+            do_var_check = True,
+            hist_list    = hist_list,
+            cut_flow     = [
+              ['AllMuPt25',None],
+              ['ThreeMuons',None],
+              ['Mlow200',None],
+              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['LeadMuPt28',None],
+              ['MuLLL',['Mu0RecoSF','Mu1RecoSF','Mu2RecoSF','Mu0FF','Mu1FF','Mu2FF']],
               ],
             )
 
 
 
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_TTTT',
+            region       = 'FAKESVR1_TTTT',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['FourMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuTTTT',['Mu0AllSF','Mu1AllSF','Mu2AllSF','Mu3AllSF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_TTTL',
+            region       = 'FAKESVR1_TTTL',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['FourMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuTTTL',['Mu0AllSF','Mu1AllSF','Mu2AllSF','Mu3RecoSF','Mu3FF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_TTLT',
+            region       = 'FAKESVR1_TTLT',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['FourMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuTTLT',['Mu0AllSF','Mu1AllSF','Mu3AllSF','Mu2RecoSF','Mu2FF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_TLTT',
+            region       = 'FAKESVR1_TLTT',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['FourMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuTLTT',['Mu0AllSF','Mu2AllSF','Mu3AllSF','Mu1RecoSF','Mu1FF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
-            region       = 'FAKESVR6_LTTT',
+            region       = 'FAKESVR1_LTTT',
             plot_all     = False,
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+              ['AllMuPt25',None],
               ['FourMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt30',None],
+              ['LeadMuPt28',None],
               ['MuLTTT',['Mu1AllSF','Mu2AllSF','Mu3AllSF','Mu0RecoSF','Mu0FF']],
               ],
             )
-    
+    """ 
     loop += pyframe.algs.HistCopyAlg()
 
     ##-------------------------------------------------------------------------

@@ -16,6 +16,7 @@ USER   = os.getenv('USER')
 
 ## global config
 # inputs
+#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_common_v2Ntuples' # input NTUP path
 #NTUP='/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_common_v1Ntuples/merged' # input NTUP path
 NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v7/merged' # input NTUP path
 
@@ -25,7 +26,10 @@ INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-RUN = "HistBound15FF"
+#RUN = "Hist17JanTP"
+#RUN = "Hist17JanVR"
+#RUN = "Hist17JanV1VR"
+RUN = "Hist17JanFF"
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
 OUTFILE="ntuple.root"         # file output by pyframe job 
@@ -35,9 +39,8 @@ QUEUE="long"                        # length of pbs queue (short, long, extralon
 
 # pick your script!!!
 SCRIPT="./ssdilep/run/j.plotter_FF.py"  
-#SCRIPT="./ssdilep/run/j.plotter_STUDY.py"  
-#SCRIPT="./ssdilep/run/j.plotter_VR_TwoMu.py"  
 #SCRIPT="./ssdilep/run/j.plotter_TAndP.py"  
+#SCRIPT="./ssdilep/run/j.plotter_VR_OneMuPair.py"  
 
 
 BEXEC="Hist.sh"                      # exec script (probably dont change) 

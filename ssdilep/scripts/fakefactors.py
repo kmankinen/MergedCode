@@ -6,9 +6,9 @@ from array import array
 # -------------------------------------------------------------------------------------
 # config
 # -------------------------------------------------------------------------------------
-indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/FakesFinalFF"
-tag       = "red"
-name      = "avgpresc"
+indir     = "/coepp/cephfs/mel/fscutti/Analysis/ssdilep/scripts/MCFakesDiJet"
+tag       = "mc"
+name      = "dijet"
 
 # pt 
 var       = "mulead_pt"
@@ -68,13 +68,14 @@ c_all.SetTicky()
 
 merged_ff_file = ROOT.TFile.Open(os.path.join(indir,outmerged),"UPDATE")
 
-for i in xrange(1,9):
+#for i in xrange(1,9):
+for i in xrange(1,2):
   num_file = ROOT.TFile.Open(os.path.join(indir,infile%("NUM",i)),"READ")
   den_file = ROOT.TFile.Open(os.path.join(indir,infile%("DEN",i)),"READ")
 
-  h_num = num_file.Get("h_FAKES_NUM_F%s_nominal_addon_fakes"%i).Clone()
+  h_num = num_file.Get("h_FAKES_NUM_F%s_nominal_dijet"%i).Clone()
   h_num.SetNameTitle("h_num","h_num")
-  h_den = den_file.Get("h_FAKES_DEN_F%s_nominal_addon_fakes"%i).Clone()
+  h_den = den_file.Get("h_FAKES_DEN_F%s_nominal_dijet"%i).Clone()
   h_den.SetNameTitle("h_den","h_den")
 
  
@@ -124,5 +125,5 @@ for i in xrange(1,9):
   ff_file.WriteTObject(h_ff.Clone())
   ff_file.WriteTObject(c.Clone())
  
-
+# EOF
 

@@ -59,19 +59,20 @@ class MuAllSF(pyframe.core.Algorithm):
         sf=1.0
         muons = self.store['muons']
         
+        if self.mu_index in ['tag','probe']:
+          muon = self.store[self.mu_index]
+        
         if self.mu_index < len(muons): 
+          muon = muons[self.mu_index]
         
           if "mc" in self.sampletype: 
-            muon = muons[self.mu_index]
             
             if muon.isTruthMatchedToMuon:
               if not ("Not" in self.mu_iso):
-                # HIGG3D3 
                 sf *= getattr(muon,"_".join(["IsoEff","SF","Iso"+self.mu_iso])).at(0)
                 # EXOT12 v1 ntuples 
                 #sf *= getattr(muon,"_".join(["IsoEff","SF",self.mu_iso])).at(0)
               if not ("Not" in self.mu_reco):
-                # HIGG3D3 
                 sf *= getattr(muon,"_".join(["RecoEff","SF","Reco"+self.mu_reco])).at(0)
                 # EXOT12 v1 ntuples 
                 #sf *= getattr(muon,"_".join(["RecoEff","SF",self.mu_reco])).at(0)
@@ -138,6 +139,5 @@ class MuFakeFactorGraph(pyframe.core.Algorithm):
           self.store[self.key] = ff_mu
 
         return True
-
 
 # EOF

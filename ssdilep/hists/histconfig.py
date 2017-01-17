@@ -171,6 +171,7 @@ h_jetlead_pt  = Hist1D( hname  = "h_jetlead_pt",
 # -------
 
 # mulead
+# ------
 h_mulead_pt = Hist1D( hname  = "h_mulead_pt",
                               xtitle = "p_{T}(#mu_{lead}) [GeV]",
                               ytitle = "Events / (1 GeV)", 
@@ -212,7 +213,7 @@ h_mulead_trkd0 = Hist1D( hname  = "h_mulead_trkd0",
                             )
 
 h_mulead_trkd0sig = Hist1D( hname  = "h_mulead_trkd0sig",
-                              xtitle = "",
+                              xtitle = "d^{trk}_{0} / #sigma(d^{trk}_{0}) (#mu_{lead})",
                               ytitle = "Events / (0.01)", 
                               nbins  = 100,
                               xmin   = 0.,
@@ -252,6 +253,7 @@ h_mulead_ptvarcone30  = Hist1D( hname  = "h_mulead_ptvarcone30",
                             )
 
 # musublead
+# ---------
 h_musublead_pt = Hist1D( hname  = "h_musublead_pt",
                               xtitle = "p_{T}(#mu_{sublead}) [GeV]",
                               ytitle = "Events / (1 GeV)", 
@@ -293,7 +295,7 @@ h_musublead_trkd0 = Hist1D( hname  = "h_musublead_trkd0",
                             )
 
 h_musublead_trkd0sig = Hist1D( hname  = "h_musublead_trkd0sig",
-                              xtitle = "",
+                              xtitle = "d^{trk}_{0} / #sigma(d^{trk}_{0}) (#mu_{sublead})",
                               ytitle = "Events / (0.01)", 
                               nbins  = 100,
                               xmin   = 0.,
@@ -332,6 +334,67 @@ h_musublead_ptvarcone30  = Hist1D( hname  = "h_musublead_ptvarcone30",
                               vexpr  = "self.store['muons'][1].ptvarcone30 / self.store['muons'][1].tlv.Pt()",
                             )
 
+# -------------
+# tag and probe
+# -------------
+h_tag_pt = Hist1D( hname  = "h_tag_pt",
+                              xtitle = "p_{T}(#mu_{tag}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.0,
+                              dir    = "muons",
+                              vexpr  = "self.store['tag'].tlv.Pt() / GeV",
+                            )
+
+h_probe_pt = Hist1D( hname  = "h_probe_pt",
+                              xtitle = "p_{T}(#mu_{probe}) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2000,
+                              xmin   = 0.0,
+                              xmax   = 2000.0,
+                              dir    = "muons",
+                              vexpr  = "self.store['probe'].tlv.Pt() / GeV",
+                            )
+
+h_probe_ptiso = Hist1D( hname  = "h_probe_ptiso",
+                              xtitle = "p_{T}(#mu_{probe}) + ptvarcone30 [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 1000,
+                              xmin   = 0.0,
+                              xmax   = 1000.0,
+                              dir    = "muons",
+                              vexpr  = "( self.store['probe'].tlv.Pt() + self.store['probe'].ptvarcone30 ) / GeV",
+                            )
+
+h_probe_ujet_pt = Hist1D( hname  = "h_probe_ujet_pt",
+                              xtitle = "p_{T}(#mu_{probe} underlying jet) [GeV]",
+                              ytitle = "Events / (1 GeV)", 
+                              nbins  = 2100,
+                              xmin   = -100.0,
+                              xmax   = 2000.0,
+                              dir    = "muons",
+                              vexpr  = "self.store['probe_ujet_pt']",
+                            )
+
+h_tag_ptvarcone30  = Hist1D( hname  = "h_tag_ptvarcone30",
+                              xtitle = "ptvarcone30/p_{T}(#mu_{tag})",
+                              ytitle = "Events / (0.001)", 
+                              nbins  = 10000,
+                              xmin   = 0.,
+                              xmax   = 10.,
+                              dir    = "muons",
+                              vexpr  = "self.store['tag'].ptvarcone30 / self.store['tag'].tlv.Pt()",
+                            )
+h_probe_ptvarcone30  = Hist1D( hname  = "h_probe_ptvarcone30",
+                              xtitle = "ptvarcone30/p_{T}(#mu_{probe})",
+                              ytitle = "Events / (0.001)", 
+                              nbins  = 10000,
+                              xmin   = 0.,
+                              xmax   = 10.,
+                              dir    = "muons",
+                              vexpr  = "self.store['probe'].ptvarcone30 / self.store['probe'].tlv.Pt()",
+                            )
 
 # -------
 # MET
@@ -400,7 +463,6 @@ h_met_trk_sumet  = Hist1D( hname  = "h_met_trk_sumet",
 # --------
 # 2D hists
 # --------
-
 h_mulead_ptiso_jetlead_pt  = Hist2D( hname      = "h_mulead_ptiso_jetlead_pt",
                               xtitle  = "p_{T}(#mu_{lead}) + ptvarcone30 [GeV]",
                               ytitle  = "p_{T}(jet_{lead}) [GeV]", 
