@@ -15,8 +15,14 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-indir    = 'HistNewVR'
-outdir   = 'PlotsNewVR'
+#indir    = 'HistNewVREB'
+#outdir   = 'PlotsNewVREB'
+
+#indir    = 'HistFinalFF'
+#outdir   = 'NewPlotsFinalFF'
+
+indir    = 'HistNewTESTV1'
+outdir   = 'PlotsNewTESTV1'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -49,8 +55,8 @@ job_vars['INDIR']     = INDIR
 job_vars['SCRIPT']    = SCRIPT
 
 #fake_estimate = "FullRegions"
-fake_estimate = "ReducedRegions"
-#fake_estimate = "Subtraction"
+#fake_estimate = "ReducedRegions"
+fake_estimate = "Subtraction"
 
 regions = {}
 # use it as such:
@@ -60,27 +66,25 @@ regions = {}
 #regions["Z_OS"]   = [6,  "OS", "incl"]
 #regions["Z_SS"]   = [6,  "SS", "incl"]
 
-regions["FAKESVR6_MAINREG"] = [4, "VR",   "red"]
-#regions["FAKESVR6_TT"]      = [4, "TT",   "full"]
-#regions["FAKESVR6_LL"]      = [4, "LL",   "full"]
-#regions["FAKESVR6_TL"]      = [4, "TL",   "full"]
-#regions["FAKESVR6_LT"]      = [4, "LT",   "full"]
-#regions["FAKESVR6_TTL"]     = [4, "TTL",  "full"]
-#regions["FAKESVR6_TLT"]     = [4, "TLT",  "full"]
-#regions["FAKESVR6_LTT"]     = [4, "LTT",  "full"]
-#regions["FAKESVR6_TTTL"]    = [4, "TTTL", "full"]
-#regions["FAKESVR6_TTLT"]    = [4, "TTLT", "full"]
-#regions["FAKESVR6_TLTT"]    = [4, "TLTT", "full"]
-#regions["FAKESVR6_LTTT"]    = [4, "LTTT", "full"]
+#regions["FAKESVR1_MAINREG"] = [5, "VR",   "V1"]
+#regions["FAKESVR1_TT"]      = [5, "TT",   "V1"]
+regions["FAKESVR1_LL"]      = [5, "LL",   "V1"]
+regions["FAKESVR1_TL"]      = [5, "TL",   "V1"]
+regions["FAKESVR1_LT"]      = [5, "LT",   "V1"]
+#regions["FAKESVR1_TTL"]     = [5, "TTL",  "V1"]
+#regions["FAKESVR1_TLT"]     = [5, "TLT",  "V1"]
+#regions["FAKESVR1_LTT"]     = [5, "LTT",  "V1"]
+#regions["FAKESVR1_TTTL"]    = [5, "TTTL", "V1"]
+#regions["FAKESVR1_TTLT"]    = [5, "TTLT", "V1"]
+#regions["FAKESVR1_TLTT"]    = [5, "TLTT", "V1"]
+#regions["FAKESVR1_LTTT"]    = [5, "LTTT", "V1"]
 
 
-"""
-regions["FAKES_NUM_F0"]   = [2,  "numerator", "acc"]
-regions["FAKES_DEN_F0"]   = [2,  "denominator", "acc"]
+#regions["FAKES_NUM_F0"]   = [2,  "numerator", "acc"]
+#regions["FAKES_DEN_F0"]   = [2,  "denominator", "acc"]
 
-regions["FAKES_NUM_F1"]   = [6,  "numerator", "acc"]
-regions["FAKES_DEN_F1"]   = [6,  "denominator", "acc"]
-"""
+#regions["FAKES_NUM_F1"]   = [6,  "numerator", "acc"]
+#regions["FAKES_DEN_F1"]   = [6,  "denominator", "acc"]
 
 
 #---------------------
