@@ -142,8 +142,8 @@ mulead_pt = Var(name = 'mulead_pt',
               xmin   = 0.,
               xmax   = 400.,
               #xmax   = 120.,
-              #rebin  = 20,
               rebin  = 20,
+              #rebin  = 5,
               log    = False,
               )
 
@@ -319,6 +319,24 @@ mulead_ptcone40 = Var(name = 'mulead_ptcone40',
               log    = False,
               )
 
+
+## tag and probe
+## -------------------------------------
+tag_pt = Var(name = 'tag_pt',
+              path   = 'muons',
+              xmin   = 0.,
+              xmax   = 400.,
+              rebin  = 1,
+              log    = False,
+              )
+probe_pt = Var(name = 'probe_pt',
+              path   = 'muons',
+              xmin   = 0.,
+              xmax   = 400.,
+              rebin  = 1,
+              log    = False,
+              )
+
 # jets
 jetlead_pt = Var(name = 'jetlead_pt',
               path    = 'jets',
@@ -404,15 +422,25 @@ vars_list.append(mulead_trkd0sig)
 vars_list.append(mulead_trkz0)
 vars_list.append(mulead_trkz0sintheta)
 
-vars_list.append(mulead_topoetcone20)
-vars_list.append(mulead_topoetcone30)
-vars_list.append(mulead_topoetcone40)
+#vars_list.append(mulead_topoetcone20)
+#vars_list.append(mulead_topoetcone30)
+#vars_list.append(mulead_topoetcone40)
 vars_list.append(mulead_ptvarcone30)
 
 vars_list.append(met_clus_et)
 vars_list.append(met_clus_phi)
 vars_list.append(met_clus_sumet)
 #"""
+
+
+# -------------
+# tag-and-probe
+# -------------
+"""
+vars_list.append(tag_pt)
+vars_list.append(probe_pt)
+"""
+
 
 # ---------------------
 # just for fake-factors
