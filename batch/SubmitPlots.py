@@ -15,14 +15,8 @@ def make_tag(cat,var):
 
 ana      = 'ssdilep'
 
-#indir    = 'HistNewVREB'
-#outdir   = 'PlotsNewVREB'
-
-#indir    = 'HistFinalFF'
-#outdir   = 'NewPlotsFinalFF'
-
-indir    = 'HistNewTESTV1'
-outdir   = 'PlotsNewTESTV1'
+indir    = 'Hist17JanFF'
+outdir   = 'Plots17JanFF'
 
 USER    = os.getenv('USER')
 MAIN    = os.getenv('MAIN')
@@ -62,30 +56,46 @@ regions = {}
 # use it as such:
 #regions["FOLDERNAME"]     = [icut, "plot label"]
 
+#"""
+regions["ProbeTight_F1"] = [4, "TruthFilter_SS",   "truthfilter_ss"]
+regions["ProbeLoose_F1"] = [4, "TruthFilter_SS",   "truthfilter_ss"]
 
-#regions["Z_OS"]   = [6,  "OS", "incl"]
-#regions["Z_SS"]   = [6,  "SS", "incl"]
+regions["ProbeTight_F2"] = [4, "TruthFilter_OS",   "truthfilter_os"]
+regions["ProbeLoose_F2"] = [4, "TruthFilter_OS",   "truthfilter_os"]
 
-#regions["FAKESVR1_MAINREG"] = [5, "VR",   "V1"]
-#regions["FAKESVR1_TT"]      = [5, "TT",   "V1"]
-regions["FAKESVR1_LL"]      = [5, "LL",   "V1"]
-regions["FAKESVR1_TL"]      = [5, "TL",   "V1"]
-regions["FAKESVR1_LT"]      = [5, "LT",   "V1"]
-#regions["FAKESVR1_TTL"]     = [5, "TTL",  "V1"]
-#regions["FAKESVR1_TLT"]     = [5, "TLT",  "V1"]
-#regions["FAKESVR1_LTT"]     = [5, "LTT",  "V1"]
-#regions["FAKESVR1_TTTL"]    = [5, "TTTL", "V1"]
-#regions["FAKESVR1_TTLT"]    = [5, "TTLT", "V1"]
-#regions["FAKESVR1_TLTT"]    = [5, "TLTT", "V1"]
-#regions["FAKESVR1_LTTT"]    = [5, "LTTT", "V1"]
+regions["ProbeTight_R1"] = [4, "FakeFilter_SS",   "fakefilter_ss"]
+regions["ProbeLoose_R1"] = [4, "FakeFilter_SS",   "fakefilter_ss"]
 
+regions["ProbeTight_R2"] = [4, "AntiTruth_SS",   "antitruth_ss"]
+regions["ProbeLoose_R2"] = [4, "AntiTruth_SS",   "antitruth_ss"]
 
-#regions["FAKES_NUM_F0"]   = [2,  "numerator", "acc"]
-#regions["FAKES_DEN_F0"]   = [2,  "denominator", "acc"]
+regions["ProbeTight_R3"] = [4, "FakeFilter_OS",   "fakefilter_os"]
+regions["ProbeLoose_R3"] = [4, "FakeFilter_OS",   "fakefilter_os"]
 
-#regions["FAKES_NUM_F1"]   = [6,  "numerator", "acc"]
-#regions["FAKES_DEN_F1"]   = [6,  "denominator", "acc"]
+regions["ProbeTight_R4"] = [4, "AntiTruth_OS",   "antitruth_os"]
+regions["ProbeLoose_R4"] = [4, "AntiTruth_OS",   "antitruth_os"]
+#"""
 
+"""
+regions["FAKES_NUM_F0"]   = [2,  "numerator", "bound"]
+regions["FAKES_DEN_F0"]   = [2,  "denominator", "bound"]
+
+regions["FAKES_NUM_F1"]   = [6,  "numerator", "bound"]
+regions["FAKES_DEN_F1"]   = [6,  "denominator", "bound"]
+"""
+
+#regions["FAKESVR1_MAINREG"] = [5, "VR",   "v2"]
+#regions["FAKESVR1_TT"]      = [5, "TT",   "v2"]
+#regions["FAKESVR1_LL"]      = [5, "LL",   "v2"]
+#regions["FAKESVR1_TL"]      = [5, "TL",   "v2"]
+#regions["FAKESVR1_LT"]      = [5, "LT",   "v2"]
+#regions["FAKESVR1_TTL"]     = [5, "TTL",  "v2"]
+#regions["FAKESVR1_TLT"]     = [5, "TLT",  "v2"]
+#regions["FAKESVR1_LTT"]     = [5, "LTT",  "v2"]
+#regions["FAKESVR1_TTTL"]    = [5, "TTTL", "v2"]
+#regions["FAKESVR1_TTLT"]    = [5, "TTLT", "v2"]
+#regions["FAKESVR1_TLTT"]    = [5, "TLTT", "v2"]
+#regions["FAKESVR1_LTTT"]    = [5, "LTTT", "v2"]
 
 #---------------------
 # Make input tarball

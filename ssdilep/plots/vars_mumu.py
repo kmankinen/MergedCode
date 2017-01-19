@@ -142,8 +142,8 @@ mulead_pt = Var(name = 'mulead_pt',
               xmin   = 0.,
               xmax   = 400.,
               #xmax   = 120.,
-              rebin  = 20,
-              #rebin  = 5,
+              #rebin  = 20,
+              rebin  = 5,
               log    = False,
               )
 
@@ -326,14 +326,28 @@ tag_pt = Var(name = 'tag_pt',
               path   = 'muons',
               xmin   = 0.,
               xmax   = 400.,
-              rebin  = 1,
+              rebin  = 10,
               log    = False,
               )
 probe_pt = Var(name = 'probe_pt',
               path   = 'muons',
               xmin   = 0.,
               xmax   = 400.,
-              rebin  = 1,
+              rebin  = 10,
+              log    = False,
+              )
+probe_ptiso = Var(name = 'probe_ptiso',
+              path   = 'muons',
+              xmin   = 0.,
+              xmax   = 500.,
+              rebin  = 10,
+              log    = False,
+              )
+probe_ujet_pt = Var(name = 'probe_ujet_pt',
+              path   = 'muons',
+              xmin   = 0.,
+              xmax   = 500.,
+              rebin  = 10,
               log    = False,
               )
 
@@ -421,10 +435,6 @@ vars_list.append(mulead_trkd0)
 vars_list.append(mulead_trkd0sig)
 vars_list.append(mulead_trkz0)
 vars_list.append(mulead_trkz0sintheta)
-
-#vars_list.append(mulead_topoetcone20)
-#vars_list.append(mulead_topoetcone30)
-#vars_list.append(mulead_topoetcone40)
 vars_list.append(mulead_ptvarcone30)
 
 vars_list.append(met_clus_et)
@@ -436,10 +446,13 @@ vars_list.append(met_clus_sumet)
 # -------------
 # tag-and-probe
 # -------------
-"""
+#"""
 vars_list.append(tag_pt)
 vars_list.append(probe_pt)
-"""
+vars_list.append(probe_ptiso)
+vars_list.append(probe_ptiso)
+vars_list.append(probe_ujet_pt)
+#"""
 
 
 # ---------------------
