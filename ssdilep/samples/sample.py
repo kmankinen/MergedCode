@@ -23,6 +23,7 @@ class Sample(object):
     def __init__(self,
                  name          = '',
                  tlatex        = None,
+                 infile        = None,
                  xsec          = 0.0,
                  feff          = 1.0, 
                  kfactor       = 1.0,
@@ -36,6 +37,7 @@ class Sample(object):
         ## Attach attributes.
         ## -------------------------------------------------------
         self.name          = name
+        self.infile        = infile or name
         self.tlatex        = tlatex or name
         self.xsec          = xsec
         self.feff          = feff
@@ -47,7 +49,7 @@ class Sample(object):
         self.estimator     = estimator
         ## for stylying histograms
         self.plotopts      = metaroot.hist.PlotOptions(**kw)
-
+        
         ## set additional key-word args
         ## -------------------------------------------------------
         for k,w in kw.iteritems():
