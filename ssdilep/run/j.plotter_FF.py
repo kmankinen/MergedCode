@@ -58,6 +58,7 @@ def analyze(config):
     ##-------------------------------------------------------------------------
     loop = pyframe.core.EventLoop(name='ssdilep',
                                   sampletype=config['sampletype'],
+                                  samplename=config['samplename'],
                                   outfile='ntuple.root',
                                   quiet=False,
                                   )
@@ -114,7 +115,8 @@ def analyze(config):
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt25') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OneJet') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuIsoBound08') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuIsoBound15') 
 
     
     ## initialize and/or decorate objects
@@ -209,18 +211,24 @@ def analyze(config):
             scale         = None,
             )
     
+    loop += ssdilep.algs.ObjWeights.JetPtWeightHist(
+            config_file=os.path.join(main_path,'ssdilep/data/weights_30Jan.root'),
+            key='JetW',
+            scale=None,
+            )
+    
     ## configure histograms
     ## ---------------------------------------
     hist_list = []
     hist_list += ssdilep.hists.FF_hists.hist_list
+    #hist_list += ssdilep.hists.H2D_hists.hist_list
     #hist_list += ssdilep.hists.PtOnly_hists.hist_list
-    hist_list += ssdilep.hists.H2D_hists.hist_list
     
     
     ##-------------------------------------------------------------------------
     ## make plots
     ##-------------------------------------------------------------------------
-    
+    """ 
     ## before any selection
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -246,6 +254,7 @@ def analyze(config):
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ],
             )
+    """
     ## F1
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -273,12 +282,12 @@ def analyze(config):
               ['LeadMuTruthFilter',None],
               ['LeadMuIsoNotFixedCutTightTrackOnly',['MuSFNotFixedCutTightTrackOnlyLoose']],
               ['MuJetDphi27',None],
-              ['AllJetPt35',None],
+              ['AllJetPt35',['JetW']],
               ['LeadMuD0Sig10',None],
               ['METlow40',None],
               ],
             )
-    
+    """ 
     ## F2
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -511,7 +520,7 @@ def analyze(config):
               ],
             )
     
-    
+    """    
     
     """ 
     ## before any selection

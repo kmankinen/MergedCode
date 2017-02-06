@@ -13,6 +13,8 @@ description:
 
 ## modules
 from sample import Sample
+from samples_DCH import *
+
 import ROOT
 
 
@@ -798,7 +800,7 @@ ZmumuSherpa22 = Sample( name =   'ZmumuSherpa22',
                                Sherpa_NNPDF30NNLO_Zmumu_Pt500_700_BFilter,        
                                Sherpa_NNPDF30NNLO_Zmumu_Pt700_1000_BFilter,       
                                Sherpa_NNPDF30NNLO_Zmumu_Pt1000_2000_BFilter,      
-                               Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_BFilter,     
+                               #Sherpa_NNPDF30NNLO_Zmumu_Pt2000_E_CMS_BFilter,     
                               ],
                 ) 
 
@@ -1232,67 +1234,7 @@ singletop = Sample( name =   'singletop',
                 ) 
 
 
-#------------------------------------------------------------------------------------------------------
-# Doubly charged Higss 
-# Notes:
-#       * cross sections: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/XsecSummaryHiggsBSMOthers 
-#------------------------------------------------------------------------------------------------------
 
-DCH_name =  'DCH%d'
-DCH_tlatex = 'm_{H^{\pm\pm}}=%d GeV'
-DCH_masses = [
-    300,
-    400,
-    500,
-    600,
-    700,
-    800,
-    900,
-    1000,
-    1100,
-    1200,
-    1300,
-    ]
-
-for m in DCH_masses:
-    name = DCH_name % m
-    globals()[name] = Sample(
-            name = name,
-            tlatex = DCH_tlatex % (m),
-            line_color = ROOT.kOrange-3,
-            marker_color = ROOT.kOrange-3,
-            fill_color = ROOT.kOrange-3,
-            line_width  = 3,
-            line_style = 1,
-            fill_style = 3004,
-            )
-
-DCH300.xsec  = 0.020179   
-DCH400.xsec  = 0.0059727  
-DCH500.xsec  = 0.0021733  
-DCH600.xsec  = 0.00089447 
-DCH700.xsec  = 0.00040462 
-DCH800.xsec  = 0.00019397 
-DCH900.xsec  = 9.8716e-05 
-DCH1000.xsec = 5.2052e-05
-DCH1100.xsec = 2.8246e-05
-DCH1200.xsec = 1.5651e-05
-DCH1300.xsec = 8.877e-06 
-
-list_DCH =[globals()[DCH_name%(m)] for m in DCH_masses]
-
-all_DCH = Sample( name =  'all_DCH',
-                    tlatex = 'm_{H^{\pm\pm}}=all',
-                    line_color = ROOT.kOrange-3,
-                    marker_color = ROOT.kOrange-3,
-                    fill_color = ROOT.kOrange-3,
-                    line_width  = 3,
-                    line_style = 1,
-                    fill_style = 3004,
-                    daughters = list_DCH
-                ) 
-
-single_DCH = [DCH500]
 
 
 #-------------------------------------------------------------------------------
@@ -1329,7 +1271,7 @@ all_mc += ZeeSherpa22.daughters
 all_mc += ZmumuSherpa22.daughters
 all_mc += ZtautauSherpa22.daughters
 
-all_mc += all_DCH.daughters
+all_mc += full_DCH
 
 
 # Samples loaded for SubmitPlot.py
@@ -1337,16 +1279,16 @@ all_mc += all_DCH.daughters
 
 mc_bkg = []
 
-mc_bkg.append( diboson_sherpa )
-#mc_bkg.append( diboson_incl_sherpa )
+#mc_bkg.append( diboson_sherpa )
+mc_bkg.append( diboson_incl_sherpa )
 
-mc_bkg.append( WenuSherpa22 )
+#mc_bkg.append( WenuSherpa22 )
 mc_bkg.append( WmunuSherpa22 )
-mc_bkg.append( WtaunuSherpa22 )
+#mc_bkg.append( WtaunuSherpa22 )
 
-mc_bkg.append( ZeeSherpa22 ) 
+#mc_bkg.append( ZeeSherpa22 ) 
 mc_bkg.append( ZmumuSherpa22 )
-mc_bkg.append( ZtautauSherpa22 )
+#mc_bkg.append( ZtautauSherpa22 )
 
 mc_bkg.append( ttX )
 mc_bkg.append( singletop )

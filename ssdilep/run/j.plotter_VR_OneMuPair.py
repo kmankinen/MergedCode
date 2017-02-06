@@ -58,6 +58,7 @@ def analyze(config):
     ##-------------------------------------------------------------------------
     loop = pyframe.core.EventLoop(name='ssdilep',
                                   sampletype=config['sampletype'],
+                                  samplename=config['samplename'],
                                   outfile='ntuple.root',
                                   quiet=False,
                                   )
@@ -110,16 +111,18 @@ def analyze(config):
    
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastTwoSSMuons') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='ExactlyTwoSSMuons') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OddSSMuons') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllPairsM20') 
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuLoose') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuZ0SinTheta05') 
-    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuIsoBound08') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuIsoBound15') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllJetPt25') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='DCHFilter') 
+    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
+    
     #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PASS') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PassDiMuChain') 
 
     
     ## initialize and/or decorate objects
@@ -225,27 +228,53 @@ def analyze(config):
             scale         = None,
             )
     
-    
+    # reweighted fake-factors 
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_reducedthr_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_30Jan_ff.root'),
+            mu_index=0,
+            key='Mu0WFF',
+            scale=sys_ff,
+            )
+    loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
+            config_file=os.path.join(main_path,'ssdilep/data/g_30Jan_ff.root'),
+            mu_index=1,
+            key='Mu1WFF',
+            scale=sys_ff,
+            )
+    loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
+            config_file=os.path.join(main_path,'ssdilep/data/g_30Jan_ff.root'),
+            mu_index=2,
+            key='Mu2WFF',
+            scale=sys_ff,
+            )
+    loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
+            config_file=os.path.join(main_path,'ssdilep/data/g_30Jan_ff.root'),
+            mu_index=3,
+            key='Mu3WFF',
+            scale=sys_ff,
+            )
+    
+    # unweighted fake-factors 
+    loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
+            config_file=os.path.join(main_path,'ssdilep/data/g_21Jan_ff.root'),
             mu_index=0,
             key='Mu0FF',
             scale=sys_ff,
             )
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_reducedthr_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_21Jan_ff.root'),
             mu_index=1,
             key='Mu1FF',
             scale=sys_ff,
             )
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_reducedthr_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_21Jan_ff.root'),
             mu_index=2,
             key='Mu2FF',
             scale=sys_ff,
             )
     loop += ssdilep.algs.ObjWeights.MuFakeFactorGraph(
-            config_file=os.path.join(main_path,'ssdilep/data/g_reducedthr_ff.root'),
+            config_file=os.path.join(main_path,'ssdilep/data/g_21Jan_ff.root'),
             mu_index=3,
             key='Mu3FF',
             scale=sys_ff,
@@ -274,7 +303,7 @@ def analyze(config):
               ['TwoMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt28',None],
+              ['AtLeastOneMuPt28',None],
               ['MuTT',['Mu0AllSF','Mu1AllSF']],
               ],
             )
@@ -287,9 +316,9 @@ def analyze(config):
               ['AllMuPt25',None],
               ['TwoMuons',None],
               ['Mlow200',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt28',None],
-              ['MuLT',['Mu0RecoSF','Mu1AllSF','Mu0FF','EffCorrLT']],
+              ['SubLeadIsMatched',['MuTrigSFRecoLoose']],
+              ['SubLeadMuPt28',None],
+              ['MuLT',['Mu0RecoSF','Mu1AllSF','Mu0WFF','EffCorrLT']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
@@ -301,9 +330,9 @@ def analyze(config):
               ['AllMuPt25',None],
               ['TwoMuons',None],
               ['Mlow200',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['LeadIsMatched',['MuTrigSFRecoLoose']],
               ['LeadMuPt28',None],
-              ['MuTL',['Mu0AllSF','Mu1RecoSF','Mu1FF','EffCorrTL']],
+              ['MuTL',['Mu0AllSF','Mu1RecoSF','Mu1WFF','EffCorrTL']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
@@ -316,10 +345,11 @@ def analyze(config):
               ['TwoMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt28',None],
-              ['MuLL',['Mu0RecoSF','Mu1RecoSF','Mu0FF','Mu1FF','EffCorrLL']],
+              ['AtLeastOneMuPt28',None],
+              ['MuLL',['Mu0RecoSF','Mu1RecoSF','Mu0WFF','Mu1WFF','EffCorrLL']],
               ],
             )
+    
     
     ## VR2
     ## ---------------------------------------
@@ -333,8 +363,8 @@ def analyze(config):
               ['TwoMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt28',None],
-              ['MuNoFilterTT',['Mu0AllSF','Mu1AllSF']],
+              ['AtLeastOneMuPt28',None],
+              ['MuTT',['Mu0AllSF','Mu1AllSF']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
@@ -346,9 +376,9 @@ def analyze(config):
               ['AllMuPt25',None],
               ['TwoMuons',None],
               ['Mlow200',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt28',None],
-              ['MuNoFilterLT',['Mu0RecoSF','Mu1AllSF','Mu0FF','EffCorrLT']],
+              ['SubLeadIsMatched',['MuTrigSFRecoLoose']],
+              ['SubLeadMuPt28',None],
+              ['MuLT',['Mu0RecoSF','Mu1AllSF','Mu0FF','EffCorrLT']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
@@ -360,9 +390,9 @@ def analyze(config):
               ['AllMuPt25',None],
               ['TwoMuons',None],
               ['Mlow200',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['LeadIsMatched',['MuTrigSFRecoLoose']],
               ['LeadMuPt28',None],
-              ['MuNoFilterTL',['Mu0AllSF','Mu1RecoSF','Mu1FF','EffCorrTL']],
+              ['MuTL',['Mu0AllSF','Mu1RecoSF','Mu1FF','EffCorrTL']],
               ],
             )
     loop += ssdilep.algs.algs.PlotAlg(
@@ -375,10 +405,11 @@ def analyze(config):
               ['TwoMuons',None],
               ['Mlow200',None],
               ['PassAndMatch',['MuTrigSFRecoLoose']],
-              ['LeadMuPt28',None],
-              ['MuNoFilterLL',['Mu0RecoSF','Mu1RecoSF','Mu0FF','Mu1FF','EffCorrLL']],
+              ['AtLeastOneMuPt28',None],
+              ['MuLL',['Mu0RecoSF','Mu1RecoSF','Mu0FF','Mu1FF','EffCorrLL']],
               ],
             )
+    
     
     """    
     loop += ssdilep.algs.algs.PlotAlg(

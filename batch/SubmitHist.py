@@ -16,9 +16,16 @@ USER   = os.getenv('USER')
 
 ## global config
 # inputs
+NTUP='/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_common_v1Ntuples/merged' # input NTUP path
 #NTUP='/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_common_v2Ntuples' # input NTUP path
-#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_common_v1Ntuples/merged' # input NTUP path
-NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v7/merged' # input NTUP path
+
+#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_pv3/merged' # input NTUP path
+#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_pv3/merged' # input NTUP path
+#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/EXOT12_pv4/merged' # input NTUP path
+
+
+#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v7/merged' # input NTUP path
+#NTUP='/coepp/cephfs/mel/fscutti/ssdilep/HIGG3D3_v8/merged' # input NTUP path
 
 JOBDIR = "/coepp/cephfs/mel/%s/jobdir" % USER # Alright this is twisted...
 INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%m_y%Y_H%H_M%M_S%S")) )
@@ -26,21 +33,34 @@ INTARBALL = os.path.join(JOBDIR,'histtarball_%s.tar.gz' % (time.strftime("d%d_m%
 AUTOBUILD = True                # auto-build tarball using Makefile.tarball
 
 # outputs
-#RUN = "Hist17JanTP"
-#RUN = "Hist17JanVR"
-#RUN = "Hist17JanV1VR"
-RUN = "Hist17JanFF"
+#RUN = "Hist21JanV2TP"
+#RUN = "Hist21JanV1TP"
+#RUN = "Hist21JanV2VR"
+#RUN = "Hist21JanV1VR"
+#RUN = "HistFull21JanFF"
+
+#RUN = "Hist22JanV2VR"
+#RUN = "Hist23JanFF"
+#RUN = "Hist23JanV2VR"
+
+#RUN = "Hist30JanV2TP" 
+#RUN = "HistRew30JanFF"
+#RUN = "Hist30JanV2VR"
+#RUN = "Hist31JanV2VR"
+RUN = "HistTEST"
+
+#RUN = "HistUniTruth23JanV1VR"
+
 
 OUTPATH="/coepp/cephfs/mel/%s/ssdilep/%s"%(USER,RUN) # 
-OUTFILE="ntuple.root"         # file output by pyframe job 
 
 # running
 QUEUE="long"                        # length of pbs queue (short, long, extralong )
 
 # pick your script!!!
-SCRIPT="./ssdilep/run/j.plotter_FF.py"  
+#SCRIPT="./ssdilep/run/j.plotter_FF.py"  
 #SCRIPT="./ssdilep/run/j.plotter_TAndP.py"  
-#SCRIPT="./ssdilep/run/j.plotter_VR_OneMuPair.py"  
+SCRIPT="./ssdilep/run/j.plotter_VR_OneMuPair.py"  
 
 
 BEXEC="Hist.sh"                      # exec script (probably dont change) 
@@ -65,7 +85,6 @@ def main():
     global AUTOBUILD
     global RUN
     global OUTPATH
-    global OUTFILE
     global QUEUE
     global SCRIPT
     global BEXEC
@@ -126,7 +145,6 @@ def submit(tag,job_sys,samps,config={}):
     global AUTOBUILD
     global RUN
     global OUTPATH
-    global OUTFILE
     global QUEUE
     global SCRIPT
     global BEXEC
@@ -140,8 +158,9 @@ def submit(tag,job_sys,samps,config={}):
     f = open(cfg,'w')
     for s in samps:
 
-        ## input
+        ## input & output
         sinput = input_file(s,job_sys) 
+        soutput = output_file(s,job_sys) 
 
         ## sample type
         stype  = s.type
@@ -152,7 +171,7 @@ def submit(tag,job_sys,samps,config={}):
         sconfig.update(s.config)
         sconfig_str = ",".join(["%s:%s"%(key,val) for key,val in sconfig.items()])
 
-        line = ';'.join([s.name,sinput,stype,sconfig_str])
+        line = ';'.join([s.name,sinput,soutput,stype,sconfig_str])
         f.write('%s\n'%line) 
 
     f.close()
@@ -170,7 +189,6 @@ def submit(tag,job_sys,samps,config={}):
     vars=[]
     vars+=["CONFIG=%s"    % abscfg     ]
     vars+=["INTARBALL=%s" % absintar   ]
-    vars+=["OUTFILE=%s"   % OUTFILE    ]
     vars+=["OUTPATH=%s"   % absoutpath ]
     vars+=["SCRIPT=%s"    % SCRIPT     ]
     vars+=["NCORES=%d"    % NCORES     ]
@@ -196,12 +214,17 @@ def prepare_path(path):
 
 def input_file(sample,sys):
     global NTUP
-    sinput = sample.name
+    sinput = sample.infile
     
     if sys!='nominal': sys='sys_'+sys
     sinput += '.root'
     sinput = os.path.join(NTUP,sys,sinput) 
     return sinput
+
+def output_file(sample,sys):
+    soutput = sample.name
+    soutput += '.root'
+    return soutput
 
 if __name__=='__main__': main()
 
