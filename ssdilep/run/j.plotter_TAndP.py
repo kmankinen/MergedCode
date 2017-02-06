@@ -58,6 +58,7 @@ def analyze(config):
     ##-------------------------------------------------------------------------
     loop = pyframe.core.EventLoop(name='ssdilep',
                                   sampletype=config['sampletype'],
+                                  samplename=config['samplename'],
                                   outfile='ntuple.root',
                                   quiet=False,
                                   )
@@ -114,7 +115,6 @@ def analyze(config):
     ## cuts
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TwoMuons') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AtLeastTwoSSMuons') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='TagAndProbeExist') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuPt25') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuLoose') 
@@ -122,7 +122,7 @@ def analyze(config):
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuZ0SinTheta05') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuIsoBound08') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllPairsM20') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='M15') 
+    loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='Mlow200') 
 
     
     loop += ssdilep.algs.vars.ProbeVars(key_tag='tag',key_probe='probe')   
@@ -173,14 +173,14 @@ def analyze(config):
     ## configure histograms
     ## ---------------------------------------
     hist_list = []
-    hist_list += ssdilep.hists.Main_hists.hist_list
+    #hist_list += ssdilep.hists.Main_hists.hist_list
     hist_list += ssdilep.hists.TAndP_hists.hist_list
     
     
     ##-------------------------------------------------------------------------
     ## make plots
     ##-------------------------------------------------------------------------
-    
+    """    
     # F1
     # -------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -190,13 +190,13 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoSSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
               ['TagisTight',['TagAllSF']],
               ['ProbeisTight',None],
               ['ProbeTruthFilter',None],
               ],
             )
-    
+    """ 
     loop += ssdilep.algs.algs.PlotAlg(
             region       = 'ProbeLoose_F1',
             plot_all     = False,
@@ -204,12 +204,14 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoSSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
+              ['TagPt28',None],
               ['TagisTight',['TagAllSF']],
               ['ProbeisLoose',None],
               ['ProbeTruthFilter',None],
               ],
             )
+    """
     # F2
     # -------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -219,7 +221,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoOSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
               ['TagisTight',['TagAllSF']],
               ['ProbeisTight',None],
               ['ProbeTruthFilter',None],
@@ -233,7 +235,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoOSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
               ['TagisTight',['TagAllSF']],
               ['ProbeisLoose',None],
               ['ProbeTruthFilter',None],
@@ -249,7 +251,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoSSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
               ['TagisTight',['TagAllSF']],
               ['ProbeisTight',None],
               ['ProbeMuFakeFilter',None],
@@ -263,7 +265,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoSSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
               ['TagisTight',['TagAllSF']],
               ['ProbeisLoose',None],
               ['ProbeMuFakeFilter',None],
@@ -279,7 +281,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoSSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
               ['TagisTight',['TagAllSF']],
               ['ProbeisTight',None],
               ['ProbeMuFailTruthFilter',None],
@@ -293,7 +295,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoSSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
               ['TagisTight',['TagAllSF']],
               ['ProbeisLoose',None],
               ['ProbeMuFailTruthFilter',None],
@@ -309,7 +311,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoOSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
               ['TagisTight',['TagAllSF']],
               ['ProbeisTight',None],
               ['ProbeMuFakeFilter',None],
@@ -323,7 +325,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoOSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
               ['TagisTight',['TagAllSF']],
               ['ProbeisLoose',None],
               ['ProbeMuFakeFilter',None],
@@ -339,7 +341,7 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoOSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
               ['TagisTight',['TagAllSF']],
               ['ProbeisTight',None],
               ['ProbeMuFailTruthFilter',None],
@@ -353,12 +355,13 @@ def analyze(config):
             hist_list    = hist_list,
             cut_flow  = [
               ['TwoOSMuons',None],
-              ['PassAndMatch',['MuTrigSFRecoLoose']],
+              ['TagIsMatched',['MuTrigSFRecoLoose']],
               ['TagisTight',['TagAllSF']],
               ['ProbeisLoose',None],
               ['ProbeMuFailTruthFilter',None],
               ],
             )
+    """
     loop += pyframe.algs.HistCopyAlg()
 
     ##-------------------------------------------------------------------------

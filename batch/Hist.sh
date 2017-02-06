@@ -22,7 +22,6 @@ echo " parameters passed: $*"
 echo 
 
 echo " SCRIPT:      $SCRIPT"
-echo " OUTFILE:     $OUTFILE"
 echo " OUTPATH:     $OUTPATH"
 echo " CONFIG:      $CONFIG"
 echo " INTARBALL:   $INTARBALL"
@@ -82,15 +81,19 @@ echo "reading in config file '${CONFIG}', line ${PBS_ARRAYID}"
 line=`sed -n -e ${PBS_ARRAYID}p ${CONFIG}`
 echo ${line}
 arrIN=(${line//;/ });
-SAMPLE=${arrIN[0]}
+SAMPLENAME=${arrIN[0]}
 INPUT=${arrIN[1]}
-SAMPLETYPE=${arrIN[2]}
-CFG=${arrIN[3]}
-echo "SAMPLE:     ${SAMPLE}"
+OUTPUT=${arrIN[2]}
+SAMPLETYPE=${arrIN[3]}
+CFG=${arrIN[4]}
+
+echo "SAMPLENAME: ${SAMPLENAME}"
 echo "SAMPLETYPE: ${SAMPLETYPE}"
 echo "INPUT:      ${INPUT}"
 echo "CFG:        ${CFG}"
 
+# hardcoded name
+NTUPLE="ntuple.root"
 
 echo
 echo "copying input locally..."
@@ -98,9 +101,6 @@ TMPINPUT="`mktemp ntuple.XXXXXXX`.root"
 echo cp ${INPUT} ${TMPINPUT}
 cp ${INPUT} ${TMPINPUT}
 
-echo ""
-echo "executing job..."
-echo ${SCRIPT} --input ${TMPINPUT} --sampletype ${SAMPLETYPE} --config "${CFG}"
 
 # -----------------------------
 # avoid to fuck the cluster up:
@@ -112,8 +112,11 @@ MEMLIMIT="$((4 * ${NCORES}))"
 echo "${MEMLIMIT}000000000" > /cgroup/cpuset/${USER}/${PBS_JOBID}/memory.limit_in_bytes
 echo $$ > /cgroup/cpuset/${USER}/${PBS_JOBID}/tasks
 
+echo ""
+echo "executing job..."
+echo ${SCRIPT} --input ${TMPINPUT} --samplename ${SAMPLENAME} --sampletype ${SAMPLETYPE} --config "${CFG}"
 
-${SCRIPT} --input ${TMPINPUT} --sampletype ${SAMPLETYPE} --config "${CFG}"
+${SCRIPT} --input ${TMPINPUT} --samplename ${SAMPLENAME} --sampletype ${SAMPLETYPE} --config "${CFG}"
 
 
 echo "finished execution"
@@ -123,9 +126,10 @@ echo "preparing output dir..."
 if [ ! -d ${OUTPATH} ]; then mkdir ${OUTPATH}; fi
 
 echo "copying output"
-echo cp ${OUTFILE} ${OUTPATH}/${SAMPLE}.root 
-cp ${OUTFILE} ${OUTPATH}/${SAMPLE}.root
-chmod a+r ${OUTPATH}/${SAMPLE}.root
+# hardcoded output ntuple
+echo cp ${NTUPLE} ${OUTPATH}/${OUTPUT}
+cp ${NTUPLE} ${OUTPATH}/${OUTPUT}
+chmod a+r ${OUTPATH}/${OUTPUT}
 
 echo "cd ${TMPDIR}"
 cd ${TMPDIR}
