@@ -59,7 +59,7 @@ def analyze(config):
     loop = pyframe.core.EventLoop(name='ssdilep',
                                   sampletype=config['sampletype'],
                                   samplename=config['samplename'],
-                                  outfile='ntuple.root',
+                                  outfile=config['samplename']+".root",
                                   quiet=False,
                                   )
     

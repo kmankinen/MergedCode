@@ -93,7 +93,6 @@ echo "INPUT:      ${INPUT}"
 echo "CFG:        ${CFG}"
 
 # hardcoded name
-NTUPLE="ntuple.root"
 
 echo
 echo "copying input locally..."
@@ -127,8 +126,8 @@ if [ ! -d ${OUTPATH} ]; then mkdir ${OUTPATH}; fi
 
 echo "copying output"
 # hardcoded output ntuple
-echo cp ${NTUPLE} ${OUTPATH}/${OUTPUT}
-cp ${NTUPLE} ${OUTPATH}/${OUTPUT}
+echo cp ${OUTPUT} ${OUTPATH}
+cp ${OUTPUT} ${OUTPATH}
 chmod a+r ${OUTPATH}/${OUTPUT}
 
 echo "cd ${TMPDIR}"
