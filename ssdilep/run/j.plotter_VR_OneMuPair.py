@@ -59,7 +59,7 @@ def analyze(config):
     loop = pyframe.core.EventLoop(name='ssdilep',
                                   sampletype=config['sampletype'],
                                   samplename=config['samplename'],
-                                  outfile='ntuple.root',
+                                  outfile=config['samplename']+".root",
                                   quiet=False,
                                   )
     
@@ -113,16 +113,15 @@ def analyze(config):
     ## +++++++++++++++++++++++++++++++++++++++
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='OddSSMuons') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllPairsM20') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
+    ####loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='EleVeto') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuLoose') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuEta247') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuZ0SinTheta05') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllMuIsoBound15') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='AllJetPt25') 
     loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='DCHFilter') 
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
+    ####loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='JetCleaning') 
     
-    #loop += ssdilep.algs.algs.CutAlg(cutflow='presel',cut='PASS') 
 
     
     ## initialize and/or decorate objects
@@ -349,8 +348,7 @@ def analyze(config):
               ['MuLL',['Mu0RecoSF','Mu1RecoSF','Mu0WFF','Mu1WFF','EffCorrLL']],
               ],
             )
-    
-    
+    """ 
     ## VR2
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -409,7 +407,7 @@ def analyze(config):
               ['MuLL',['Mu0RecoSF','Mu1RecoSF','Mu0FF','Mu1FF','EffCorrLL']],
               ],
             )
-    
+    """ 
     
     """    
     loop += ssdilep.algs.algs.PlotAlg(
