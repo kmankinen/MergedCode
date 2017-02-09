@@ -178,14 +178,14 @@ parent["HR"] = {"feff":1.0, "tlatex": "H^{\pm\pm}_{R}(%s)"}
 parent["HL"] = {"feff":1.0, "tlatex": "H^{\pm\pm}_{L}(%s)"}
 
 pos_decay = {}
-pos_decay["MpMp"] = {"feff": 1. / 0.25, "tlatex": "#mu^{+}#mu^{+}"}
-pos_decay["EpMp"] = {"feff": 1. / 0.50, "tlatex": "e^{+}#mu^{+}"}
-pos_decay["EpEp"] = {"feff": 1. / 0.25, "tlatex": "#mu^{+}#mu^{+}"}
+pos_decay["MpMp"] = {"feff": 1. / 0.25, "tlatex": " #mu^{+} #mu^{+}"}
+pos_decay["EpMp"] = {"feff": 1. / 0.50, "tlatex": " e^{+} #mu^{+}"}
+pos_decay["EpEp"] = {"feff": 1. / 0.25, "tlatex": " #mu^{+} #mu^{+}"}
 
 neg_decay = {}
-neg_decay["MmMm"] = {"feff": 1. / 0.25, "tlatex": "#mu^{-}#mu^{-}"}
-neg_decay["EmMm"] = {"feff": 1. / 0.50, "tlatex": "e^{-}#mu^{-}"}
-neg_decay["EmEm"] = {"feff": 1. / 0.25, "tlatex": "#mu^{-}#mu^{-}"}
+neg_decay["MmMm"] = {"feff": 1. / 0.25, "tlatex": " #mu^{-} #mu^{-}"}
+neg_decay["EmMm"] = {"feff": 1. / 0.50, "tlatex": " e^{-} #mu^{-}"}
+neg_decay["EmEm"] = {"feff": 1. / 0.25, "tlatex": " #mu^{-} #mu^{-}"}
 
 # loops over the list of original samples
 # and appends the decay modes taking into
@@ -201,7 +201,7 @@ for boson in parent.keys():
         globals()[full_sname]         = copy(sroot)
         globals()[full_sname].infile  = sroot.name
         globals()[full_sname].name    = full_sname
-        globals()[full_sname].tlatex  = parent[boson]["tlatex"]%(sroot.name.replace("DCH",""))+"#rightarrow " + pos_decay[pos_mode]["tlatex"] + neg_decay[neg_mode]["tlatex"]
+        globals()[full_sname].tlatex  = parent[boson]["tlatex"]%(sroot.name.replace("DCH",""))+" #rightarrow" + pos_decay[pos_mode]["tlatex"] + neg_decay[neg_mode]["tlatex"]
         globals()[full_sname].feff    = parent[boson]["feff"] * pos_decay[pos_mode]["feff"] * neg_decay[neg_mode]["feff"]
         full_DCH.append(globals()[full_sname])
 
