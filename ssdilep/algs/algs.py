@@ -947,12 +947,164 @@ class CutAlg(pyframe.core.Algorithm):
         for j in jets:
           if j.tlv.Pt() < 45 * GeV: return False
       return True
+
+    #__________________________________________________________________________
+    def cut_OneOrTwoBjets(self):
+        nbjets = 0
+        jets = self.store['jets']
+        for jet in jets:
+          if jet.isFix77:
+            nbjets += 1
+        if nbjets in [1,2]:
+          return True
+        else:
+          return False
+
+    #__________________________________________________________________________
+
+    def cut_BadJetVeto(self):
+        jets = self.store['jets']
+        for jet in jets:
+          if not jet.isClean:
+            return False
+        return True
+
+    #__________________________________________________________________________
+    #
+    # Electron cuts from the old framework
+    #__________________________________________________________________________    
+
+
+    def cut_AtLeastOneLooseElectrons(self):
+        return self.chain.nel > 0
+    #__________________________________________________________________________  
+         
+    def cut_AtLeastTwoLooseElectrons(self):
+        return self.chain.nel > 1
+
+    #__________________________________________________________________________                    
+    def cut_OneLooseElectron(self):
+        return self.chain.nel == 1
+
+    #__________________________________________________________________________                   
+    def cut_TwoLooseElectrons(self):
+        return self.chain.nel == 2
+
+    #__________________________________________________________________________
+
+    def cut_TwoLooseLeptons(self):
+        if ((self.chain.nel==1 and self.chain.nmuon==1) or (self.chain.nel==0 and self.chain.nmuon==2) or (self.chain.nel==2 and self.chain.nmuon==0)): return True;
+
+    #__________________________________________________________________________
+    # continue here with cut_LeadElectronIsLoose(self) etc from the old framework
+
+    #__________________________________________________________________________
+    #
+    # New cuts for electros
+    #__________________________________________________________________________
+
+
+    #__________________________________________________________________________
+    def cut_AllEleMedium(self):
+      electrons = self.store['electrons']
+      for m in electrons:
+        is_medium = bool(m.isMedium) or bool(m.isTight)
+        if not is_medium: return False
+      return True
+
+    #__________________________________________________________________________
+    def cut_AllEleLoose(self):
+      electrons = self.store['electrons']
+      for m in electrons:
+        is_loose = bool(m.isLoose) or bool(m.isMedium) or bool(m.isTight)
+        if not is_loose: return False
+      return True
     
     #__________________________________________________________________________
+    def cut_LeadEleIsLoose(self):
+      electrons = self.store['electrons']
+      lead_el = electrons[0]
+      is_loose = bool(lead_el.isLoose) or bool(lead_el.isMedium) or bool(lead_el.isTight)
+      return is_loose
+
+    #__________________________________________________________________________
+    def cut_LeadEleIsMedium(self):
+      electrons = self.store['electrons']
+      lead_el = electrons[0]
+      is_medium = bool(lead_el.isMedium) or bool(lead_el.isTight)
+      return is_medium
+
+    #__________________________________________________________________________
+    def cut_LeadEleIsTight(self):
+      electrons = self.store['electrons']
+      lead_el = electrons[0]
+      is_tight = bool(lead_el.isTight)
+      return is_tight
+
+    #___________________________________________________________________________
+
+    def cut_OddSSElectrons(self):
+      electrons = self.store['electrons']
+      ss_pairs = []
+      if self.chain.nel >= 2:
+        for p in combinations(electrons,2):
+          if p[0].trkcharge * p[1].trkcharge > 0.0: ss_pairs.append(p)
+      if len(ss_pairs)==1 or len(ss_pairs)==3: return True
+      return False
+
+   #____________________________________________________________________________
+
+    def cut_AllElePairsM20(self):
+      electrons = self.store['electrons']
+      if self.chain.nel >= 2:
+        for p in combinations(electrons,2):
+          if (p[0].tlv + p[1].tlv).M()<20*GeV: return False
+      return True
+
+    #__________________________________________________________________________
+
+    def cut_AllEleEta247(self):
+      electrons = self.store['electrons']
+      passed = True
+      for m in electrons:
+        passed = passed and abs(m.tlv.Eta())<2.47
+      return passed
+
+    #__________________________________________________________________________
+
+    def cut_AllEleZ0SinTheta05(self):
+      electrons = self.store['electrons']
+      passed = True
+      for m in electrons:
+        passed = passed and abs(m.trkz0sintheta)<0.5
+      return passed
+
+    #__________________________________________________________________________
+
+    def cut_AllEleIsoBound15(self):
+      electrons = self.store['electrons']
+      for m in electrons:
+        if m.ptvarcone30 / m.tlv.Pt() > 1.5: return False
+      return True
+
+    #__________________________________________________________________________
+
+    def cut_EleMass130GeV200(self):
+      electrons = self.store['electrons']
+      if len(electrons)==2 :
+          tempMass = (electrons[0].tlv + electrons[1].tlv).M()
+          if tempMass > 130*GeV and tempMass < 200*GeV :
+            return True;
+      return False
+
+    #__________________________________________________________________________
+
+
     def cut_PASS(self):
       #print self.chain.njets
       return True
-    
+
+
 #------------------------------------------------------------------------------
 class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
   
