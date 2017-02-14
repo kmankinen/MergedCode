@@ -172,7 +172,7 @@ h_electrons_dphi  = Hist1D( hname  = "h_electrons_dphi",
                               vexpr  = "self.store['electrons_dphi']",
                             )
 
-h_electrons_delta  = Hist1D( hname  = "h_electrons_delta",
+h_electrons_deta  = Hist1D( hname  = "h_electrons_deta",
                               xtitle = "#Delta#eta(e_{lead},e_{sublead})",
                               ytitle = "Events", 
                               nbins  = 50,
@@ -896,6 +896,6 @@ h_elelead_pt_jetlead_pt  = Hist2D( hname      = "h_elelead_pt_jetlead_pt",
                               dir     = "event",
                               vexpr   = " self.store['electrons'][0].tlv.Pt() / GeV , self.store['jets'][0].tlv.Pt() / GeV",
 
-
+                          )
 
 # EOF
