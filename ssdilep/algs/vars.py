@@ -53,14 +53,27 @@ class BuildTrigConfig(pyframe.core.Algorithm):
 
       dGeV = GeV / 1.03
 
-      if self.key == "muons":
+      #Adding to the store the electron trigger
+      if self.key== "electrons":
+        self.store["dilepEleTrig"]={}  
+        
+        for trig in self.store["reqTrig"]:
+            self.store["dilepEleTrig"]= trig
+      #####
+        
+      elif self.key== "mixedChannel":
+        self.store["singleLeptonTrig"]={}
+        
+        for trig in self.store["reqTrig"]:
+            self.store["singleLeptonTrig"] =trig
+    
+      elif self.key == "muons":
         self.store["singleMuTrigList"]  = {}  
         self.store["singleMuTrigSlice"] = {}  # this is for prescale slicing
         self.store["singleMuTrigThr"]   = {}  # this is for prescale slicing
         low_thr  = []
         high_thr = []
 
-        
         # the muon_listTrigChains is filled 
         # in the ntuple if # muons>0. If more 
         # than one muon exists skip repetitions
@@ -116,6 +129,16 @@ class Particle(pyframe.core.ParticleProxy):
     def isTrueIsoMuon(self):
       matchtype = self.truthType in [6]
       return self.isTruthMatchedToMuon and matchtype
+
+    #__________________________________________________________________________
+    def isTrueIsoElectron(self):
+      matchtype = self.truthType in [2]
+      return self.isTruthMatchedToElectron and matchtype
+
+    #__________________________________________________________________________
+    def isTrueNonIsoElectron(self):
+      matchtype = self.truthType in [1,3,4]
+      return self.isTruthMatchedToElectron and matchtype
 
 
 class ParticlesBuilder(pyframe.core.Algorithm):
@@ -436,6 +459,81 @@ class DiMuVars(pyframe.core.Algorithm):
 
         return True
 
+#------------------------------------------------------------------------------
+class DiEleVars(pyframe.core.Algorithm):
+    """
+    computes variables for the di-muon selection
+    """
+    #__________________________________________________________________________
+    def __init__(self, 
+                 name      = 'DiEleVars',
+                 key_muons = 'electrons',
+                 key_met   = 'met_clus',
+                 ):
+        pyframe.core.Algorithm.__init__(self, name)
+        self.key_electrons = key_electrons
+        self.key_met   = key_met
+
+    #__________________________________________________________________________
+    def execute(self, weight):
+        pyframe.core.Algorithm.execute(self, weight)
+        """
+        computes variables and puts them in the store
+        """
+
+        ## get objects from event candidate
+        ## --------------------------------------------------
+        assert self.store.has_key(self.key_muons), "electrons key: %s not found in store!" % (self.key_electrons)
+        electrons = self.store[self.key_electrons]
+        met = self.store[self.key_met]
+        
+        # ------------------
+        # at least two muons
+        # ------------------
+        
+        # dict containing pair 
+        # and significance
+        ss_pairs = {} 
+        if len(electrons)>=2:
+          
+          for p in combinations(electrons,2):
+            ss_pairs[p] = p[0].trkd0sig + p[1].trkd0sig 
+          
+          max_sig  = 1000.
+          for pair,sig in ss_pairs.iteritems():
+            if sig < max_sig: 
+              if pair[0].tlv.Pt() > pair[1].tlv.Pt():
+                self.store['ele1'] = pair[0]
+                self.store['ele2'] = pair[1]
+              else: 
+                self.store['ele1'] = pair[1]
+                self.store['ele2'] = pair[0]
+              max_sig = sig 
+        
+        if ss_pairs:
+          ele1 = self.store['ele1'] 
+          ele2 = self.store['ele2'] 
+          ele1T = ROOT.TLorentzVector()
+          ele1T.SetPtEtaPhiM( ele1.tlv.Pt(), 0., ele1.tlv.Phi(), ele1.tlv.M() )
+          ele2T = ROOT.TLorentzVector()
+          ele2T.SetPtEtaPhiM( ele2.tlv.Pt(), 0., ele2.tlv.Phi(), ele2.tlv.M() )
+        
+          self.store['charge_product'] = ele2.trkcharge*ele1.trkcharge
+          self.store['mVis']           = (ele2.tlv+ele1.tlv).M()
+          self.store['mTtot']          = (ele1T + ele2T + met.tlv).M()  
+          self.store['ele_dphi']     = ele2.tlv.DeltaPhi(ele1.tlv)
+          self.store['ele_deta']     = ele2.tlv.Eta()-ele1.tlv.Eta()
+         
+        # puts additional muons in the store
+        if ss_pairs and len(electrons)>2:
+           i = 2
+           for e in electrons:
+             if e==self.store['ele1'] or e==self.store['ele2']: continue
+             i = i + 1
+             self.store['ele%d'%i] = e
+
+        return True
+
 
 #------------------------------------------------------------------------------
 class MultiMuVars(pyframe.core.Algorithm):
@@ -555,82 +653,6 @@ class MultiMuVars(pyframe.core.Algorithm):
 
         return True
 
-
-
-#------------------------------------------------------------------------------
-class DiEleVars(pyframe.core.Algorithm):
-    """
-    computes variables for the di-electron selection
-    """
-    #__________________________________________________________________________
-    def __init__(self, 
-                 name      = 'DiEleVars',
-                 key_electrons = 'electrons',
-                 key_met   = 'met_clus',
-                 ):
-        pyframe.core.Algorithm.__init__(self, name)
-        self.key_electrons = key_electrons
-        self.key_met   = key_met
-
-    #__________________________________________________________________________
-    def execute(self, weight):
-        pyframe.core.Algorithm.execute(self, weight)
-        """
-        computes variables and puts them in the store
-        """
-
-        ## get objects from event candidate
-        ## --------------------------------------------------
-        assert self.store.has_key(self.key_electrons), "electrons key: %s not found in store!" % (self.key_electrons)
-        electrons = self.store[self.key_electrons]
-        met = self.store[self.key_met]
-        
-        # -----------------------
-        # at least two electrons
-        # -----------------------
-        
-        # dict containing pair 
-        # and significance
-        ss_pairs = {} 
-        if len(electrons)>=2:
-          
-          for p in combinations(electrons,2):
-            ss_pairs[p] = p[0].trkd0sig + p[1].trkd0sig 
-          
-          max_sig  = 1000.
-          for pair,sig in ss_pairs.iteritems():
-            if sig < max_sig: 
-              if pair[0].tlv.Pt() > pair[1].tlv.Pt():
-                self.store['ele1'] = pair[0]
-                self.store['ele2'] = pair[1]
-              else: 
-                self.store['ele1'] = pair[1]
-                self.store['ele2'] = pair[0]
-              max_sig = sig 
-        
-        if ss_pairs:
-          ele1 = self.store['ele1'] 
-          ele2 = self.store['ele2'] 
-          ele1T = ROOT.TLorentzVector()
-          ele1T.SetPtEtaPhiM( ele1.tlv.Pt(), 0., ele1.tlv.Phi(), ele1.tlv.M() )
-          ele2T = ROOT.TLorentzVector()
-          ele2T.SetPtEtaPhiM( ele2.tlv.Pt(), 0., ele2.tlv.Phi(), ele2.tlv.M() )
-        
-          self.store['charge_product'] = ele2.trkcharge*ele1.trkcharge
-          self.store['mVis']           = (ele2.tlv+ele1.tlv).M()
-          self.store['mTtot']          = (ele1T + ele2T + met.tlv).M()  
-          self.store['muons_dphi']     = ele2.tlv.DeltaPhi(ele1.tlv)
-          self.store['muons_deta']     = ele2.tlv.Eta()-ele1.tlv.Eta()
-         
-        # puts additional electrons in the store
-        if ss_pairs and len(electrons)>2:
-           i = 2
-           for m in electrons:
-             if m==self.store['ele1'] or m==self.store['ele2']: continue
-             i = i + 1
-             self.store['ele%d'%i] = m
-
-        return True
 
 # EOF 
 

@@ -85,6 +85,114 @@ class MuAllSF(pyframe.core.Algorithm):
           self.store[self.key] = sf
         return True
 
+#------------------------------------------------------------------------------
+class EleAllSF(pyframe.core.Algorithm):
+    """
+    Single muon efficiencies: reco + iso + ttva
+    """
+    #__________________________________________________________________________
+    def __init__(self, name="EleAllSF",
+            ele_index   = None,
+            ele_iso     = None,
+            ele_reco    = None,
+            key        = None,
+            scale      = None,
+            ):
+        pyframe.core.Algorithm.__init__(self, name=name)
+        self.ele_index  = ele_index
+        self.ele_iso    = ele_iso
+        self.ele_reco   = ele_reco
+        self.key       = key
+        self.scale     = scale
+
+        assert key, "Must provide key for storing ele iso sf"
+    
+    #_________________________________________________________________________
+    def initialize(self): 
+      pass
+    
+    #_________________________________________________________________________
+    def execute(self, weight):
+        
+        sf=1.0
+        electrons = self.store['electrons']
+        
+        if self.ele_index in ['tag','probe']:
+          electron = self.store[self.ele_index]
+        
+        if self.ele_index < len(electrons): 
+          ele = electrons[self.ele_index]
+        
+          if "mc" in self.sampletype: 
+
+              #if electron.isTruthMatchedToElectron:
+                if ("Not" in self.ele_iso):
+                    sf *= getattr(ele,"RecoEff_SF").at(0)
+                    sf *= getattr(ele,"PIDEff_SF_LH" + self.ele_reco[0:-3] ).at(0)
+                else:    
+                    sf *= getattr(ele,"RecoEff_SF").at(0)
+                    sf *= getattr(ele,"IsoEff_SF_" + self.ele_reco + self.ele_iso ).at(0)
+                    sf *= getattr(ele,"PIDEff_SF_LH" + self.ele_reco[0:-3] ).at(0)
+          
+                if self.scale: pass
+
+        if self.key: 
+          self.store[self.key] = sf
+        return True
+
+#------------------------------------------------------------------------------
+class EleFakeFactorGraph(pyframe.core.Algorithm):
+    """
+    Applies the fake-factors to electron pairs
+    """
+    #__________________________________________________________________________
+    def __init__(self, name="EleFakeFactor",config_file=None,ele_index=None,key=None,sys=None):
+        pyframe.core.Algorithm.__init__(self,name=name)
+        self.config_file    = config_file
+        self.ele_index       = ele_index
+        self.key            = key
+        self.sys            = None
+
+        assert config_file, "Must provide config file!"
+        assert key, "Must provide key for storing fakefactor"
+    #_________________________________________________________________________
+    def initialize(self):
+        f = ROOT.TFile.Open(self.config_file)
+        assert f, "Failed to open fake-factor config file: %s"%(self.config_file)
+
+        if self.sys=="UP":
+            h_ff = f.Get("FFup")
+        elif self.sys=="DN":
+            h_ff = f.Get("FFdn")
+        else:
+            h_ff = f.Get("FF")
+        assert h_ff, "Failed to get 'h_ff' from %s"%(self.config_file)
+
+        self.h_ff = h_ff.Clone()
+        self.h_ff.SetDirectory(0)
+        f.Close()
+    #_________________________________________________________________________
+    def execute(self, weight):
+        
+        ff_ele = - 1.0 
+        electrons = self.store['electrons']
+         
+        if self.ele_index < len(electrons): 
+
+          ele = electrons[self.ele_index]
+          
+          ff_ele = self.h_ff.GetBinContent( self.h_ff.FindBin( ele.tlv.Pt()/GeV, abs( ele.eta ) ) )
+
+        if ff_ele==0:
+          sf=0
+          if self.key:
+            self.store[self.key] = sf
+            return True
+       
+        if self.key: 
+          self.store[self.key] = ff_ele
+
+        return True
 
 #------------------------------------------------------------------------------
 class MuFakeFactorGraph(pyframe.core.Algorithm):
@@ -141,3 +249,4 @@ class MuFakeFactorGraph(pyframe.core.Algorithm):
         return True
 
 # EOF
+
