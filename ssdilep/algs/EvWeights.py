@@ -18,6 +18,10 @@ log.setLevel(logging.DEBUG)
 import ROOT
 import metaroot
 
+#std
+import itertools
+from itertools import combinations
+from copy import copy
 # pyframe
 import pyframe
 
@@ -143,6 +147,181 @@ class LPXKfactor(pyframe.core.Algorithm):
             self.set_weight(wkf*weight)
         return True
 
+class EleTrigSF(pyframe.core.Algorithm):
+    """
+    Implementation of electron trigger scale factors
+
+    """
+    #__________________________________________________________________________
+    def __init__(self, name="EleTrigSF",
+            trig_list      = None,
+            key            = None,
+            scale           = None,
+            ):
+        pyframe.core.Algorithm.__init__(self, name=name)
+        self.trig_list         = trig_list
+        self.key               = key
+        self.scale             = scale
+
+        assert key, "Must provide key for storing ele trig sf"
+    #_________________________________________________________________________
+    def initialize(self):
+
+      self.isoLevels = [
+      "",
+      "_isolLoose",
+      "_isolTight",
+      ]
+      self.IDLevels = [
+      "LooseAndBLayerLLH",
+      "MediumLLH",
+      "TightLLH",
+      ]
+      if not self.trig_list: self.trig_list = "HLT_2e17lhloose"
+
+    #_________________________________________________________________________
+    def execute(self, weight):
+
+      sf = 1.0
+      electrons = self.store['electrons']
+
+      if(len(electrons)==0 or "mc" not in self.sampletype):
+          if self.key:
+              self.store[self.key] = sf
+          return True
+
+      #first loop on electrons to see if the pass the tight criteria requirements
+      is_TightOrLoose = []
+      for ele in electrons:
+          if(ele.LHMedium and ele.isIsolated_Loose):
+              is_TightOrLoose.append(1)
+          else: is_TightOrLoose.append(0)
+                 
+      SFTight = "TrigEff_SF_DI_E_2015_e17_lhloose_2016_e17_lhloose_MediumLLH_isolLoose"
+      SFLoose = "TrigEff_SF_DI_E_2015_e17_lhloose_2016_e17_lhloose_LooseAndBLayerLLH"
+      EffTight = "TrigMCEff_DI_E_2015_e17_lhloose_2016_e17_lhloose_MediumLLH_isolLoose"
+      EffLoose = "TrigMCEff_DI_E_2015_e17_lhloose_2016_e17_lhloose_LooseAndBLayerLLH"
+
+
+      if(len(electrons)==2):
+          for ele in range(len(electrons)):
+              if(is_TightOrLoose[ele] ==1): sf *= getattr(electrons[0],SFTight).at(0)
+              if(is_TightOrLoose[ele] ==0): sf *= getattr(electrons[1],SFLoose).at(0)
+
+          if self.key:
+              self.store[self.key] = sf
+          return True
+
+      elif(len(electrons)==3):
+          P2passD  = 0
+          P2passMC = 0
+          P3passD  = 1
+          P3passMC = 1
+          for pair in itertools.combinations(electrons,2) :
+              combinationProbD  = 1 # e1*SF1 * e2*SF2 * (1-e3*SF3)
+              combinationProbMC = 1 # e1     * e2     * (1-e3    )
+              for eleFail in electrons:
+                  if eleFail not in pair:
+                      for elePass in pair:
+                          if elePass.LHMedium and elePass.isIsolated_Loose:
+                              combinationProbD  *= getattr(elePass,SFTight).at(0)*getattr(elePass,EffTight).at(0)
+                              combinationProbMC *= getattr(elePass,EffTight).at(0)
+                          else:
+                              combinationProbD  *= getattr(elePass,SFLoose).at(0)*getattr(elePass,EffLoose).at(0)
+                              combinationProbMC *= getattr(elePass,EffLoose).at(0)
+                      if eleFail.LHMedium and eleFail.isIsolated_Loose:
+                          combinationProbD  *= 1 - ( getattr(eleFail,SFTight).at(0)**getattr(elePass,EffTight).at(0))
+                          combinationProbMC *= 1 -   getattr(eleFail,EffTight).at(0)                  
+                      else:
+                          combinationProbD  *= 1 - ( getattr(eleFail,SFLoose).at(0)*getattr(elePass,EffLoose).at(0))
+                          combinationProbMC *= 1 -   getattr(eleFail,EffLoose).at(0)
+                      break
+              P2passD  += combinationProbD   # a*b*(1-c) + a*c*(1-b) + b*c*(1-d) 
+              P2passMC += combinationProbMC  # a*b*(1-c) + a*c*(1-b) + b*c*(1-d)
+          for ele in electrons:
+              if ele.LHMedium and ele.isIsolated_Loose:
+                  P3passD  *= getattr(ele,SFTight).at(0)*getattr(elePass,EffTight).at(0)
+                  P3passMC *= getattr(ele,EffTight).at(0)
+              else:
+                  P3passD  *= getattr(ele,SFLoose).at(0)*getattr(elePass,EffLoose).at(0)
+                  P3passMC *= getattr(ele,EffLoose).at(0)
+           
+          if(P2passD==0 and P2passMC==0 and P3passD==0 and P3passMC ==0):
+              print "No SF available for these leptons"
+              sf == 0
+              
+          else : sf = (P2passD+P3passD)/(P2passMC+P3passMC)
+          if self.key: 
+              self.store[self.key] = sf
+          return True
+
+      elif(len(electrons)==4):
+          P2passD  = 0
+          P2passMC = 0
+          P3passD  = 1
+          P3passMC = 1
+          P4passD  = 1
+          P4passMC = 1
+          for pair in itertools.combinations(electrons,2) :
+              combinationProbD  = 1 # e1*SF1 * e2*SF2 * (1-e3*SF3) * (1-e4*SF4)
+              combinationProbMC = 1 # e1     * e2     * (1-e3    ) * (1-e4    )
+              for eleFail in electrons:
+                  if eleFail not in pair:
+                      for elePass in pair:
+                          if elePass.LHMedium and elePass.isIsolated_Loose:
+                              combinationProbD  *= getattr(elePass,SFTight).at(0)*getattr(elePass,EffTight).at(0)
+                              combinationProbMC *= getattr(elePass,EffTight).at(0)
+                          else:
+                              combinationProbD  *= getattr(elePass,SFLoose).at(0)*getattr(elePass,EffLoose).at(0)
+                              combinationProbMC *= getattr(elePass,EffLoose).at(0)
+                      if eleFail.LHMedium and eleFail.isIsolated_Loose:
+                          combinationProbD  *= 1 - ( getattr(eleFail,SFTight).at(0)**getattr(elePass,EffTight).at(0))
+                          combinationProbMC *= 1 -   getattr(eleFail,EffTight).at(0)                  
+                      else:
+                          combinationProbD  *= 1 - ( getattr(eleFail,SFLoose).at(0)*getattr(elePass,EffLoose).at(0))
+                          combinationProbMC *= 1 -   getattr(eleFail,EffLoose).at(0)
+                      break
+              P2passD  += combinationProbD   # a*b*(1-c)*(1-d) + a*c*(1-b)*(1-d) + b*c*(1-d)*(1-a) etc. 
+              P2passMC += combinationProbMC  # a*b*(1-c)*(1-d) + a*c*(1-b)*(1-d) + b*c*(1-d)*(1-a) + etc
+          for pair in itertools.combinations(electrons,3) :
+              combinationProbD  = 1 # e1*SF1 * e2*SF2 * e3*SF3 * (1-e4*SF4)
+              combinationProbMC = 1 # e1     * e2     * e3     * (1-e4)
+              for eleFail in electrons:
+                  if eleFail not in pair:
+                      for elePass in pair:
+                          if elePass.LHMedium and elePass.isIsolated_Loose:
+                              combinationProbD  *= getattr(elePass,SFTight).at(0)*getattr(elePass,EffTight).at(0)
+                              combinationProbMC *= getattr(elePass,EffTight).at(0)
+                          else:
+                              combinationProbD  *= getattr(elePass,SFLoose).at(0)*getattr(elePass,EffLoose).at(0)
+                              combinationProbMC *= getattr(elePass,EffLoose).at(0)
+                      if eleFail.LHMedium and eleFail.isIsolated_Loose:
+                          combinationProbD  *= 1 - ( getattr(eleFail,SFTight).at(0)**getattr(elePass,EffTight).at(0))
+                          combinationProbMC *= 1 -   getattr(eleFail,EffTight).at(0)                  
+                      else:
+                          combinationProbD  *= 1 - ( getattr(eleFail,SFLoose).at(0)*getattr(elePass,EffLoose).at(0))
+                          combinationProbMC *= 1 -   getattr(eleFail,EffLoose).at(0)
+                      break
+              P3passD  += combinationProbD   # a*b*(1-c) + a*c*(1-b) + b*c*(1-d) 
+              P3passMC += combinationProbMC  # a*b*(1-c) + a*c*(1-b) + b*c*(1-d)
+          for ele in electrons:
+              if ele.LHMedium and ele.isIsolated_Loose:
+                  P4passD  *= getattr(ele,SFTight).at(0)*getattr(elePass,EffTight).at(0)
+                  P4passMC *= getattr(ele,EffTight).at(0)
+              else:
+                  P4passD  *= getattr(ele,SFLoose).at(0)*getattr(elePass,EffLoose).at(0)
+                  P4passMC *= getattr(ele,EffLoose).at(0)
+           
+          if(P2passD==0 and P2passMC==0 and P3passD==0 and P3passMC ==0 and P4passMC==0 and P4passD==0):
+              print "No sf available for this event"
+              sf == 0
+              
+          else : sf = (P2passD+P3passD+P4passD)/(P2passMC+P3passMC+P4passMC)
+          if self.key: 
+              self.store[self.key] = sf
+          return True
+
+
 
 #------------------------------------------------------------------------------
 class MuTrigSF(pyframe.core.Algorithm):
@@ -227,7 +406,6 @@ class MuTrigSF(pyframe.core.Algorithm):
         if self.key: 
           self.store[self.key] = trig_sf
         return True
-
 
 #------------------------------------------------------------------------------
 class EffCorrPair(pyframe.core.Algorithm):
