@@ -355,7 +355,7 @@ class CutAlg(pyframe.core.Algorithm):
       
       mu0_is_tight     = bool(muons[0].isIsolated_FixedCutTightTrackOnly and muons[0].trkd0sig<3.)
       mu1_is_tight     = bool(muons[1].isIsolated_FixedCutTightTrackOnly and muons[1].trkd0sig<3.)
-      mu2_is_tight     = bool(muons[2].isIsolated_FixedCutTightTrackOnly and muons[2].trkd0sig<3.)
+      mu2_is_tight     = bool(muons[2].isIsolated_FixedCutTipghtTrackOnly and muons[2].trkd0sig<3.)
       pass_mc_filter   = True
       
       if self.sampletype=="mc":
@@ -986,10 +986,6 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_TwoLooseElectrons(self):
         return self.chain.nel == 2
 
-    #__________________________________________________________________________
-
-    def cut_TwoLooseLeptons(self):
-        if ((self.chain.nel==1 and self.chain.nmuon==1) or (self.chain.nel==0 and self.chain.nmuon==2) or (self.chain.nel==2 and self.chain.nmuon==0)): return True;
 
     #__________________________________________________________________________
     # continue here with cut_LeadElectronIsLoose(self) etc from the old framework
@@ -1135,22 +1131,22 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_LeadEleIsLHLoose(self):
       electrons = self.store['electrons']
       lead_el = electrons[0]
-      is_loose = bool(lead_el.LHLoose) or bool(lead_el.LHMedium) or bool(lead_el.LHTight)
-      return is_loose
+      is_LHloose = bool(lead_el.LHLoose) or bool(lead_el.LHMedium) or bool(lead_el.LHTight)
+      return is_LHloose
 
     #__________________________________________________________________________
     def cut_LeadEleIsLHMedium(self):
       electrons = self.store['electrons']
       lead_el = electrons[0]
-      is_medium = bool(lead_el.LHMedium) or bool(lead_el.LHTight)
-      return is_medium
+      is_LHmedium = bool(lead_el.LHMedium) or bool(lead_el.LHTight)
+      return is_LHmedium
 
     #__________________________________________________________________________
     def cut_LeadEleIsLHTight(self):
       electrons = self.store['electrons']
       lead_el = electrons[0]
-      is_tight = bool(lead_el.LHTight)
-      return is_tight
+      is_LHtight = bool(lead_el.LHTight)
+      return is_LHtight
 
     #___________________________________________________________________________
 
@@ -1240,8 +1236,126 @@ class CutAlg(pyframe.core.Algorithm):
              if sublead_ele_is_matched and event_is_triggered:
                 return True
       return False
+    #__________________________________________________________________________
+    def cut_TagEleIsMatched(self):
+      required_triggers = self.store["reqTrig"]
+      passed_triggers   = self.store["passTrig"].keys()
+      
+      tag = self.store['tag'] 
+      for trig in required_triggers:
+        if trig in self.store["singleEleTrigList"].keys():
+          tag_is_matched     = bool( tag.isTrigMatchedToChain.at(self.store["singleEleTrigList"][trig]) )
+          event_is_triggered = bool( trig in passed_triggers )
+          if tag_is_matched and event_is_triggered: 
+            return True
+      return False
+    #__________________________________________________________________________
+    def cut_LeadEleIsMatched(self):
+      required_triggers = self.store["reqTrig"]
+      passed_triggers   = self.store["passTrig"].keys()
+      
+      lead_ele = self.store['electrons'][0]
+      for trig in required_triggers:
+        if trig in self.store["singleEleTrigList"].keys():
+          lead_ele_is_matched = bool( lead_ele.isTrigMatchedToChain.at(self.store["singleEleTrigList"][trig]) )
+          event_is_triggered = bool( trig in passed_triggers )
+          if lead_ele_is_matched and event_is_triggered: 
+            return True
+      return False
+
+    #__________________________________________________________________________
+    def cut_PassAndMatchPrescEle(self):
+      required_triggers = self.store["reqTrig"]
+      passed_triggers   = self.store["passTrig"].keys()
+
+      electrons = self.store['electrons']
+      for m in electrons:
+        for trig in required_triggers:
+          if trig in self.store["singleEleTrigList"].keys():
+            ele_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleEleTrigList"][trig]) )
+            event_is_triggered = bool( trig in passed_triggers )
+            if ele_is_matched and event_is_triggered:
+              if m.tlv.Pt()>=self.store["singleEleTrigSlice"][trig][0] and m.tlv.Pt()<self.store["singleEleTrigSlice"][trig][1]:
+                return True
+      return False
+
 
      #________________________________________________________________________
+
+
+    #__________________________________________________________________________
+    #
+    # Mixed channel cuts
+    #__________________________________________________________________________    
+
+
+    def cut_AtLeastOneLooseLepton(self):
+        if ((self.chain.nel>0) or (self.chain.nmuon>0)): return True;
+
+    #__________________________________________________________________________  
+         
+    def cut_AtLeastTwoLooseLeptons(self):
+        if ((self.chain.nel>=1 and self.chain.nmuon>=1) or (self.chain.nel==0 and self.chain.nmuon>=2) or (self.chain.nel>=2 and self.chain.nmuon==0)): return True;
+
+    #__________________________________________________________________________                    
+    def cut_OneLooseLepton(self):
+        if ((self.chain.nel == 1) or (self.chain.nmuon ==1)): return True;
+
+    #__________________________________________________________________________
+
+    def cut_TwoLooseLeptons(self):
+        if ((self.chain.nel==1 and self.chain.nmuon==1) or (self.chain.nel==0 and self.chain.nmuon==2) or (self.chain.nel==2 and self.chain.nmuon==0)): return True;
+    #__________________________________________________________________________
+
+    def cut_ExatlyTwoSSLeptons(self):
+      electrons = self.store['electrons']
+      muons = self.store['muons']
+      if self.chain.nel == 2:
+        for p in combinations(electrons,2):
+          if p[0].trkcharge * p[1].trkcharge > 0.0: return True
+      if self.chain.nmuon == 2:
+        for p in combinations(muons,2):
+          if p[0].trkcharge * p[1].trkcharge > 0.0: return True
+      if (self.chain.nel == 1 and self.chain.nmuon ==1):
+          if electrons[0].trkcharge * muons[0].trkcharge > 0.0: return True     
+      return False
+
+    #__________________________________________________________________________
+    def cut_OneEleMuonPair(self):
+        if (self.chain.nel == 1 and self.chain.nmuon ==1): return True
+
+    #__________________________________________________________________________
+    def cut_OneSSEleMuonPair(self):
+      electrons  = self.store['electrons']
+      muons = self.store['muons']
+      if (len(electrons)==1 and len(muons)==1):
+        if electrons[0].trkcharge * muons[0].trkcharge > 0.0:
+          return True
+      return False
+    
+    #__________________________________________________________________________
+    def cut_OneOSEleMuonPair(self):
+      electrons  = self.store['electrons']
+      muons = self.store['muons']
+      if (len(electrons)==1 and len(muons)==1):
+        if electrons[0].trkcharge * muons[0].trkcharge < 0.0:
+          return True
+      return False
+
+    #__________________________________________________________________________
+
+    def cut_EleMuonMass130GeV200(self):
+      electrons = self.store['electrons']
+      muons = self.store['muons']
+      if len(electrons)==1 and len(muons)==1 :
+          tempMass = (electrons[0].tlv + muons[0].tlv).M()
+          if tempMass > 130*GeV and tempMass < 200*GeV :
+            return True;
+      return False
+
+    #___________________________________________________________________________
+
+
 
     def cut_PASS(self):
       #print self.chain.njets
