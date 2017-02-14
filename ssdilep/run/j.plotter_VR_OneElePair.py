@@ -138,13 +138,6 @@ def analyze(config):
     #        SKIP      = True,
     #        key       = "DataUnPrescAvg",
     #        )
-    loop += ssdilep.algs.EvWeights.MuTrigSF(
-            trig_list     = ["HLT_mu26_imedium_OR_HLT_mu50"],
-            mu_reco       = "Loose",
-            mu_iso        = "FixedCutTightTrackOnly",
-            key           = "MuTrigSFRecoLoose",
-            scale         = None,
-            )
     loop +=  ssdilep.algs.EvWeights.EleTrigSF(
             trig_list =  ["HLT_2e17_lhloose"],
             key       = "EleTrigSF",
@@ -245,7 +238,7 @@ def analyze(config):
     ##-------------------------------------------------------------------------
     ## make plots
     ##-------------------------------------------------------------------------
-
+    """
     ## VR1
     ## ---------------------------------------
     loop += ssdilep.algs.algs.PlotAlg(
@@ -362,7 +355,7 @@ def analyze(config):
               ['MuLL',['Mu0RecoSF','Mu1RecoSF','Mu0FF','Mu1FF','EffCorrLL']],
               ],
             )
-
+    """
     loop += pyframe.algs.HistCopyAlg()
 
     ##-------------------------------------------------------------------------
