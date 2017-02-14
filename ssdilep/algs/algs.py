@@ -696,9 +696,7 @@ class CutAlg(pyframe.core.Algorithm):
             muon_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleMuTrigList"][trig]) )
             event_is_triggered = bool( trig in passed_triggers )
             if muon_is_matched and event_is_triggered: 
-              return True
-      return False
-   
+              return True   
 
     #__________________________________________________________________________
     def cut_TagIsMatched(self):
@@ -738,8 +736,6 @@ class CutAlg(pyframe.core.Algorithm):
           event_is_triggered = bool( trig in passed_triggers )
           if sublead_mu_is_matched and event_is_triggered: 
             return True
-      return False
-
 
     #__________________________________________________________________________
     def cut_PassAndMatchPresc(self):
@@ -1003,42 +999,157 @@ class CutAlg(pyframe.core.Algorithm):
     # New cuts for electros
     #__________________________________________________________________________
 
+    #__________________________________________________________________________
+    def cut_AtLeastTwoElectrons(self):
+      return self.chain.nel > 1
+    #__________________________________________________________________________
+    def cut_AtLeastTwoSSElectrons(self):
+      electrons = self.store['electrons']
+      if self.chain.nel >= 2:
+        for p in combinations(electrons,2):
+          if p[0].trkcharge * p[1].trkcharge > 0.0: return True
+      return False
+    #__________________________________________________________________________
+    def cut_AtLeastTwoSSElePairs(self):
+      electrons = self.store['electrons']
+      if self.chain.nel >= 4:
+        for p in combinations(electrons,4):
+          if p[0].trkcharge * p[1].trkcharge * p[2].trkcharge * p[3].trkcharge > 0.0: return True
+      return False
 
     #__________________________________________________________________________
-    def cut_AllEleMedium(self):
+    def cut_OneElectron(self):
+        return self.chain.nel == 1
+    #__________________________________________________________________________
+    def cut_TwoElectrons(self):
+        return self.chain.nel == 2
+    #__________________________________________________________________________
+    def cut_ThreeElectrons(self):
+        return self.chain.nel == 3
+    #__________________________________________________________________________
+    def cut_FourElectrons(self):
+        return self.chain.nel == 4
+
+    #__________________________________________________________________________
+    def cut_TwoSSElectrons(self):
+      electrons  = self.store['electrons']
+      if len(electrons)==2:
+        if electrons[0].trkcharge * electrons[1].trkcharge > 0.0:
+          return True
+      return False
+    
+    #__________________________________________________________________________
+    def cut_TwoOSElectrons(self):
+      electrons  = self.store['electrons']
+      if len(electrons)==2:
+        if electrons[0].trkcharge * electrons[1].trkcharge < 0.0:
+          return True
+      return False
+
+
+    #__________________________________________________________________________
+    def cut_AllElePt25(self):
+      electrons = self.store['electrons']
+      passed = True
+      for m in electrons:
+        passed = passed and m.tlv.Pt()>=25.0*GeV
+      return passed
+    
+    #__________________________________________________________________________
+    def cut_AllElePt28(self):
+      electrons = self.store['electrons']
+      passed = True
+      for m in electrons:
+        passed = passed and m.tlv.Pt()>=28.0*GeV
+      return passed
+    
+    #__________________________________________________________________________
+    def cut_AllElePt30(self):
+      electrons = self.store['electrons']
+      passed = True
+      for m in electrons:
+        passed = passed and m.tlv.Pt()>=30.0*GeV
+      return passed
+
+    #__________________________________________________________________________
+
+    def cut_AtLeastOneElePt28(self):
+        electrons = self.store['electrons']
+        for m in electrons:
+          if m.tlv.Pt()>28*GeV: return True
+        return False
+
+    #_________________________________________________________________________
+
+    def cut_AtLeastOneElePt30(self):
+        electrons = self.store['electrons']
+        for m in electrons:
+           if m.tlv.Pt()>30*GeV: return True
+        return False
+   
+    #__________________________________________________________________________
+    def cut_LeadElePt30(self):
+        electrons = self.store['electrons']
+        return electrons[0].tlv.Pt()>30*GeV
+    #__________________________________________________________________________
+    def cut_LeadElePt28(self):
+        electrons = self.store['electrons']
+        return electrons[0].tlv.Pt()>28*GeV
+    #__________________________________________________________________________
+    def cut_SubLeadElePt28(self):
+        electrons = self.store['electrons']
+        return electrons[1].tlv.Pt()>28*GeV
+
+    #_________________________________________________________________________
+
+    def cut_SubLeadElePt30(self):
+        electrons = self.store['electrons']
+        return electrons[1].tlv.Pt()>30*GeV
+
+    #__________________________________________________________________________
+    def cut_AllEleLHMedium(self):
       electrons = self.store['electrons']
       for m in electrons:
-        is_medium = bool(m.isMedium) or bool(m.isTight)
+        is_medium = bool(m.LHMedium) or bool(m.LHTight)
         if not is_medium: return False
       return True
 
     #__________________________________________________________________________
-    def cut_AllEleLoose(self):
+    def cut_AllEleLHLoose(self):
       electrons = self.store['electrons']
       for m in electrons:
-        is_loose = bool(m.isLoose) or bool(m.isMedium) or bool(m.isTight)
+        is_loose = bool(m.LHLoose) or bool(m.LHMedium) or bool(m.LHTight)
         if not is_loose: return False
       return True
-    
+
     #__________________________________________________________________________
-    def cut_LeadEleIsLoose(self):
+
+    def cut_AllEleLHTight(self):
+      electrons = self.store['electrons']
+      for m in electrons:
+        is_tight = bool(m.LHTight)
+        if not is_tight: return False
+      return True    
+
+    #__________________________________________________________________________
+    def cut_LeadEleIsLHLoose(self):
       electrons = self.store['electrons']
       lead_el = electrons[0]
-      is_loose = bool(lead_el.isLoose) or bool(lead_el.isMedium) or bool(lead_el.isTight)
+      is_loose = bool(lead_el.LHLoose) or bool(lead_el.LHMedium) or bool(lead_el.LHTight)
       return is_loose
 
     #__________________________________________________________________________
-    def cut_LeadEleIsMedium(self):
+    def cut_LeadEleIsLHMedium(self):
       electrons = self.store['electrons']
       lead_el = electrons[0]
-      is_medium = bool(lead_el.isMedium) or bool(lead_el.isTight)
+      is_medium = bool(lead_el.LHMedium) or bool(lead_el.LHTight)
       return is_medium
 
     #__________________________________________________________________________
-    def cut_LeadEleIsTight(self):
+    def cut_LeadEleIsLHTight(self):
       electrons = self.store['electrons']
       lead_el = electrons[0]
-      is_tight = bool(lead_el.isTight)
+      is_tight = bool(lead_el.LHTight)
       return is_tight
 
     #___________________________________________________________________________
@@ -1099,6 +1210,38 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
 
+    def cut_PassAndMatchEle(self):
+      required_triggers = self.store["reqTrig"]
+      passed_triggers   = self.store["passTrig"].keys()
+
+      electrons = self.store['electrons']
+      for m in electrons:
+         for trig in required_triggers:
+            if trig in self.store["singleEleTrigList"].keys():
+               ele_is_matched = bool( m.isTrigMatchedToChain.at(self.store["singleEleTrigList"][trig]) )
+               event_is_triggered = bool ( trig in passed_triggers )
+               if ele_is_matched and event_is_triggered:
+                   return True
+
+      return False
+
+     #_________________________________________________________________________
+
+    def cut_SubLeadEleIsMatched(self):
+
+      required_triggers = self.store["reqTrig"]
+      passed_triggers = self.store["passTrig"].keys()
+
+      sublead_ele = self.store['electrons'][1]
+      for trig in required_triggers:
+         if trig in self.store["singleEleTrigList"].keys():
+             sublead_ele_is_matched = bool (sublead_ele.isTrigMatchedToChain.at(self.store["singleEleTrigList"][trig]) )
+             event_is_triggered = bool( trig in passed_triggers )
+             if sublead_ele_is_matched and event_is_triggered:
+                return True
+      return False
+
+     #________________________________________________________________________
 
     def cut_PASS(self):
       #print self.chain.njets

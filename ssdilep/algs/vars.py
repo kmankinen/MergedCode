@@ -556,6 +556,82 @@ class MultiMuVars(pyframe.core.Algorithm):
         return True
 
 
+
+#------------------------------------------------------------------------------
+class DiEleVars(pyframe.core.Algorithm):
+    """
+    computes variables for the di-electron selection
+    """
+    #__________________________________________________________________________
+    def __init__(self, 
+                 name      = 'DiEleVars',
+                 key_electrons = 'electrons',
+                 key_met   = 'met_clus',
+                 ):
+        pyframe.core.Algorithm.__init__(self, name)
+        self.key_electrons = key_electrons
+        self.key_met   = key_met
+
+    #__________________________________________________________________________
+    def execute(self, weight):
+        pyframe.core.Algorithm.execute(self, weight)
+        """
+        computes variables and puts them in the store
+        """
+
+        ## get objects from event candidate
+        ## --------------------------------------------------
+        assert self.store.has_key(self.key_electrons), "electrons key: %s not found in store!" % (self.key_electrons)
+        electrons = self.store[self.key_electrons]
+        met = self.store[self.key_met]
+        
+        # -----------------------
+        # at least two electrons
+        # -----------------------
+        
+        # dict containing pair 
+        # and significance
+        ss_pairs = {} 
+        if len(electrons)>=2:
+          
+          for p in combinations(electrons,2):
+            ss_pairs[p] = p[0].trkd0sig + p[1].trkd0sig 
+          
+          max_sig  = 1000.
+          for pair,sig in ss_pairs.iteritems():
+            if sig < max_sig: 
+              if pair[0].tlv.Pt() > pair[1].tlv.Pt():
+                self.store['ele1'] = pair[0]
+                self.store['ele2'] = pair[1]
+              else: 
+                self.store['ele1'] = pair[1]
+                self.store['ele2'] = pair[0]
+              max_sig = sig 
+        
+        if ss_pairs:
+          ele1 = self.store['ele1'] 
+          ele2 = self.store['ele2'] 
+          ele1T = ROOT.TLorentzVector()
+          ele1T.SetPtEtaPhiM( ele1.tlv.Pt(), 0., ele1.tlv.Phi(), ele1.tlv.M() )
+          ele2T = ROOT.TLorentzVector()
+          ele2T.SetPtEtaPhiM( ele2.tlv.Pt(), 0., ele2.tlv.Phi(), ele2.tlv.M() )
+        
+          self.store['charge_product'] = ele2.trkcharge*ele1.trkcharge
+          self.store['mVis']           = (ele2.tlv+ele1.tlv).M()
+          self.store['mTtot']          = (ele1T + ele2T + met.tlv).M()  
+          self.store['muons_dphi']     = ele2.tlv.DeltaPhi(ele1.tlv)
+          self.store['muons_deta']     = ele2.tlv.Eta()-ele1.tlv.Eta()
+         
+        # puts additional electrons in the store
+        if ss_pairs and len(electrons)>2:
+           i = 2
+           for m in electrons:
+             if m==self.store['ele1'] or m==self.store['ele2']: continue
+             i = i + 1
+             self.store['ele%d'%i] = m
+
+        return True
+
 # EOF 
 
 
