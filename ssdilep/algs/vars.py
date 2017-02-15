@@ -133,12 +133,12 @@ class Particle(pyframe.core.ParticleProxy):
     #__________________________________________________________________________
     def isTrueIsoElectron(self):
       matchtype = self.truthType in [2]
-      return self.isTruthMatchedToElectron and matchtype
+      return matchtype
 
     #__________________________________________________________________________
     def isTrueNonIsoElectron(self):
       matchtype = self.truthType in [1,3,4]
-      return self.isTruthMatchedToElectron and matchtype
+      return matchtype
 
 
 class ParticlesBuilder(pyframe.core.Algorithm):
@@ -467,7 +467,7 @@ class DiEleVars(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def __init__(self, 
                  name      = 'DiEleVars',
-                 key_muons = 'electrons',
+                 key_electrons = 'electrons',
                  key_met   = 'met_clus',
                  ):
         pyframe.core.Algorithm.__init__(self, name)
@@ -483,7 +483,7 @@ class DiEleVars(pyframe.core.Algorithm):
 
         ## get objects from event candidate
         ## --------------------------------------------------
-        assert self.store.has_key(self.key_muons), "electrons key: %s not found in store!" % (self.key_electrons)
+        assert self.store.has_key(self.key_electrons), "electrons key: %s not found in store!" % (self.key_electrons)
         electrons = self.store[self.key_electrons]
         met = self.store[self.key_met]
         
@@ -521,8 +521,8 @@ class DiEleVars(pyframe.core.Algorithm):
           self.store['charge_product'] = ele2.trkcharge*ele1.trkcharge
           self.store['mVis']           = (ele2.tlv+ele1.tlv).M()
           self.store['mTtot']          = (ele1T + ele2T + met.tlv).M()  
-          self.store['ele_dphi']     = ele2.tlv.DeltaPhi(ele1.tlv)
-          self.store['ele_deta']     = ele2.tlv.Eta()-ele1.tlv.Eta()
+          self.store['electrons_dphi']       = ele2.tlv.DeltaPhi(ele1.tlv)
+          self.store['electrons_deta']       = ele2.tlv.Eta()-ele1.tlv.Eta()
          
         # puts additional muons in the store
         if ss_pairs and len(electrons)>2:
