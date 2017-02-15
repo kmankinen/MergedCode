@@ -121,8 +121,6 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_TagPt28(self):
         tag = self.store['tag']
         return tag.tlv.Pt()>28*GeV
-    
-    
     #__________________________________________________________________________
     def cut_OneMuon(self):
         return self.chain.nmuon == 1
@@ -1033,7 +1031,10 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_FourElectrons(self):
         return self.chain.nel == 4
-
+    #__________________________________________________________________________
+    def cut_OneElectronOneMuon(self):
+        if(len(self.store['electrons'])==1 and len(self.store['muons'])==1)
+        return True
     #__________________________________________________________________________
     def cut_TwoSSElectrons(self):
       electrons  = self.store['electrons']
@@ -1082,7 +1083,7 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_EleTL(self):
       electrons = self.store['electrons']
       lead_is_tight    = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
-      sublead_is_loose = bool(not(electrons[1].isIsolated_Loose or electrons[1].LHMedium))
+      sublead_is_loose = bool(not(electrons[1].isIsolated_Loose and electrons[1].LHMedium))
       pass_mc_filter   = True
       
       if self.sampletype=="mc":
@@ -1095,7 +1096,7 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_EleLT(self):
       electrons = self.store['electrons']
-      lead_is_loose    = bool(not(electrons[0].isIsolated_Loose or electrons[0].LHMedium))
+      lead_is_loose    = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
       sublead_is_tight = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
       pass_mc_filter   = True
       
@@ -1109,8 +1110,8 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def cut_EleLL(self):
       electrons = self.store['electrons']
-      lead_is_loose    = bool(not(electrons[0].isIsolated_Loose or electrons[0].LHMedium))
-      sublead_is_loose = bool(not(electrons[1].isIsolated_Loose or electrons[1].LHMedium))
+      lead_is_loose    = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
+      sublead_is_loose = bool(not(electrons[1].isIsolated_Loose and electrons[1].LHMedium))
       pass_mc_filter   = True
       
       if self.sampletype=="mc":
@@ -1119,6 +1120,295 @@ class CutAlg(pyframe.core.Algorithm):
         pass_mc_filter   = lead_is_real and sublead_is_real     
 
       return lead_is_loose and sublead_is_loose and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleTTT(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 3: return False
+      
+      ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      ele1_is_tight     = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
+      ele2_is_tight     = bool(electrons[2].isIsolated_Loose and electrons[2].LHMedium)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele0_is_real      = electrons[0].isTrueIsoElectron()
+        ele1_is_real      = electrons[1].isTrueIsoElectron()
+        ele2_is_real      = electrons[2].isTrueIsoElectron()
+        pass_mc_filter   = ele0_is_real and ele1_is_real and ele2_is_real   
+
+      return ele0_is_tight and ele1_is_tight and ele2_is_tight and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleTTL(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 3: return False
+      
+      ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      ele1_is_tight     = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
+      ele2_is_loose     = bool(not(electrons[2].isIsolated_Loose and electrons[2].LHMedium))
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele0_is_real      = electrons[0].isTrueIsoElectron()
+        ele1_is_real      = electrons[1].isTrueIsoElectron()
+        ele2_is_real      = electrons[2].isTrueIsoElectron()
+        pass_mc_filter   = ele0_is_real and ele1_is_real and ele2_is_real   
+
+      return ele0_is_tight and ele1_is_tight and ele2_is_loose and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleTLT(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 3: return False
+      
+      ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      ele1_is_loose     = bool(not(electrons[1].isIsolated_Loose and electrons[1].LHMedium))
+      ele2_is_tight     = bool(electrons[2].isIsolated_Loose and electrons[2].LHMedium)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele0_is_real      = electrons[0].isTrueIsoElectron()
+        ele1_is_real      = electrons[1].isTrueIsoElectron()
+        ele2_is_real      = electrons[2].isTrueIsoElectron()
+        pass_mc_filter   = ele0_is_real and ele1_is_real and ele2_is_real   
+
+      return ele0_is_tight and ele1_is_loose and ele2_is_tight and pass_mc_filter
+    #__________________________________________________________________________
+    def cut_EleLTT(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 3: return False
+      
+      ele0_is_loose     = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
+      ele1_is_tight     = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
+      ele2_is_tight     = bool(electrons[2].isIsolated_Loose and electrons[2].LHMedium)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele0_is_real      = electrons[0].isTrueIsoElectron()
+        ele1_is_real      = electrons[1].isTrueIsoElectron()
+        ele2_is_real      = electrons[2].isTrueIsoElectron()
+        pass_mc_filter   = ele0_is_real and ele1_is_real and ele2_is_real   
+
+      return ele0_is_loose and ele1_is_tight and ele2_is_tight and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleTLL(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 3: return False
+      
+      ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      ele1_is_loose     = bool(not(electrons[1].isIsolated_Loose and electrons[1].LHMedium))
+      ele2_is_loose     = bool(not(electrons[2].isIsolated_Loose and electrons[2].LHMedium))
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele0_is_real      = electrons[0].isTrueIsoElectron()
+        ele1_is_real      = electrons[1].isTrueIsoElectron()
+        ele2_is_real      = electrons[2].isTrueIsoElectron()
+        pass_mc_filter   = ele0_is_real and ele1_is_real and ele2_is_real   
+
+      return ele0_is_tight and ele1_is_loose and ele2_is_loose and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleLLT(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 3: return False
+      
+      ele0_is_loose     = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
+      ele1_is_loose     = bool(not(electrons[1].isIsolated_Loose and electrons[1].LHMedium))
+      ele2_is_tight     = bool(electrons[2].isIsolated_Loose and electrons[2].LHMedium)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele0_is_real      = electrons[0].isTrueIsoElectron()
+        ele1_is_real      = electrons[1].isTrueIsoElectron()
+        ele2_is_real      = electrons[2].isTrueIsoElectron()
+        pass_mc_filter   = ele0_is_real and ele1_is_real and ele2_is_real   
+
+      return ele0_is_loose and ele1_is_loose and ele2_is_tight and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleLTL(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 3: return False
+      
+      ele0_is_loose     = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
+      ele1_is_tight     = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
+      ele2_is_loose     = bool(not(electrons[2].isIsolated_Loose and electrons[2].LHMedium))
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele0_is_real      = electrons[0].isTrueIsoElectron()
+        ele1_is_real      = electrons[1].isTrueIsoElectron()
+        ele2_is_real      = electrons[2].isTrueIsoElectron()
+        pass_mc_filter   = ele0_is_real and ele1_is_real and ele2_is_real   
+
+      return ele0_is_loose and ele1_is_tight and ele2_is_loose and pass_mc_filter
+    #__________________________________________________________________________
+    def cut_EleLLL(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 3: return False
+      
+      ele0_is_loose     = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
+      ele1_is_loose     = bool(not(electrons[1].isIsolated_Loose and electrons[1].LHMedium))
+      ele2_is_loose     = bool(not(electrons[2].isIsolated_Loose and electrons[2].LHMedium))
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele0_is_real      = electrons[0].isTrueIsoElectron()
+        ele1_is_real      = electrons[1].isTrueIsoElectron()
+        ele2_is_real      = electrons[2].isTrueIsoElectron()
+        pass_mc_filter   = ele0_is_real and ele1_is_real and ele2_is_real   
+
+      return ele0_is_loose and ele1_is_loose and ele2_is_loose and pass_mc_filter
+    #__________________________________________________________________________
+    def cut_EleTTTT(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 4: return False
+      
+      ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      ele1_is_tight     = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
+      ele2_is_tight     = bool(electrons[2].isIsolated_Loose and electrons[2].LHMedium)
+      ele3_is_tight     = bool(electrons[3].isIsolated_Loose and electrons[3].LHMedium)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele0_is_real      = electrons[0].isTrueIsoElectron()
+        ele1_is_real      = electrons[1].isTrueIsoElectron()
+        ele2_is_real      = electrons[2].isTrueIsoElectron()
+        ele3_is_real      = electrons[3].isTrueIsoElectron()
+        pass_mc_filter   = ele0_is_real and ele1_is_real and ele2_is_real and ele3_is_real
+
+      return ele0_is_tight and ele1_is_tight and ele2_is_tight and ele3_is_tight and pass_mc_filter
+    
+    #__________________________________________________________________________
+    def cut_EleTTTL(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 4: return False
+      
+      ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      ele1_is_tight     = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
+      ele2_is_tight     = bool(electrons[2].isIsolated_Loose and electrons[2].LHMedium)
+      ele3_is_loose     = bool(not (electrons[3].isIsolated_Loose and electrons[3].LHMedium))
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele3_is_real      = electrons[3].isTrueIsoElectron()
+        pass_mc_filter   = ele3_is_real
+
+      return ele0_is_tight and ele1_is_tight and ele2_is_tight and ele3_is_loose and pass_mc_filter
+    
+    #__________________________________________________________________________
+    def cut_EleTTLT(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 4: return False
+      
+      ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      ele1_is_tight     = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
+      ele2_is_loose     = bool(not (electrons[2].isIsolated_Loose and electrons[2].LHMedium))
+      ele3_is_tight     = bool(electrons[3].isIsolated_Loose and electrons[3].LHMedium)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele2_is_real      = electrons[2].isTrueIsoElectron()
+        pass_mc_filter   = ele2_is_real
+
+      return ele0_is_tight and ele1_is_tight and ele2_is_loose and ele3_is_tight and pass_mc_filter
+    
+    #__________________________________________________________________________
+    def cut_EleTLTT(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 4: return False
+      
+      ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      ele1_is_loose     = bool(not (electrons[1].isIsolated_Loose and electrons[1].LHMedium))
+      ele2_is_tight     = bool(electrons[2].isIsolated_Loose and electrons[2].LHMedium)
+      ele3_is_tight     = bool(electrons[3].isIsolated_Loose and electrons[3].LHMedium)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele1_is_real      = electrons[1].isTrueIsoElectron()
+        pass_mc_filter   = ele1_is_real
+
+      return ele0_is_tight and ele1_is_loose and ele2_is_tight and ele3_is_tight and pass_mc_filter
+    
+    #__________________________________________________________________________
+    def cut_EleLTTT(self):
+      electrons = self.store['electrons']
+      if len(electrons) < 4: return False
+      
+      ele0_is_loose     = bool(not (electrons[0].isIsolated_Loose and electrons[0].LHMedium))
+      ele1_is_tight     = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
+      ele2_is_tight     = bool(electrons[2].isIsolated_Loose and electrons[2].LHMedium)
+      ele3_is_tight     = bool(electrons[3].isIsolated_Loose and electrons[3].LHMedium)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele0_is_real      = electrons[0].isTrueIsoElectron()
+        pass_mc_filter   = ele0_is_real
+
+      return ele0_is_loose and ele1_is_tight and ele2_is_tight and ele3_is_tight and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleMuTT(self):
+      electrons = self.store['electrons']
+      muons = self.store['muons']
+      ele_is_tight    = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      muon_is_tight   = bool(muons[0].isIsolated_FixedCutTightTrackOnly and muons[0].trkd0sig<3.)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele_is_real     = electrons[0].isTrueIsoElectron()
+        muon_is_real    = muons[1].isTrueIsoMuon()
+        pass_mc_filter   = ele_is_real and muon_is_real     
+
+      return ele_is_tight and muon_is_tight and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleMuLT(self):
+      electrons = self.store['electrons']
+      muons = self.store['muons']
+      ele_is_loose    = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
+      muon_is_tight   = bool(muons[0].isIsolated_FixedCutTightTrackOnly and muons[0].trkd0sig<3.)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele_is_real     = electrons[0].isTrueIsoElectron()
+        muon_is_real    = muons[1].isTrueIsoMuon()
+        pass_mc_filter   = ele_is_real and muon_is_real     
+
+      return ele_is_loose and muon_is_tight and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleMuTL(self):
+      electrons = self.store['electrons']
+      muons = self.store['muons']
+      ele_is_tight    = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      muon_is_loose   = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and muons[1].trkd0sig<10.)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele_is_real     = electrons[0].isTrueIsoElectron()
+        muon_is_real    = muons[1].isTrueIsoMuon()
+        pass_mc_filter   = ele_is_real and muon_is_real     
+
+      return ele_is_tight and muon_is_loose and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleMuLL(self):
+      electrons = self.store['electrons']
+      muons = self.store['muons']
+      ele_is_loose    = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
+      muon_is_loose   = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and muons[1].trkd0sig<10.)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        ele_is_real     = electrons[0].isTrueIsoElectron()
+        muon_is_real    = muons[1].isTrueIsoMuon()
+        pass_mc_filter   = ele_is_real and muon_is_real     
+
+      return ele_is_loose and muon_is_loose and pass_mc_filter
 
     #__________________________________________________________________________
     def cut_AllElePt25(self):
@@ -1265,6 +1555,31 @@ class CutAlg(pyframe.core.Algorithm):
       os_pairs = []
       if self.chain.nel >= 2:
         for p in combinations(electrons,2):
+          if p[0].trkcharge * p[1].trkcharge < 0.0: os_pairs.append(p)
+      if len(os_pairs)==1 or len(os_pairs)==3: return True
+      return False
+    #___________________________________________________________________________
+
+    def cut_OddSSElectronMuon(self):
+      electrons = self.store['electrons']
+      muons     = self.store['muons']
+      ss_pairs = []
+      leptons = eletrons + muons
+      if len(leptons) >= 2:
+        for p in combinations(leptons,2):
+          if p[0].trkcharge * p[1].trkcharge > 0.0: ss_pairs.append(p)
+      if len(ss_pairs)==1 or len(ss_pairs)==3: return True
+      return False
+
+    #___________________________________________________________________________
+
+    def cut_OddOSSElectronMuon(self):
+      electrons = self.store['electrons']
+      muons     = self.store['muons']
+      os_pairs = []
+      leptons = eletrons + muons
+      if len(leptons) >= 2:
+        for p in combinations(leptons,2):
           if p[0].trkcharge * p[1].trkcharge < 0.0: os_pairs.append(p)
       if len(os_pairs)==1 or len(os_pairs)==3: return True
       return False
