@@ -88,6 +88,16 @@ class CutAlg(pyframe.core.Algorithm):
           if p[0].trkcharge * p[1].trkcharge > 0.0: ss_pairs.append(p)
       if len(ss_pairs)==1 or len(ss_pairs)==3: return True
       return False
+
+    #__________________________________________________________________________
+    def cut_OddOSMuons(self):
+      muons = self.store['muons']
+      os_pairs = []
+      if self.chain.nmuon >= 2:
+        for p in combinations(muons,2):
+          if p[0].trkcharge * p[1].trkcharge < 0.0: os_pairs.append(p)
+      if len(os_pairs)==1 or len(os_pairs)==3: return True
+      return False
     
     #__________________________________________________________________________
     def cut_AtLeastOneMuPt28(self):
@@ -293,9 +303,7 @@ class CutAlg(pyframe.core.Algorithm):
         pass_mc_filter   = lead_is_real and sublead_is_real     
 
       return lead_is_loose and sublead_is_loose and pass_mc_filter
-    
-    
-    
+        
     #__________________________________________________________________________
     def cut_MuTT(self):
       muons = self.store['muons']
@@ -1042,6 +1050,75 @@ class CutAlg(pyframe.core.Algorithm):
           return True
       return False
 
+    #__________________________________________________________________________
+    def cut_EleTT(self):
+      electrons = self.store['electrons']
+      lead_is_tight    = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      sublead_is_tight = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        lead_is_real     = electrons[0].isTrueIsoElectron()
+        sublead_is_real  = electrons[1].isTrueIsoElectron()
+        pass_mc_filter   = lead_is_real and sublead_is_real     
+
+      return lead_is_tight and sublead_is_tight and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleTT(self):
+      electrons = self.store['electrons']
+      lead_is_tight    = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      sublead_is_tight = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        lead_is_real     = electrons[0].isTrueIsoElectron()
+        sublead_is_real  = electrons[1].isTrueIsoElectron()
+        pass_mc_filter   = lead_is_real and sublead_is_real     
+
+      return lead_is_tight and sublead_is_tight and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleTL(self):
+      electrons = self.store['electrons']
+      lead_is_tight    = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
+      sublead_is_loose = bool(not(electrons[1].isIsolated_Loose or electrons[1].LHMedium))
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        lead_is_real     = electrons[0].isTrueIsoElectron()
+        sublead_is_real  = electrons[1].isTrueIsoElectron()
+        pass_mc_filter   = lead_is_real and sublead_is_real     
+
+      return lead_is_tight and sublead_is_loose and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleLT(self):
+      electrons = self.store['electrons']
+      lead_is_loose    = bool(not(electrons[0].isIsolated_Loose or electrons[0].LHMedium))
+      sublead_is_tight = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        lead_is_real     = electrons[0].isTrueIsoElectron()
+        sublead_is_real  = electrons[1].isTrueIsoElectron()
+        pass_mc_filter   = lead_is_real and sublead_is_real     
+
+      return lead_is_loose and sublead_is_tight and pass_mc_filter
+
+    #__________________________________________________________________________
+    def cut_EleLL(self):
+      electrons = self.store['electrons']
+      lead_is_loose    = bool(not(electrons[0].isIsolated_Loose or electrons[0].LHMedium))
+      sublead_is_loose = bool(not(electrons[1].isIsolated_Loose or electrons[1].LHMedium))
+      pass_mc_filter   = True
+      
+      if self.sampletype=="mc":
+        lead_is_real     = electrons[0].isTrueIsoElectron()
+        sublead_is_real  = electrons[1].isTrueIsoElectron()
+        pass_mc_filter   = lead_is_real and sublead_is_real     
+
+      return lead_is_loose and sublead_is_loose and pass_mc_filter
 
     #__________________________________________________________________________
     def cut_AllElePt25(self):
@@ -1181,6 +1258,17 @@ class CutAlg(pyframe.core.Algorithm):
       if len(ss_pairs)==1 or len(ss_pairs)==3: return True
       return False
 
+    #___________________________________________________________________________
+
+    def cut_OddOSElectrons(self):
+      electrons = self.store['electrons']
+      os_pairs = []
+      if self.chain.nel >= 2:
+        for p in combinations(electrons,2):
+          if p[0].trkcharge * p[1].trkcharge < 0.0: os_pairs.append(p)
+      if len(os_pairs)==1 or len(os_pairs)==3: return True
+      return False
+
    #____________________________________________________________________________
 
     def cut_AllElePairsM20(self):
@@ -1190,13 +1278,29 @@ class CutAlg(pyframe.core.Algorithm):
           if (p[0].tlv + p[1].tlv).M()<20*GeV: return False
       return True
 
-    #__________________________________________________________________________
+  #____________________________________________________________________________
 
-    def cut_AllEleEta247(self):
+    def cut_AllElePt30(self):
       electrons = self.store['electrons']
       passed = True
       for m in electrons:
-        passed = passed and abs(m.tlv.Eta())<2.47
+        passed = passed and m.tlv.Pt()>25*GeV
+      return passed
+
+  #__________________________________________________________________________
+    
+    def cut_Mass130GeV(self):
+        electrons = self.store['electrons']
+        if (electrons[0].tlv + electrons[1].tlv).M() > 130*GeV: return True
+        return False
+
+    #__________________________________________________________________________
+
+    def cut_AllEleEta247AndNotCrackRegion(self):
+      electrons = self.store['electrons']
+      passed = True
+      for m in electrons:
+        passed = passed and abs(m.tlv.Eta())<2.47 and not(1.37<m.tlv.Eta()<1.52)
       return passed
 
     #__________________________________________________________________________
@@ -1206,6 +1310,15 @@ class CutAlg(pyframe.core.Algorithm):
       passed = True
       for m in electrons:
         passed = passed and abs(m.trkz0sintheta)<0.5
+      return passed
+
+    #__________________________________________________________________________
+
+    def cut_AllEleTrkd0Sig5(self):
+      electrons = self.store['electrons']
+      passed = True
+      for m in electrons:
+        passed = passed and abs(m.trkd0sig)<5
       return passed
 
     #__________________________________________________________________________
@@ -1474,7 +1587,6 @@ class PlotAlg(pyframe.algs.CutFlowAlg,CutAlg):
         # ---------------
         if passed:
           for h in self.hist_list:
-            
             if self.do_var_check:
               exec ( "present = %s"%h.varcheck() )
               if not present: 
