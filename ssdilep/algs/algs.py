@@ -1128,6 +1128,28 @@ class CutAlg(pyframe.core.Algorithm):
       return True    
 
     #__________________________________________________________________________
+    def cut_AllEleIsolatedLoose(self):
+      electrons = self.store['electrons']
+      for m in electrons:
+        is_IsolatedLoose = bool(m.Isolated_Loose)
+        if not is_IsolatedLoose: return False
+      return True
+
+    #__________________________________________________________________________
+    def cut_LeadEleIsIsolatedLoose(self):
+      electrons = self.store['electrons']
+      lead_el = electrons[0]
+      is_IsolatedLoose = bool(lead_el.Isolated_Loose)
+      return is_IsolatedLoose
+
+    #__________________________________________________________________________
+    def cut_SubLeadEleIsIsolatedLoose(self):
+      electrons = self.store['electrons']
+      sublead_el = electrons[1]
+      is_IsolatedLoose = bool(sublead_el.Isolated_Loose)
+      return is_IsolatedLoose
+
+    #__________________________________________________________________________
     def cut_LeadEleIsLHLoose(self):
       electrons = self.store['electrons']
       lead_el = electrons[0]
@@ -1193,6 +1215,15 @@ class CutAlg(pyframe.core.Algorithm):
       for m in electrons:
         if m.ptvarcone30 / m.tlv.Pt() > 1.5: return False
       return True
+
+    #__________________________________________________________________________
+
+    def cut_EleMass130GeV(self):
+        electrons = self.store['electrons']
+        if len(electrons)==2 :
+          if (electrons[0].tlv + electrons[1].tlv).M() > 130*GeV:
+            return True;
+        return False
 
     #__________________________________________________________________________
 
