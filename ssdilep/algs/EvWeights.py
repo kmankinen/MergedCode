@@ -146,7 +146,38 @@ class LPXKfactor(pyframe.core.Algorithm):
             if self.key: self.store[self.key] = wkf
             self.set_weight(wkf*weight)
         return True
+#------------------------------------------------------------------------------                                                                                                   
+class OneOrTwoBjetsSF(pyframe.core.Algorithm):
+    """                                                                                                                                                                            
+    OneOrTwoBjetsSF                                                                                                                                                                
+    """
+    #__________________________________________________________________________                                                                                                    
+    def __init__(self, name="OneOrTwoBjetsSF",
+            key            = None,
+            ):
 
+        pyframe.core.Algorithm.__init__(self, name=name)
+        self.key               = key
+
+        assert key, "Must provide key for storing ele reco sf"
+    #_________________________________________________________________________                                                                                                     
+    def initialize(self):
+      pass
+    #_________________________________________________________________________                                                                                                     
+    def execute(self, weight):
+      sf=1.0
+      if "mc" in self.sampletype:
+          jets = self.store['jets']
+          for jet in jets:
+              if jet.isFix77:
+                  sf *= getattr(jet,"jvtSF").at(0)
+                  sf *= getattr(jet,"SFFix77").at(0)
+
+      if self.key:
+        self.store[self.key] = sf
+      return True
+
+#------------------------------------------------------------------------------                                                                                                   
 class EleTrigSF(pyframe.core.Algorithm):
     """
     Implementation of electron trigger scale factors
