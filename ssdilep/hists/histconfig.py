@@ -151,7 +151,6 @@ h_scdphi  = Hist1D( hname  = "h_scdphi",
                               vexpr  = "self.store['scdphi']",
                             )
 
-
 h_electrons_chargeprod  = Hist1D( hname  = "h_electrons_chargeprod",
                               xtitle = "q(e_{lead}) #timesq (e_{sublead})",
                               ytitle = "Events", 
@@ -190,16 +189,6 @@ h_electrons_mVis  = Hist1D( hname  = "h_electrons_mVis",
                               xmax   = 2000.,
                               dir    = "event",
                               vexpr  = "self.store['mVis']/GeV",
-                            )
-
-h_electrons_mTtot  = Hist1D( hname  = "h_electrons_mTtot",
-                              xtitle = "m^{tot}_{T}(e_{lead},e_{sublead}) [GeV]",
-                              ytitle = "Events / (1 GeV)", 
-                              nbins  = 2000,
-                              xmin   = 0.0,
-                              xmax   = 2000.,
-                              dir    = "event",
-                              vexpr  = "self.store['mTtot']/GeV",
                             )
 
 h_ejet_dphi  = Hist1D( hname  = "h_ejet_dphi",
@@ -588,7 +577,7 @@ h_electrons_dphi  = Hist1D( hname  = "h_electrons_dphi",
                               vexpr  = "self.store['electrons_dphi']",
                             )
 
-h_electrons_delta  = Hist1D( hname  = "h_electrons_delta",
+h_electrons_deta  = Hist1D( hname  = "h_electrons_delta",
                               xtitle = "#Delta#eta(e_{lead},e_{sublead})",
                               ytitle = "Events", 
                               nbins  = 50,
