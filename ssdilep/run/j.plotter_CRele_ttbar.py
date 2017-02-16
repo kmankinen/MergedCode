@@ -68,7 +68,7 @@ def analyze(config):
     ## trig list to the store for later cutflow
     ## ---------------------------------------
     loop += ssdilep.algs.vars.BuildTrigConfig(
-        required_triggers = ["HLT_2e17lhloose"],
+        required_triggers = ["HLT_2e17_lhloose"],
         key = 'electrons',
         )
     
@@ -144,6 +144,12 @@ def analyze(config):
             trig_list =  ["HLT_2e17_lhloose"],
             key       = "EleTrigSF",
             scale     = None,
+            )
+
+    loop += ssdilep.algs.EvWeights.ChargeFlipEleSF(
+            key='ChargeFlipEleSF',
+            config_file=os.path.join(main_path,'ssdilep/data/chargeFlipRates-12-01-2017.root'),
+            chargeFlipSF=True,
             )
 
     ## objects
@@ -230,6 +236,7 @@ def analyze(config):
             sys=None,
             )
 
+
     ## configure histograms
     ## ---------------------------------------
     hist_list = []
@@ -248,6 +255,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+                           ['PassDiEle',['EleTrigSF']],
                            ['OneOrTwoBjets',['OneOrTwoBjetsSF']],
                            ['TwoElectrons',None],
                            ['EleTT',['Ele0AllSF','Ele1AllSF']],
@@ -261,6 +269,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+                           ['PassDiEle',['EleTrigSF']],
                            ['OneOrTwoBjets',['OneOrTwoBjetsSF']],
                            ['TwoElectrons',None],
                            ['EleTL',['Ele0AllSF','Ele1RecoSF','Ele1FF']],
@@ -273,6 +282,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+                           ['PassDiEle',['EleTrigSF']],
                            ['OneOrTwoBjets',['OneOrTwoBjetsSF']],
                            ['TwoElectrons',None],
                            ['EleLT',['Ele0RecoSF','Ele1AllSF','Ele0FF']],
@@ -285,6 +295,7 @@ def analyze(config):
             do_var_check = True,
             hist_list    = hist_list,
             cut_flow     = [
+                           ['PassDiEle',['EleTrigSF']],
                            ['OneOrTwoBjets',['OneOrTwoBjetsSF']],
                            ['TwoElectrons',None],
                            ['EleLL',['Ele0RecoSF','Ele1RecoSF','Ele0FF','Ele1FF']],
