@@ -718,7 +718,7 @@ class CutAlg(pyframe.core.Algorithm):
       passed_triggers   = self.store["passTrig"].keys()
 
       muons = self.store['muons']
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       muon_is_matched = False
       electron_is_matched =False
       event_is_triggered= False
@@ -1037,14 +1037,14 @@ class CutAlg(pyframe.core.Algorithm):
       return self.chain.nel > 1
     #__________________________________________________________________________
     def cut_AtLeastTwoSSElectrons(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if self.chain.nel >= 2:
         for p in combinations(electrons,2):
           if p[0].trkcharge * p[1].trkcharge > 0.0: return True
       return False
     #__________________________________________________________________________
     def cut_AtLeastTwoSSElePairs(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if self.chain.nel >= 4:
         for p in combinations(electrons,4):
           if p[0].trkcharge * p[1].trkcharge * p[2].trkcharge * p[3].trkcharge > 0.0: return True
@@ -1064,11 +1064,11 @@ class CutAlg(pyframe.core.Algorithm):
         return self.chain.nel == 4
     #__________________________________________________________________________
     def cut_OneElectronOneMuon(self):
-        if(len(self.store['electrons'])==1 and len(self.store['muons'])==1):return True
+        if(len(self.store['electrons_loose'])==1 and len(self.store['muons'])==1):return True
         return False
     #__________________________________________________________________________
     def cut_TwoSSElectrons(self):
-      electrons  = self.store['electrons']
+      electrons  = self.store['electrons_loose']
       if len(electrons)==2:
         if electrons[0].trkcharge * electrons[1].trkcharge > 0.0:
           return True
@@ -1076,7 +1076,7 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_TwoOSElectrons(self):
-      electrons  = self.store['electrons']
+      electrons  = self.store['electrons_loose']
       if len(electrons)==2:
         if electrons[0].trkcharge * electrons[1].trkcharge < 0.0:
           return True
@@ -1084,7 +1084,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleTT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       lead_is_tight    = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
       sublead_is_tight = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
       pass_mc_filter   = True
@@ -1098,7 +1098,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleTT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       lead_is_tight    = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
       sublead_is_tight = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
       pass_mc_filter   = True
@@ -1112,7 +1112,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleTL(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       lead_is_tight    = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
       sublead_is_loose = bool(not(electrons[1].isIsolated_Loose and electrons[1].LHMedium))
       pass_mc_filter   = True
@@ -1126,7 +1126,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleLT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       lead_is_loose    = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
       sublead_is_tight = bool(electrons[1].isIsolated_Loose and electrons[1].LHMedium)
       pass_mc_filter   = True
@@ -1140,7 +1140,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleLL(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       lead_is_loose    = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
       sublead_is_loose = bool(not(electrons[1].isIsolated_Loose and electrons[1].LHMedium))
       pass_mc_filter   = True
@@ -1154,7 +1154,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleTTT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 3: return False
       
       ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
@@ -1172,7 +1172,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleTTL(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 3: return False
       
       ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
@@ -1190,7 +1190,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleTLT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 3: return False
       
       ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
@@ -1207,7 +1207,7 @@ class CutAlg(pyframe.core.Algorithm):
       return ele0_is_tight and ele1_is_loose and ele2_is_tight and pass_mc_filter
     #__________________________________________________________________________
     def cut_EleLTT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 3: return False
       
       ele0_is_loose     = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
@@ -1225,7 +1225,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleTLL(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 3: return False
       
       ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
@@ -1243,7 +1243,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleLLT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 3: return False
       
       ele0_is_loose     = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
@@ -1261,7 +1261,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleLTL(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 3: return False
       
       ele0_is_loose     = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
@@ -1278,7 +1278,7 @@ class CutAlg(pyframe.core.Algorithm):
       return ele0_is_loose and ele1_is_tight and ele2_is_loose and pass_mc_filter
     #__________________________________________________________________________
     def cut_EleLLL(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 3: return False
       
       ele0_is_loose     = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
@@ -1295,7 +1295,7 @@ class CutAlg(pyframe.core.Algorithm):
       return ele0_is_loose and ele1_is_loose and ele2_is_loose and pass_mc_filter
     #__________________________________________________________________________
     def cut_EleTTTT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 4: return False
       
       ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
@@ -1315,7 +1315,7 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_EleTTTL(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 4: return False
       
       ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
@@ -1332,7 +1332,7 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_EleTTLT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 4: return False
       
       ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
@@ -1349,7 +1349,7 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_EleTLTT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 4: return False
       
       ele0_is_tight     = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
@@ -1366,7 +1366,7 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_EleLTTT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons) < 4: return False
       
       ele0_is_loose     = bool(not (electrons[0].isIsolated_Loose and electrons[0].LHMedium))
@@ -1383,7 +1383,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleMuTT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       muons = self.store['muons']
       ele_is_tight    = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
       muon_is_tight   = bool(muons[0].isIsolated_FixedCutTightTrackOnly and muons[0].trkd0sig<3.)
@@ -1398,7 +1398,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleMuLT(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       muons = self.store['muons']
       ele_is_loose    = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
       muon_is_tight   = bool(muons[0].isIsolated_FixedCutTightTrackOnly and muons[0].trkd0sig<3.)
@@ -1413,7 +1413,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleMuTL(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       muons = self.store['muons']
       ele_is_tight    = bool(electrons[0].isIsolated_Loose and electrons[0].LHMedium)
       muon_is_loose   = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and muons[1].trkd0sig<10.)
@@ -1428,7 +1428,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_EleMuLL(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       muons = self.store['muons']
       ele_is_loose    = bool(not(electrons[0].isIsolated_Loose and electrons[0].LHMedium))
       muon_is_loose   = bool(not muons[1].isIsolated_FixedCutTightTrackOnly and muons[1].trkd0sig<10.)
@@ -1443,7 +1443,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_AllElePt25(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       passed = True
       for m in electrons:
         passed = passed and m.tlv.Pt()>=25.0*GeV
@@ -1451,7 +1451,7 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_AllElePt28(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       passed = True
       for m in electrons:
         passed = passed and m.tlv.Pt()>=28.0*GeV
@@ -1459,7 +1459,7 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_AllElePt30(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       passed = True
       for m in electrons:
         passed = passed and m.tlv.Pt()>=30.0*GeV
@@ -1468,7 +1468,7 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
 
     def cut_AtLeastOneElePt28(self):
-        electrons = self.store['electrons']
+        electrons = self.store['electrons_loose']
         for m in electrons:
           if m.tlv.Pt()>28*GeV: return True
         return False
@@ -1476,33 +1476,33 @@ class CutAlg(pyframe.core.Algorithm):
     #_________________________________________________________________________
 
     def cut_AtLeastOneElePt30(self):
-        electrons = self.store['electrons']
+        electrons = self.store['electrons_loose']
         for m in electrons:
            if m.tlv.Pt()>30*GeV: return True
         return False
    
     #__________________________________________________________________________
     def cut_LeadElePt30(self):
-        electrons = self.store['electrons']
+        electrons = self.store['electrons_loose']
         return electrons[0].tlv.Pt()>30*GeV
     #__________________________________________________________________________
     def cut_LeadElePt28(self):
-        electrons = self.store['electrons']
+        electrons = self.store['electrons_loose']
         return electrons[0].tlv.Pt()>28*GeV
     #__________________________________________________________________________
     def cut_SubLeadElePt28(self):
-        electrons = self.store['electrons']
+        electrons = self.store['electrons_loose']
         return electrons[1].tlv.Pt()>28*GeV
 
     #_________________________________________________________________________
 
     def cut_SubLeadElePt30(self):
-        electrons = self.store['electrons']
+        electrons = self.store['electrons_loose']
         return electrons[1].tlv.Pt()>30*GeV
 
     #__________________________________________________________________________
     def cut_AllEleLHMedium(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       for m in electrons:
         is_medium = bool(m.LHMedium) or bool(m.LHTight)
         if not is_medium: return False
@@ -1510,7 +1510,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_AllEleLHLoose(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       for m in electrons:
         is_loose = bool(m.LHLoose)
         if not is_loose: return False
@@ -1519,7 +1519,7 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
 
     def cut_AllEleLHTight(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       for m in electrons:
         is_tight = bool(m.LHTight)
         if not is_tight: return False
@@ -1527,7 +1527,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_AllEleIsolatedLoose(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       for m in electrons:
         is_IsolatedLoose = bool(m.Isolated_Loose)
         if not is_IsolatedLoose: return False
@@ -1535,35 +1535,35 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_LeadEleIsIsolatedLoose(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       lead_el = electrons[0]
       is_IsolatedLoose = bool(lead_el.Isolated_Loose)
       return is_IsolatedLoose
 
     #__________________________________________________________________________
     def cut_SubLeadEleIsIsolatedLoose(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       sublead_el = electrons[1]
       is_IsolatedLoose = bool(sublead_el.Isolated_Loose)
       return is_IsolatedLoose
 
     #__________________________________________________________________________
     def cut_LeadEleIsLHLoose(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       lead_el = electrons[0]
       is_LHloose = bool(lead_el.LHLoose) or bool(lead_el.LHMedium) or bool(lead_el.LHTight)
       return is_LHloose
 
     #__________________________________________________________________________
     def cut_LeadEleIsLHMedium(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       lead_el = electrons[0]
       is_LHmedium = bool(lead_el.LHMedium) or bool(lead_el.LHTight)
       return is_LHmedium
 
     #__________________________________________________________________________
     def cut_LeadEleIsLHTight(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       lead_el = electrons[0]
       is_LHtight = bool(lead_el.LHTight)
       return is_LHtight
@@ -1571,7 +1571,7 @@ class CutAlg(pyframe.core.Algorithm):
     #___________________________________________________________________________
 
     def cut_OddSSElectrons(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       ss_pairs = []
       if self.chain.nel >= 2:
         for p in combinations(electrons,2):
@@ -1582,7 +1582,7 @@ class CutAlg(pyframe.core.Algorithm):
     #___________________________________________________________________________
 
     def cut_OddOSElectrons(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       os_pairs = []
       if self.chain.nel >= 2:
         for p in combinations(electrons,2):
@@ -1592,7 +1592,7 @@ class CutAlg(pyframe.core.Algorithm):
     #___________________________________________________________________________
 
     def cut_OddSSElectronMuon(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       muons     = self.store['muons']
       ss_pairs = []
       leptons = eletrons + muons
@@ -1605,7 +1605,7 @@ class CutAlg(pyframe.core.Algorithm):
     #___________________________________________________________________________
 
     def cut_OddOSSElectronMuon(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       muons     = self.store['muons']
       os_pairs = []
       leptons = eletrons + muons
@@ -1618,7 +1618,7 @@ class CutAlg(pyframe.core.Algorithm):
    #____________________________________________________________________________
 
     def cut_AllElePairsM20(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if self.chain.nel >= 2:
         for p in combinations(electrons,2):
           if (p[0].tlv + p[1].tlv).M()<20*GeV: return False
@@ -1627,7 +1627,7 @@ class CutAlg(pyframe.core.Algorithm):
   #____________________________________________________________________________
 
     def cut_AllElePt30(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       passed = True
       for m in electrons:
         passed = passed and m.tlv.Pt()>30*GeV
@@ -1636,14 +1636,14 @@ class CutAlg(pyframe.core.Algorithm):
   #__________________________________________________________________________
     
     def cut_Mass130GeV(self):
-        electrons = self.store['electrons']
+        electrons = self.store['electrons_loose']
         if (electrons[0].tlv + electrons[1].tlv).M() > 130*GeV: return True
         return False
 
     #__________________________________________________________________________
 
     def cut_AllEleEta247AndNotCrackRegion(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       passed = True
       for m in electrons:
         passed = passed and abs(m.tlv.Eta())<2.47 and not(1.37<abs(m.tlv.Eta())<1.52)
@@ -1652,7 +1652,7 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
 
     def cut_AllEleZ0SinTheta05(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       passed = True
       for m in electrons:
         passed = passed and abs(m.trkz0sintheta)<0.5
@@ -1661,7 +1661,7 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
 
     def cut_AllEleTrkd0Sig5(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       passed = True
       for m in electrons:
         passed = passed and abs(m.trkd0sig)<5
@@ -1670,7 +1670,7 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
 
     def cut_AllEleIsoBound15(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       for m in electrons:
         if m.ptvarcone30 / m.tlv.Pt() > 1.5: return False
       return True
@@ -1678,7 +1678,7 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
 
     def cut_EleMass130GeV(self):
-        electrons = self.store['electrons']
+        electrons = self.store['electrons_loose']
         if len(electrons)==2 :
           if (electrons[0].tlv + electrons[1].tlv).M() > 130*GeV:
             return True;
@@ -1687,7 +1687,7 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
 
     def cut_EleMass130GeV200(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       if len(electrons)==2 :
           tempMass = (electrons[0].tlv + electrons[1].tlv).M()
           if tempMass > 130*GeV and tempMass < 200*GeV :
@@ -1700,7 +1700,7 @@ class CutAlg(pyframe.core.Algorithm):
       required_triggers = self.store["reqTrig"]
       passed_triggers   = self.store["passTrig"].keys()
 
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       for m in electrons:
          for trig in required_triggers:
             if trig in self.store["singleEleTrigList"].keys():
@@ -1718,7 +1718,7 @@ class CutAlg(pyframe.core.Algorithm):
       required_triggers = self.store["reqTrig"]
       passed_triggers = self.store["passTrig"].keys()
 
-      sublead_ele = self.store['electrons'][1]
+      sublead_ele = self.store['electrons_loose'][1]
       for trig in required_triggers:
          if trig in self.store["singleEleTrigList"].keys():
              sublead_ele_is_matched = bool (sublead_ele.isTrigMatchedToChain.at(self.store["singleEleTrigList"][trig]) )
@@ -1744,7 +1744,7 @@ class CutAlg(pyframe.core.Algorithm):
       required_triggers = self.store["reqTrig"]
       passed_triggers   = self.store["passTrig"].keys()
       
-      lead_ele = self.store['electrons'][0]
+      lead_ele = self.store['electrons_loose'][0]
       for trig in required_triggers:
         if trig in self.store["singleEleTrigList"].keys():
           lead_ele_is_matched = bool( lead_ele.isTrigMatchedToChain.at(self.store["singleEleTrigList"][trig]) )
@@ -1758,7 +1758,7 @@ class CutAlg(pyframe.core.Algorithm):
       required_triggers = self.store["reqTrig"]
       passed_triggers   = self.store["passTrig"].keys()
 
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       for m in electrons:
         for trig in required_triggers:
           if trig in self.store["singleEleTrigList"].keys():
@@ -1798,7 +1798,7 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
 
     def cut_ExatlyTwoSSLeptons(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       muons = self.store['muons']
       if self.chain.nel == 2:
         for p in combinations(electrons,2):
@@ -1816,7 +1816,7 @@ class CutAlg(pyframe.core.Algorithm):
 
     #__________________________________________________________________________
     def cut_OneSSEleMuonPair(self):
-      electrons  = self.store['electrons']
+      electrons  = self.store['electrons_loose']
       muons = self.store['muons']
       if (len(electrons)==1 and len(muons)==1):
         if electrons[0].trkcharge * muons[0].trkcharge > 0.0:
@@ -1825,7 +1825,7 @@ class CutAlg(pyframe.core.Algorithm):
     
     #__________________________________________________________________________
     def cut_OneOSEleMuonPair(self):
-      electrons  = self.store['electrons']
+      electrons  = self.store['electrons_loose']
       muons = self.store['muons']
       if (len(electrons)==1 and len(muons)==1):
         if electrons[0].trkcharge * muons[0].trkcharge < 0.0:
@@ -1835,7 +1835,7 @@ class CutAlg(pyframe.core.Algorithm):
     #__________________________________________________________________________
 
     def cut_EleMuonMass130GeV200(self):
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
       muons = self.store['muons']
       if len(electrons)==1 and len(muons)==1 :
           tempMass = (electrons[0].tlv + muons[0].tlv).M()
