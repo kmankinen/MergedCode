@@ -141,6 +141,39 @@ class Particle(pyframe.core.ParticleProxy):
       return matchtype
 
 
+    #========================================================================#                                                                                                          #                          Type of the electron                          #                                                                                                          #________________________________________________________________________#                                                                                                          #                                                                                                                                                                                   #                truthType  truthOrigin  firstEgTT  firstEgTO  charge-flip                                                                                                          # 1 prompt             2     12/13/43          2   12/13/43            0                                                                                                            # 2 flip type 2        2     12/13/43          2   12/13/43            1                                                                                                            # 3 flip tpye 4        4            5          2   12/13/43            1                                                                                                            # 4 brem               4            5          2   12/13/43            0                                                                                                            # 5 FSR                4            5         15         40          N/A                                                                                                            # 6 fake                               else                                                                                                                                         #_________________________________________________________________________                                                                                                       
+    def electronType(self):
+      trueCharge = -self.firstEgMotherPdgId/11.
+      chargeEval = abs(self.trkcharge - trueCharge)
+      if   self.truthType==2 and self.truthOrigin in [12,13,43] and self.firstEgMotherTruthType== 2 and self.firstEgMotherTruthOrigin in [12,13,43] and chargeEval==0 :
+        return 1
+      elif self.truthType==2 and self.truthOrigin in [12,13,43] and self.firstEgMotherTruthType== 2 and self.firstEgMotherTruthOrigin in [12,13,43] and chargeEval==2 :
+        return 2
+      elif self.truthType==4 and self.truthOrigin== 5 and self.firstEgMotherTruthType== 2 and self.firstEgMotherTruthOrigin in [12,13,43] and chargeEval==2 :
+        return 3
+      elif self.truthType==4 and self.truthOrigin== 5 and self.firstEgMotherTruthType== 2 and self.firstEgMotherTruthOrigin in [12,13,43] and chargeEval==0 :
+        return 4
+      elif self.truthType==4 and self.truthOrigin== 5 and self.firstEgMotherTruthType==15 and self.firstEgMotherTruthOrigin==40 :
+        return 5
+      else :
+        return 6
+
+    #========================================================================#                                                                                                          #                   Type of the electron   (simplified)                  #                                                                                                          #________________________________________________________________________#                                                                                                          #                                                                                                                                                                                   #                truthType  truthOrigin                                                                                                                                             # 1 prompt             2     12/13/43                                                                                                                                               # 2 not prompt         else                                                                                                                                                         #_________________________________________________________________________                                                                                                       
+    def electronTypeSimple(self):
+      if   self.truthType==2 and self.truthOrigin in [12,13,43] :
+        return 1
+      else :
+        return 2
+
+    #========================================================================#                                                                                                          #                        Type of the electron  (new / test)              #                                                                                                          #________________________________________________________________________#                                                                                                          #                                                                                                                                                                                   #                firstEgTT  firstEgTO                                                                                                                                               # 1 prompt             2     12/13/43                                                                                                                                               # 2 heavy fake         N/A      25/26                                                                                                                                               # 0 not prompt         else                                                                                                                                                         #_________________________________________________________________________                                                                                                       
+    def electronTypeNew(self):
+      if   self.firstEgMotherTruthType==2 and self.firstEgMotherTruthOrigin in [12,13,43] :
+        return 1
+      elif self.firstEgMotherTruthOrigin in [25,26] :
+        return 2
+      else :
+        return 0
+
 class ParticlesBuilder(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def __init__(self, name="ParticlesBuilder", key=""):
