@@ -1481,7 +1481,7 @@ class CutAlg(pyframe.core.Algorithm):
     def cut_AllEleLHLoose(self):
       electrons = self.store['electrons']
       for m in electrons:
-        is_loose = bool(m.LHLoose) or bool(m.LHMedium) or bool(m.LHTight)
+        is_loose = bool(m.LHLoose)
         if not is_loose: return False
       return True
 
@@ -1599,7 +1599,7 @@ class CutAlg(pyframe.core.Algorithm):
       electrons = self.store['electrons']
       passed = True
       for m in electrons:
-        passed = passed and m.tlv.Pt()>25*GeV
+        passed = passed and m.tlv.Pt()>30*GeV
       return passed
 
   #__________________________________________________________________________
@@ -1615,7 +1615,7 @@ class CutAlg(pyframe.core.Algorithm):
       electrons = self.store['electrons']
       passed = True
       for m in electrons:
-        passed = passed and abs(m.tlv.Eta())<2.47 and not(1.37<m.tlv.Eta()<1.52)
+        passed = passed and abs(m.tlv.Eta())<2.47 and not(1.37<abs(m.tlv.Eta())<1.52)
       return passed
 
     #__________________________________________________________________________
