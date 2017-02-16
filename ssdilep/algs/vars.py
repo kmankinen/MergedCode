@@ -186,6 +186,28 @@ class ParticlesBuilder(pyframe.core.Algorithm):
     def execute(self,weight):
         self.store[self.key] = [Particle(copy(l)) for l in self.store[self.key]]
 
+class BuildLooseElectrons(pyframe.core.Algorithm):# Building a loose container for electrons (cutting away not loose electrons from ntuples)
+    #__________________________________________________________________________
+    def __init__(self, 
+                 name="BuildLooseElectrons", 
+                 key_electrons="electrons",
+                 ):
+        pyframe.core.Algorithm.__init__(self, name)
+        self.key_electrons  = key_electrons
+    #__________________________________________________________________________
+    def initialize(self):
+        log.info('Building loose electron container for %s ...' % self.key_electrons)
+    #__________________________________________________________________________
+    def execute(self,weight):
+        pyframe.core.Algorithm.execute(self, weight)
+        electrons_loose = []
+        very_loose_ele = self.store[self.key_electrons]
+        
+        for ele in very_loose_ele:
+            if(ele.pt>30*GeV and ele.LHLoose and ele.trkd0sig<5.0 and abs(ele.trkz0sintheta)<0.5 and abs(ele.tlv.Eta())<2.47 and not(1.37<abs(ele.tlv.Eta())<1.52)):
+               electrons_loose += [ele]
+        self.store['electrons_loose'] = electrons_loose
+        return True       
 
 #------------------------------------------------------------------------------
 class TagAndProbeVars(pyframe.core.Algorithm):
@@ -500,7 +522,7 @@ class DiEleVars(pyframe.core.Algorithm):
     #__________________________________________________________________________
     def __init__(self, 
                  name      = 'DiEleVars',
-                 key_electrons = 'electrons',
+                 key_electrons = 'electrons_loose',
                  key_met   = 'met_clus',
                  ):
         pyframe.core.Algorithm.__init__(self, name)
