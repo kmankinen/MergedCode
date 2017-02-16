@@ -88,8 +88,9 @@ def analyze(config):
     loop += ssdilep.algs.vars.ParticlesBuilder(
         key='electrons',
         )
-
-
+    loop += ssdilep.algs.vars.BuildLooseElectrons(
+        key_electrons='electrons',
+        )
     ## build MET
     ## ---------------------------------------
     loop += ssdilep.algs.met.METCLUS(
@@ -129,7 +130,7 @@ def analyze(config):
 
     ## initialize and/or decorate objects
     ## ---------------------------------------
-    loop += ssdilep.algs.vars.DiEleVars(key_electrons='electrons')   
+    loop += ssdilep.algs.vars.DiEleVars(key_electrons='electrons_loose')   
 
     ## weights configuration
     ## ---------------------------------------

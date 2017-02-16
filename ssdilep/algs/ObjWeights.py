@@ -115,7 +115,7 @@ class EleAllSF(pyframe.core.Algorithm):
     def execute(self, weight):
         
         sf=1.0
-        electrons = self.store['electrons']
+        electrons = self.store['electrons_loose']
         
         if self.ele_index in ['tag','probe']:
           electron = self.store[self.ele_index]
@@ -175,7 +175,7 @@ class EleFakeFactorGraph(pyframe.core.Algorithm):
     def execute(self, weight):
         
         ff_ele = - 1.0 
-        electrons = self.store['electrons']
+        electrons = self.store['electrons_loose']
          
         if self.ele_index < len(electrons): 
 

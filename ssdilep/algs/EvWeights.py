@@ -215,7 +215,7 @@ class ChargeFlipEleSF(pyframe.core.Algorithm):
     def execute(self, weight):
         sf=1.0
         if "mc" in self.sampletype:
-            electrons = self.store['electrons']
+            electrons = self.store['electrons_loose']
             for ele in electrons:
                 if self.chargeFlipSF:
                     if ele.electronType() in [2,3]:
@@ -266,7 +266,7 @@ class EleTrigSF(pyframe.core.Algorithm):
     def execute(self, weight):
 
       sf = 1.0
-      electrons = self.store['electrons']
+      electrons = self.store['electrons_loose']
 
       if(len(electrons)==0 or "mc" not in self.sampletype):
           if self.key:
