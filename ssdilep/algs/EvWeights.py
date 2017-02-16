@@ -178,6 +178,58 @@ class OneOrTwoBjetsSF(pyframe.core.Algorithm):
       return True
 
 #------------------------------------------------------------------------------                                                                                                   
+class ChargeFlipEleSF(pyframe.core.Algorithm):
+    """                                                                                                                                                                                 ChargeFlipEleSF 
+    """
+    #__________________________________________________________________________                                                                                                      
+    def __init__(self, name="ChargeFlipEleSF",
+            key            = None,
+            chargeFlipSF   = False,
+            config_file    = None,
+            ):
+
+        pyframe.core.Algorithm.__init__(self, name=name)
+        self.key               = key
+        self.chargeFlipSF      = chargeFlipSF
+        self.config_file       = config_file
+
+        assert config_file, "Must provide a charge-flip config file!"
+        assert key, "Must provide key for storing ele reco sf"
+    #_________________________________________________________________________                                                                                                     
+    
+    def initialize(self):
+      f = ROOT.TFile.Open(self.config_file)
+      assert f, "Failed to open charge-flip config file: %s"%(self.config_file)
+
+      h_etaFunc = f.Get("etaFunc")
+      assert h_etaFunc, "Failed to get 'h_etaFunc' from %s"%(self.config_file)
+      h_ptFunc = f.Get("ptFunc")
+      assert h_ptFunc, "Failed to get 'h_ptFunc' from %s"%(self.config_file)
+
+      self.h_etaFunc = h_etaFunc.Clone()
+      self.h_ptFunc  = h_ptFunc.Clone()
+      self.h_etaFunc.SetDirectory(0)
+      self.h_ptFunc.SetDirectory(0)
+      f.Close()
+    #_________________________________________________________________________                                                                                                       
+    def execute(self, weight):
+        sf=1.0
+        if "mc" in self.sampletype:
+            electrons = self.store['electrons']
+            for ele in electrons:
+                if self.chargeFlipSF:
+                    if ele.electronType() in [2,3]:
+                        ptBin = self.h_ptFunc.FindBin( ele.tlv.Pt()/GeV )
+                        if ptBin==self.h_ptFunc.GetNbinsX()+1:
+                            ptBin -= 1
+                        sf *= self.h_ptFunc. GetBinContent( ptBin ) *\
+                                self.h_etaFunc.GetBinContent( self.h_etaFunc.FindBin( abs(ele.tlv.Eta()) ) )
+
+        if self.key:
+          self.store[self.key] = sf
+        return True
+
+#------------------------------------------------------------------------------                                                                                                   
 class EleTrigSF(pyframe.core.Algorithm):
     """
     Implementation of electron trigger scale factors
