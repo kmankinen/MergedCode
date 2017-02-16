@@ -703,6 +703,37 @@ class CutAlg(pyframe.core.Algorithm):
             event_is_triggered = bool( trig in passed_triggers )
             if muon_is_matched and event_is_triggered: 
               return True   
+    #__________________________________________________________________________
+    def cut_PassDiEle(self):
+      required_triggers = self.store["reqTrig"]
+      passed_triggers   = self.store["passTrig"].keys()
+
+      for trig in required_triggers:
+          for passed in self.chain.passedTriggers:
+              if (trig==passed): return True
+      return False      
+    #__________________________________________________________________________
+    def cut_PassMixed(self):
+      required_triggers = self.store["reqTrig"]
+      passed_triggers   = self.store["passTrig"].keys()
+
+      muons = self.store['muons']
+      electrons = self.store['electrons']
+      muon_is_matched = False
+      electron_is_matched =False
+      event_is_triggered= False
+      for m in muons:
+        for trig in required_triggers:
+          if trig in self.store["singleLeptonTrig"].keys():
+            muon_is_matched    = bool( m.isTrigMatchedToChain.at(self.store["singleLeptonTrig"][trig]) )
+            event_is_triggered = bool( trig in passed_triggers )
+      for e in electrons:      
+        for trig in required_triggers:
+          if trig in self.store["singleLeptonTrig"].keys():
+            electron_is_matched    = bool( e.isTrigMatchedToChain.at(self.store["singleLeptonTrig"][trig]) )
+            event_is_triggered = bool( trig in passed_triggers )
+      if((muon_is_matched or electron_is_matched) and event_is_triggered):return True
+      return False
 
     #__________________________________________________________________________
     def cut_TagIsMatched(self):
@@ -1033,8 +1064,8 @@ class CutAlg(pyframe.core.Algorithm):
         return self.chain.nel == 4
     #__________________________________________________________________________
     def cut_OneElectronOneMuon(self):
-        if(len(self.store['electrons'])==1 and len(self.store['muons'])==1)
-        return True
+        if(len(self.store['electrons'])==1 and len(self.store['muons'])==1):return True
+        return False
     #__________________________________________________________________________
     def cut_TwoSSElectrons(self):
       electrons  = self.store['electrons']
